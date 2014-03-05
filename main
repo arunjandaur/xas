@@ -1,0 +1,13 @@
+#!/bin/bash
+
+CIF=$1
+
+#LATTICE_A=grep _cell_length_a $CIF | grep -e []
+#LATTICE_B=grep _cell_length_b $CIF
+#LATTICE_C=grep _cell_length_c $CIF
+#ALPHA=grep _cell_angle_alpha $CIF
+#BETA=grep _cell_angle_beta $CIF
+#GAMMA=grep _cell_angle_gamma $CIF
+
+python main.py > distance_intensities
+rm *.pyc
