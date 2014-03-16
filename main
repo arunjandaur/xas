@@ -1,4 +1,15 @@
 #!/bin/bash
+#2 15
+declare -a XASFiles
+XASFiles=$(ls xas/)
+
+#CO203Oct2013235037_52-CO203Oct2013235037.C1-XCH.xas.5.xas
+for i in "${XASFiles[@]}"
+do
+	temp=$(echo $i | sed -e 's/\<.+_[0-9]+-.+\.[A-Za-z]\>0*\<[0-9]+-XCH\.xas\.5\.xas\>/\1\2/')
+	echo $temp
+done
+
 
 CIF=$1
 
