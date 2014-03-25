@@ -1,13 +1,16 @@
 #!/bin/bash
-#2 15
-declare -a XASFiles
-XASFiles=$(ls xas/)
 
-#CO203Oct2013235037_52-CO203Oct2013235037.C1-XCH.xas.5.xas
+XAS_FOLDER_NAME="xas/"
+declare -a XASFiles
+XASFiles=$(ls $XAS_FOLDER_NAME)
+
 for i in "${XASFiles[@]}"
 do
-	temp=$(echo $i | sed -e 's/\<.+_[0-9]+-.+\.[A-Za-z]\>0*\<[0-9]+-XCH\.xas\.5\.xas\>/\1\2/')
-	echo $temp
+	temp=$(echo $i | sed -e 's/\(.+_[0-9]+-.+\.[A-Za-z]\)0*\([0-9]+-XCH\.xas\.5\.xas\)/\1\2/')
+	old_file="$XAS_FOLDER_NAME$i"
+	new_file="$XAS_FOLDER_NAME$temp"
+	#echo $new_file
+	#mv $old_file $new_file
 done
 
 
@@ -20,5 +23,6 @@ CIF=$1
 #BETA=grep _cell_angle_beta $CIF
 #GAMMA=grep _cell_angle_gamma $CIF
 
+rm dist_and_intens/*
 python main.py > distance_intensities
 rm *.pyc

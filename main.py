@@ -6,6 +6,7 @@ import os
 from CalcDistanceNode import CalcDistanceNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
+from cluster import cluster
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
@@ -64,5 +65,5 @@ if __name__ == '__main__':
 			intenFile = open(intenFileName, 'w')
 			intenFile.write(str(intenArray))
 	
-	np.set_printoptions(threshold='nan', precision=4)
-	print permutedDistanceArray
+	data = master['S'][0]['S']
+	cluster(data)
