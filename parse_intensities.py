@@ -9,14 +9,6 @@ def parse_intensities(atomName, atomNum, xyz_name):
         Takes the name of an xyz snapshot, an atom name (label), and which line the atom is found on, and then constructs the file name of the corresponding xas file. It then takes the 1000 energy intensity key value pairs in that xas file and converts them into a dictionary, which exists inside of a 2D numpy array. 
         Invariant: XYZ file must end in .xyz. Otherwise, xyzWithSnapNum = xyz_name[0:len(xyz_name)-4] will fail. It depends on the last four characters to be .xyz
         """
-        """
-        if atomNum < 10:
-                atomNum = '00' + str(atomNum)
-        elif atomNum < 100:
-                atomNum = '0' + str(atomNum)
-        else:
-                atomNum = str(atomNum)
-        """
         xyzWithSnapNum = xyz_name[0:len(xyz_name)-4]
         xyzWithoutSnapNum = re.sub(r'(.*)_[0-9]+[.]xyz', r'\1', xyz_name)
         xas_filename = XAS_FOLDER_NAME + '/' + xyzWithSnapNum + '-' + xyzWithoutSnapNum + '.' + atomName + str(atomNum) + '-XCH.xas.5.xas'

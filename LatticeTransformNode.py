@@ -24,7 +24,7 @@ class LatticeTransformNode(mdp.Node):
 	def _lattice_xyz_matrix(self, a, b, c, alpha, beta, gamma):
 		"""
 		Inputs:
-			a,b,c = lenghts of lattice vectors(Angstrom)
+			a,b,c = lengths of lattice vectors(Angstrom)
 			alpha, beta, gamma = angles between lattice vectors(in radians)
 			
 		Returns a transformation matrix that will yield cartesian coordinates 
