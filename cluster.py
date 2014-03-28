@@ -35,6 +35,7 @@ def cluster(data):
 		coords.append(tuple(row))
 	
 	distance_matrix = distance.squareform(distance.pdist(coords))
-	dbscan = DBSCAN(metric='precomputed').fit(distance_matrix)
+	print distance_matrix
+	dbscan = DBSCAN(metric='precomputed').fit(distance_matrix, eps=1.5)
 	print dbscan.labels_
 	#plot_clusters(dbscan)

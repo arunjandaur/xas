@@ -3,6 +3,8 @@ import numpy as np
 import mdp
 import os
 
+from mdp.nodes import PCANode
+
 from CalcDistanceNode import CalcDistanceNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
@@ -73,5 +75,10 @@ if __name__ == '__main__':
 			intenFile = open(intenFileName, 'w')
 			intenFile.write(str(intenArray))
 	
-	data = master['S'][0]['S']
-	cluster(data)
+	#data = master['S'][0]['S']
+	#cluster(data)
+
+	S_S_data = master['S'][0]['S']
+	pca_node = PCANode(reduce=True, output_dim=.95)
+	result = pca_node.execute(S_S_data)
+	print pca_node.d
