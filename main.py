@@ -14,9 +14,9 @@ SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
 NUM_ENERGIES = 1000
 
-lattice_a = 5
-lattice_b = 5
-lattice_c = 5
+lattice_a = 8.99341
+lattice_b = 8.99341
+lattice_c = 8.99341
 alpha = 90.0
 beta = 90.0
 gamma = 90.0
