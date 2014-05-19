@@ -26,5 +26,5 @@ CIF=$1
 #GAMMA=grep _cell_angle_gamma $CIF
 
 rm dist_and_intens/*
-python main.py > distance_intensities
+python main.py #> distance_intensities
 rm *.pyc

@@ -8,15 +8,16 @@ from mdp.nodes import PCANode
 from CalcDistanceNode import CalcDistanceNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
-from cluster import cluster
+
+import cluster
+import analysis
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
-NUM_ENERGIES = 1000
 
-lattice_a = 8.99341
-lattice_b = 8.99341
-lattice_c = 8.99341
+lattice_a = 32 #8.99341
+lattice_b = 32 #8.99341
+lattice_c = 32 #8.99341
 alpha = 90.0
 beta = 90.0
 gamma = 90.0
@@ -75,10 +76,19 @@ if __name__ == '__main__':
 			intenFile = open(intenFileName, 'w')
 			intenFile.write(str(intenArray))
 	
-	#data = master['S'][0]['S']
-	#cluster(data)
-
-	S_S_data = master['S'][0]['S']
-	pca_node = PCANode(reduce=True, output_dim=.95)
-	result = pca_node.execute(S_S_data)
-	print pca_node.d
+	S_S_data = master['C'][0]['O']
+	S_S_intensities = master['C'][1]
+	
+	print "DISTANCE MATRIX"
+	print S_S_data
+	print "INTENSITIES"
+	print S_S_intensities
+	
+	#cluster.oneD_cluster(S_S_data)	
+	
+	pca = PCANode(reduce=True)
+	result = pca.execute(S_S_data)
+	print pca.d
+	print pca.v
+	
+	#analysis.lin_reg(S_S_data, S_S_intensities)

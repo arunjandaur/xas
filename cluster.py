@@ -1,6 +1,6 @@
 import numpy as np
 import sklearn as sl
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import *
 from scipy.spatial import distance
 import pylab as pl
 
@@ -35,7 +35,27 @@ def cluster(data):
 		coords.append(tuple(row))
 	
 	distance_matrix = distance.squareform(distance.pdist(coords))
-	print distance_matrix
+	#print distance_matrix
 	dbscan = DBSCAN(metric='precomputed').fit(distance_matrix, eps=1.5)
 	print dbscan.labels_
 	#plot_clusters(dbscan)
+
+def oneD_cluster(data):
+	"""
+	1 Dimensional clustering using DBSCAN
+	"""
+	np.set_printoptions(threshold='nan')
+	coords = []
+	for row in data:
+		for item in row:
+			coords.append([item])
+	coords = np.array(coords)
+	distance_matrix = distance.squareform(distance.pdist(coords))
+	
+	mean_shift = MeanShift()
+	mean_shift.fit(coords)
+	print mean_shift.labels_
+
+	#dbscan = DBSCAN(metric='precomputed')
+	#dbscan.fit(distance_matrix)
+	#print dbscan.labels_
