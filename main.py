@@ -6,14 +6,19 @@ import os
 from mdp.nodes import PCANode
 
 from CalcDistanceNode import CalcDistanceNode
+from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
 
 import cluster
 import analysis
 
+from factor_practice import practice
+
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
+
+import numpy as np
 
 lattice_a = 32 #8.99341
 lattice_b = 32 #8.99341
@@ -21,6 +26,28 @@ lattice_c = 32 #8.99341
 alpha = 90.0
 beta = 90.0
 gamma = 90.0
+
+def merge(master, incoming):
+	if master == None:
+		master = incoming
+	else:
+		for key1 in master:
+			for key2 in master[key1]:
+				for key3 in master[key1][key2]:
+					master[key1][key2][key3] = np.vstack((master[key1][key2][key3], incoming[key1][key2][key3]))
+	return master
+
+def expand(matr):
+	matr = np.transpose(matr)
+	d1 = matr[0]
+	d2 = matr[1]
+	d3 = matr[2]
+	d1 = d1**2
+	d2 = d2**2
+	d3 = np.cos(d3)
+	d3_2 = np.sin(d3)
+	matr = np.transpose(np.vstack((matr, d1, d2, d3, d3_2)))
+	return matr
 
 if __name__ == '__main__':
 	"""
@@ -35,8 +62,12 @@ if __name__ == '__main__':
 	snapshots = os.listdir(SNAPSHOTS_FOLDER_NAME)
 	firstSnap = snapshots[0]
 	firstSnapCoords = np.loadtxt(SNAPSHOTS_FOLDER_NAME + '/' + firstSnap, skiprows=2, usecols=(1, 2, 3))
+
 	distanceArray = np.empty((0, len(firstSnapCoords))) 
 	calcDistanceNodeInst = CalcDistanceNode()
+
+	angleMaster = None
+	calcAngleNodeInst = CalcAngleNode()
 	#End initialization
 
 	for snap in snapshots:
@@ -48,6 +79,11 @@ if __name__ == '__main__':
 		currentSnapAtomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
 		currentSnapAtomLabels = np.reshape(currentSnapAtomLabels, (len(currentSnapAtomLabels), 1))
 		atomLabels = np.vstack((atomLabels, currentSnapAtomLabels))
+
+		#Angles
+		currentSnapAngleMaster = calcAngleNodeInst(currentSnapCoords, currentSnapAtomLabels, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+		angleMaster = merge(angleMaster, currentSnapAngleMaster)
+		#Angles
 
 		currentSnapIntensities = np.empty((0, 1))
 		for atomNum in range(len(currentSnapAtomLabels)): #Loop through each atom in the snapshot and parse the intensities associated with that atom. It uses the functionality from parse_intensities.py
@@ -76,19 +112,8 @@ if __name__ == '__main__':
 			intenFile = open(intenFileName, 'w')
 			intenFile.write(str(intenArray))
 	
-	S_S_data = master['C'][0]['O']
-	S_S_intensities = master['C'][1]
-	
-	print "DISTANCE MATRIX"
-	print S_S_data
-	print "INTENSITIES"
-	print S_S_intensities
-	
-	#cluster.oneD_cluster(S_S_data)	
-	
-	pca = PCANode(reduce=True)
-	result = pca.execute(S_S_data)
-	print pca.d
-	print pca.v
-	
-	#analysis.lin_reg(S_S_data, S_S_intensities)
+	C_O_data = master['C'][0]['O']
+	O_C_O_data = angleMaster['C']['O']['O']
+	total = np.hstack((C_O_data, O_C_O_data))
+	total = expand(total)	
+	practice(total)

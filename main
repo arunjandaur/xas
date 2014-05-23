@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XAS_FOLDER_NAME="xas_2/"
+XAS_FOLDER_NAME="xas/"
 declare -a XASFiles
 XASFiles=$(ls $XAS_FOLDER_NAME)
 

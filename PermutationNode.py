@@ -65,7 +65,7 @@ class PermutationNode(mdp.Node):
 		for atom in master:
 			#Now sort the distances to roughly cluster similar distances together
 			for atom2 in master[atom][0]:
-				subArray = master[atom][0][atom2][0]
+				subArray = master[atom][0][atom2]
 				subArray.sort()
 	
 		return master
