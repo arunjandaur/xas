@@ -20,11 +20,14 @@ def varimax(Phi, gamma = 1, q = 50, tol = 1e-6):
 	return dot(Phi, R)
 
 def practice(matr):
-	FA = FANode(tol=0.0001, max_cycles=100, verbose=True, input_dim=None, output_dim=None, dtype=float)
+	numpy.set_printoptions(suppress=True)#, precision=3)
+	FA = FANode(tol=0.0001, max_cycles=500, verbose=False, input_dim=None, output_dim=None, dtype=float)
 	FA(matr)
-	print inv(FA.A)
+	#print "A:\n", FA.A
+	#print "A^-1:\n", inv(FA.A)
 	V = varimax(FA.A)
-	print inv(V)
+	print "V:\n", V
+	print "V^-1:\n", inv(V)
 
 """
 matr = [[3.0, 6, 5],

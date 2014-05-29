@@ -41,12 +41,10 @@ def expand(matr):
 	matr = np.transpose(matr)
 	d1 = matr[0]
 	d2 = matr[1]
-	d3 = matr[2]
-	d1 = d1**2
-	d2 = d2**2
-	d3 = np.cos(d3)
-	d3_2 = np.sin(d3)
-	matr = np.transpose(np.vstack((matr, d1, d2, d3, d3_2)))
+	a = matr[2]
+	cosa = np.cos(a)
+	sina = np.sin(a)
+	matr = np.transpose(np.vstack((d1-d2, (d1-d2)**2, d1+d2, (d1+d2)**2, a, cosa, sina)))
 	return matr
 
 if __name__ == '__main__':
@@ -115,5 +113,9 @@ if __name__ == '__main__':
 	C_O_data = master['C'][0]['O']
 	O_C_O_data = angleMaster['C']['O']['O']
 	total = np.hstack((C_O_data, O_C_O_data))
-	total = expand(total)	
-	practice(total)
+	total = expand(total)
+	C_intens = master['C'][1]
+	analysis.lin_reg(total, C_intens)
+
+	#np.set_printoptions(suppress=True, precision=4)
+	#practice(total)

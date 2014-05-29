@@ -1,6 +1,6 @@
 import numpy as np
-from numpy import arange,array,ones,linalg
-from pylab import plot,show
+from numpy import arange, array, ones, linalg
+from pylab import plot, show
 from mdp.nodes import PCANode
 
 def lin_reg_test():
@@ -24,13 +24,22 @@ def plot_line(coeffs):
 	
 
 def lin_reg(coords, intensities):
-	energy = 1
+	new_intens = []
 	for row in intensities:
-		row[0] = row[0][energy]
+		energies = row[0].keys()
+		energies = sorted([float(energy) for energy in energies])
+		energies = [str(energy) for energy in energies]
+		new_row = []
+		for energy in energies:
+			inten = row[0][energy]
+			new_row.append(inten)
+		new_intens.append(new_row)
+	intensities = np.array(new_intens)
 	ones_column = np.array([ones(len(coords))]).T
 	coords = np.hstack((coords, ones_column)) #matrix variable instantiations to be right multiplied by coeff matrix to obtain intensities. Goal is to find coeff matrix.
-	coeffs = linalg.lstsq(coords, intensities)[0] #1-column column vector where each row represents a coefficient. The last one is the constant b.
-	print coeffs
+	print intensities
+	coeffs = linalg.lstsq(coords, intensities)[0] #1st elem of tuple. In each column (corresponding to an energy), each row represents a coefficient to fit the coordinates to the intensity at a certain energy. The last row is the constant b.
+	print 'hi', coeffs
 	
 def PCA():
 	col1 = np.array([[1.0, 2, 3, 4, 5, 6, 7, 8, 9]]).T

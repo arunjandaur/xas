@@ -17,10 +17,12 @@ def parse_intensities(atomName, atomNum, xyz_name):
         if os.path.isfile(xas_filename) == True:
                 raw_xas = np.loadtxt(xas_filename, usecols=(0, 1))
 		if type(raw_xas[0]) != type(np.array([[]])):
-			intensities[0][0][raw_xas[0]] = raw_xas[1]
+			key = str(float(raw_xas[0]))
+			intensities[0][0][key] = raw_xas[1]
 		else:
 	                for row in raw_xas:
-                     		intensities[0][0][row[0]] = row[1]
+				key = str(float(row[0]))
+                     		intensities[0][0][key] = row[1]
         else:
                 intensities[0][0] = -1
 
