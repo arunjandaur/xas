@@ -2,24 +2,18 @@ import sys
 import numpy as np
 import mdp
 import os
-
 from mdp.nodes import PCANode
 
 from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
-
+from factor_practice import practice
 import cluster
 import analysis
 
-from factor_practice import practice
-
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
-
-import numpy as np
-
 lattice_a = 32 #8.99341
 lattice_b = 32 #8.99341
 lattice_c = 32 #8.99341
@@ -44,7 +38,7 @@ def expand(matr):
 	a = matr[2]
 	cosa = np.cos(a)
 	sina = np.sin(a)
-	matr = np.transpose(np.vstack((d1-d2, (d1-d2)**2, d1+d2, (d1+d2)**2, a, cosa, sina)))
+	matr = np.transpose(np.vstack((cosa, a)))
 	return matr
 
 if __name__ == '__main__':
