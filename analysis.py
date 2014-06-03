@@ -35,6 +35,7 @@ def _remove_intens_dict(intensities):
 	OUTPUT: Matrix such that intensities[row] is an array of intensities.
 	"""
 	new_intens = []
+	new_energies = []
         for row in intensities:
                 energies = row[0].keys()
                 energies = sorted([float(energy) for energy in energies])
@@ -44,10 +45,12 @@ def _remove_intens_dict(intensities):
                         inten = row[0][energy]
                         new_row.append(inten)
                 new_intens.append(new_row)
+		new_energies.append(energies)
         intensities = np.array(new_intens)
-	return intensities
+	energies = np.array(new_energies)
+	return (intensities, energies)
 
-def energy_tracking(intensities):
+def energy_tracking(intensities, energies, E_peak):
 	"""
 	INPUT: Matrix with each row a different atom. 1000 columns, each an intensity corresponding to a different energy.
 	OUTPUT: Matrix with each row a different atom. A few columns. Each column value contains an atom's col-th energy peak.
@@ -57,19 +60,26 @@ def energy_tracking(intensities):
 		All energies are equally spaced. If not, alter the singal.argrelextrema line.
 	"""
 	new_intens = []
+	new_energies = []
 	for i in range(len(intensities)):
-		row = intensities[i]
-		#maxima_indices = signal.argrelextrema(row, np.greater)[0] #For minima, do np.less
-		
+		I_row = intensities[i]
+		E_row = energies[i]
+		maxima_indices = signal.argrelextrema(I_row, np.greater)[0] #For minima, do np.less
 		#widths = np.array([.1, .2, .3, .4, .5, .7, .9, 1.1, 1.3])
 		#maxima_indices = signal.find_peaks_cwt(row, widths)
-		
-		#maxima = [row[maxima_index] for maxima_index in maxima_indices] #Replace row with intensities that correspond to indices returned.
-		maxima = [max(row)]
-		new_intens.append(maxima)
+		maxima = [float(E_row[maxima_index]) for maxima_index in maxima_indices] #Replace row with intensities that correspond to indices returned.
+		nearest = maxima[0]
+		nearest_dist = abs(E_peak-nearest)
+		for maximum in maxima:
+			if abs(E_peak-maximum) < nearest_dist:
+				nearest = maximum
+				nearest_dist = abs(E_peak-maximum)
+		new_energies.append([nearest])
+		new_intens.append([float(I_row[np.where(E_row == str(nearest))])])
 		i += 1
 	intensities = np.array(new_intens)
-	return intensities
+	energies = np.array(new_energies)
+	return intensities, energies
 
 def correlations(data, intens):
 	data2 = np.transpose(data)
@@ -89,22 +99,25 @@ def filter_intens(intensities, left, right):
 
 def filter_peak(intensities, peak_energy, interval):
 	new_intens = []
+	new_energies = []
 	energies = intensities[0][0].keys()
 	energies = sorted([float(energy) for energy in energies])
 	peak_index = energies.index(peak_energy)
 	left = peak_index - interval
 	right = peak_index + interval
 	#energies = energies[peak_energy-interval:peak_energy+interval] #todo: prevent array out of bounds exception
-	intensities = _remove_intens_dict(intensities)
+	intensities, energies = _remove_intens_dict(intensities)
 	for i in range(len(intensities)):
 		new_intens.append(intensities[i][left:right]) #same todo as above
-	return np.array(new_intens)
+		new_energies.append(energies[i][left:right])
+	return (np.array(new_intens), np.array(new_energies))
 
 def lin_reg(coords, intensities):
+	pretty_print()
 	peak_energy = 5.71
 	interval = 32
-	filtered_intens = filter_peak(intensities, peak_energy, interval)
-	tracked_intens = energy_tracking(filtered_intens)
+	filtered_intens, filtered_energies = filter_peak(intensities, peak_energy, interval)
+	tracked_intens, tracked_energies = energy_tracking(filtered_intens, filtered_energies, peak_energy)
 	ones_column = np.array([ones(len(coords))]).T
 	coords = normalize(coords)
 	coords = np.hstack((coords, ones_column)) #matrix variable instantiations to be right multiplied by coeff matrix to obtain intensities. Goal is to find coeff matrix.
