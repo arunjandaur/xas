@@ -38,7 +38,7 @@ def expand(matr):
 	a = matr[2]
 	cosa = np.cos(a)
 	sina = np.sin(a)
-	matr = np.transpose(np.vstack((cosa, a)))
+	matr = np.transpose(np.vstack((d1, d2, a)))
 	return matr
 
 if __name__ == '__main__':
