@@ -8,7 +8,7 @@ from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
-from factor_practice import practice
+from factor_practice import *
 import cluster
 import analysis
 
@@ -109,7 +109,9 @@ if __name__ == '__main__':
 	total = np.hstack((C_O_data, O_C_O_data))
 	total = expand(total)
 	C_intens = master['C'][1]
-	analysis.lin_reg(total, C_intens)
 
-	#np.set_printoptions(suppress=True, precision=4)
-	#practice(total)
+	#pls(analysis.normalize(total), C_intens)
+	#practice(analysis.normalize(total))
+	#X_T, beta = analysis.lin_reg(total, C_intens)
+	#print beta
+	#print umm(X_T, beta)

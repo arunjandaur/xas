@@ -1,36 +1,14 @@
+tracking:
+
 row
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
+Pearson coefficient:  0.0996659631145
+row
+Pearson coefficient:  0.166247895672
+row
+Pearson coefficient:  0.824164641789
+no tracking:
+
+row
 Pearson coefficient:  nan
 Pearson coefficient:  nan
 Pearson coefficient:  nan
@@ -337,701 +315,7 @@ Pearson coefficient:  -0.349907737856
 Pearson coefficient:  -0.352183933492
 Pearson coefficient:  -0.36202675973
 Pearson coefficient:  -0.379163790289
-Pearson coefficient:  -0.401968262715
-Pearson coefficient:  -0.426761400676
-Pearson coefficient:  -0.447981176297
-Pearson coefficient:  -0.460025119151
-Pearson coefficient:  -0.459773750966
-Pearson coefficient:  -0.447498222061
-Pearson coefficient:  -0.425594987747
-Pearson coefficient:  -0.396798527184
-Pearson coefficient:  -0.363311302704
-Pearson coefficient:  -0.326599237831
-Pearson coefficient:  -0.28763710747
-Pearson coefficient:  -0.247159102154
-Pearson coefficient:  -0.205953706515
-Pearson coefficient:  -0.164989213863
-Pearson coefficient:  -0.125510322354
-Pearson coefficient:  -0.0889636272592
-Pearson coefficient:  -0.0567981921772
-Pearson coefficient:  -0.0303200698034
-Pearson coefficient:  -0.0105389294332
-Pearson coefficient:  0.00177390817991
-Pearson coefficient:  0.0061248830554
-Pearson coefficient:  0.00207843136164
-Pearson coefficient:  -0.0106358671965
-Pearson coefficient:  -0.0320814430355
-Pearson coefficient:  -0.0617070544262
-Pearson coefficient:  -0.0977341788386
-Pearson coefficient:  -0.136584164061
-Pearson coefficient:  -0.173050464766
-Pearson coefficient:  -0.20183440511
-Pearson coefficient:  -0.219564024972
-Pearson coefficient:  -0.225714830668
-Pearson coefficient:  -0.221826317425
-Pearson coefficient:  -0.210280108138
-Pearson coefficient:  -0.193451320497
-Pearson coefficient:  -0.173341652894
-Pearson coefficient:  -0.151626966286
-Pearson coefficient:  -0.129647166967
-Pearson coefficient:  -0.108481520624
-Pearson coefficient:  -0.0890266919381
-Pearson coefficient:  -0.0719941124199
-Pearson coefficient:  -0.0578842071289
-Pearson coefficient:  -0.0470072893255
-Pearson coefficient:  -0.0394350289091
-Pearson coefficient:  -0.0349475001115
-Pearson coefficient:  -0.0330867363829
-Pearson coefficient:  -0.0331098701016
-Pearson coefficient:  -0.0341333854417
-Pearson coefficient:  -0.0352537269104
-Pearson coefficient:  -0.0356311250448
-Pearson coefficient:  -0.034715881698
-Pearson coefficient:  -0.0322346446341
-Pearson coefficient:  -0.0282721138431
-Pearson coefficient:  -0.0232335944116
-Pearson coefficient:  -0.0177255389146
-Pearson coefficient:  -0.0124915408721
-Pearson coefficient:  -0.00827287693129
-Pearson coefficient:  -0.0056520492746
-Pearson coefficient:  -0.00503346354642
-Pearson coefficient:  -0.00645381050987
-Pearson coefficient:  -0.00957130069109
-Pearson coefficient:  -0.0136364092007
-Pearson coefficient:  -0.0175997094505
-Pearson coefficient:  -0.020260254751
-Pearson coefficient:  -0.0204348951455
-Pearson coefficient:  -0.0172918988404
-Pearson coefficient:  -0.010395106534
-Pearson coefficient:  0.000151143797243
-Pearson coefficient:  0.0137465738914
-Pearson coefficient:  0.0294211006227
-Pearson coefficient:  0.0459432534424
-Pearson coefficient:  0.0619900306904
-Pearson coefficient:  0.0762129586731
-Pearson coefficient:  0.0873848915046
-Pearson coefficient:  0.0944260447529
-Pearson coefficient:  0.0965077724015
-Pearson coefficient:  0.0930511981802
-Pearson coefficient:  0.0837142279928
-Pearson coefficient:  0.0685398198884
-Pearson coefficient:  0.0478707425279
-Pearson coefficient:  0.0225592926848
-Pearson coefficient:  -0.00610311320051
-Pearson coefficient:  -0.0363963880519
-Pearson coefficient:  -0.0662789890898
-Pearson coefficient:  -0.0936848041701
-Pearson coefficient:  -0.1167879969
-Pearson coefficient:  -0.134248834442
-Pearson coefficient:  -0.145389597901
-Pearson coefficient:  -0.150183046877
-Pearson coefficient:  -0.14912137897
-Pearson coefficient:  -0.143185629747
-Pearson coefficient:  -0.133542350316
-Pearson coefficient:  -0.121637153896
-Pearson coefficient:  -0.108833957952
-Pearson coefficient:  -0.0965637662508
-Pearson coefficient:  -0.0861968200897
-Pearson coefficient:  -0.0789120959145
-Pearson coefficient:  -0.0756647928307
-Pearson coefficient:  -0.0769664744328
-Pearson coefficient:  -0.0828032152592
-Pearson coefficient:  -0.0925729864664
-Pearson coefficient:  -0.105059345358
-Pearson coefficient:  -0.118701972886
-Pearson coefficient:  -0.131850757314
-Pearson coefficient:  -0.143136426406
-Pearson coefficient:  -0.151660454712
-Pearson coefficient:  -0.157148365691
-Pearson coefficient:  -0.159781245091
-Pearson coefficient:  -0.160159953343
-Pearson coefficient:  -0.159091108315
-Pearson coefficient:  -0.157502612526
-Pearson coefficient:  -0.156332335489
-Pearson coefficient:  -0.156415768759
-Pearson coefficient:  -0.158444145065
-Pearson coefficient:  -0.16296336562
-Pearson coefficient:  -0.170306083787
-Pearson coefficient:  -0.180520493664
-Pearson coefficient:  -0.193415550142
-Pearson coefficient:  -0.208496099018
-Pearson coefficient:  -0.224966664762
-Pearson coefficient:  -0.241841028519
-Pearson coefficient:  -0.258049354658
-Pearson coefficient:  -0.272550659025
-Pearson coefficient:  -0.284524947979
-Pearson coefficient:  -0.293505492514
-Pearson coefficient:  -0.299395425304
-Pearson coefficient:  -0.302408382388
-Pearson coefficient:  -0.303195538864
-Pearson coefficient:  -0.302657282352
-Pearson coefficient:  -0.30188840333
-Pearson coefficient:  -0.302027735023
-Pearson coefficient:  -0.304267233729
-Pearson coefficient:  -0.309403440619
-Pearson coefficient:  -0.317888497175
-Pearson coefficient:  -0.329518284505
-Pearson coefficient:  -0.343387344681
-Pearson coefficient:  -0.35793233899
-Pearson coefficient:  -0.371307280166
-Pearson coefficient:  -0.381534973033
-Pearson coefficient:  -0.386950099459
-Pearson coefficient:  -0.386307427126
-Pearson coefficient:  -0.379051920327
-Pearson coefficient:  -0.365231123708
-Pearson coefficient:  -0.345389182808
-Pearson coefficient:  -0.320585325288
-Pearson coefficient:  -0.292267169831
-Pearson coefficient:  -0.262094959889
-Pearson coefficient:  -0.232092569824
-Pearson coefficient:  -0.2044338076
-Pearson coefficient:  -0.181339095164
-Pearson coefficient:  -0.165086639948
-Pearson coefficient:  -0.157823024561
-Pearson coefficient:  -0.161241987137
-Pearson coefficient:  -0.176103550796
-Pearson coefficient:  -0.201952265315
-Pearson coefficient:  -0.236970252755
-Pearson coefficient:  -0.277815482031
-Pearson coefficient:  -0.320273136464
-Pearson coefficient:  -0.360328870441
-Pearson coefficient:  -0.394628913242
-Pearson coefficient:  -0.421133082054
-Pearson coefficient:  -0.439039938402
-Pearson coefficient:  -0.448750961194
-Pearson coefficient:  -0.451247876813
-Pearson coefficient:  -0.448244449758
-Pearson coefficient:  -0.441631642795
-Pearson coefficient:  -0.433653354486
-Pearson coefficient:  -0.42671945153
-Pearson coefficient:  -0.423209513333
-Pearson coefficient:  -0.425175941426
-Pearson coefficient:  -0.433857271686
-Pearson coefficient:  -0.449460763524
-Pearson coefficient:  -0.470799710831
-Pearson coefficient:  -0.495752400818
-Pearson coefficient:  -0.521443932659
-Pearson coefficient:  -0.544879905709
-Pearson coefficient:  -0.563232662633
-Pearson coefficient:  -0.574328253297
-Pearson coefficient:  -0.576563752124
-Pearson coefficient:  -0.568918857774
-Pearson coefficient:  -0.551174654109
-Pearson coefficient:  -0.523778001844
-Pearson coefficient:  -0.487594638795
-Pearson coefficient:  -0.444209347294
-Pearson coefficient:  -0.395596733755
-Pearson coefficient:  -0.34404845672
-Pearson coefficient:  -0.292376964675
-Pearson coefficient:  -0.243427828762
-Pearson coefficient:  -0.200271564144
-Pearson coefficient:  -0.165536414896
-Pearson coefficient:  -0.141454712758
-Pearson coefficient:  -0.129017527626
-Pearson coefficient:  -0.127978051964
-Pearson coefficient:  -0.137043635455
-Pearson coefficient:  -0.153719106018
-Pearson coefficient:  -0.174999461484
-Pearson coefficient:  -0.198023214446
-Pearson coefficient:  -0.220404326766
-Pearson coefficient:  -0.24037235318
-Pearson coefficient:  -0.257036025333
-Pearson coefficient:  -0.269997329751
-Pearson coefficient:  -0.279390262825
-Pearson coefficient:  -0.28543715717
-Pearson coefficient:  -0.288564120651
-Pearson coefficient:  -0.289243169185
-Pearson coefficient:  -0.288269961251
-Pearson coefficient:  -0.286347584616
-Pearson coefficient:  -0.284428507876
-Pearson coefficient:  -0.283466704239
-Pearson coefficient:  -0.284441620077
-Pearson coefficient:  -0.288343944821
-Pearson coefficient:  -0.295623341978
-Pearson coefficient:  -0.306557612588
-Pearson coefficient:  -0.320895102086
-Pearson coefficient:  -0.337644836852
-Pearson coefficient:  -0.355600708337
-Pearson coefficient:  -0.372965980337
-Pearson coefficient:  -0.387762940541
-Pearson coefficient:  -0.398021018776
-Pearson coefficient:  -0.401645503151
-Pearson coefficient:  -0.396529468905
-Pearson coefficient:  -0.380347379612
-Pearson coefficient:  -0.350803462725
-Pearson coefficient:  -0.305799654775
-Pearson coefficient:  -0.24414392502
-Pearson coefficient:  -0.166622782451
-Pearson coefficient:  -0.0769746914632
-Pearson coefficient:  0.0186155911702
-Pearson coefficient:  0.112657834005
-Pearson coefficient:  0.198695178944
-Pearson coefficient:  0.272742160322
-Pearson coefficient:  0.333142691712
-Pearson coefficient:  0.379804131754
-Pearson coefficient:  0.413672369045
-Pearson coefficient:  0.436038150723
-Pearson coefficient:  0.448165458319
-Pearson coefficient:  0.451458734118
-Pearson coefficient:  0.4473063717
-Pearson coefficient:  0.437179148269
-Pearson coefficient:  0.422837556087
-Pearson coefficient:  0.406056835223
-Pearson coefficient:  0.389008370401
-Pearson coefficient:  0.37372090441
-Pearson coefficient:  0.362511748352
-Pearson coefficient:  0.357264618268
-Pearson coefficient:  0.359388175515
-Pearson coefficient:  0.369687521676
-Pearson coefficient:  0.387833722444
-Pearson coefficient:  0.412412313584
-Pearson coefficient:  0.441272632932
-Pearson coefficient:  0.471510336039
-Pearson coefficient:  0.500378009906
-Pearson coefficient:  0.525425952137
-Pearson coefficient:  0.545163788732
-Pearson coefficient:  0.558798426314
-Pearson coefficient:  0.566184498689
-Pearson coefficient:  0.567261591173
-Pearson coefficient:  0.562511640578
-Pearson coefficient:  0.552300420367
-Pearson coefficient:  0.537107106077
-Pearson coefficient:  0.517535831213
-Pearson coefficient:  0.49437636822
-Pearson coefficient:  0.468538018199
-Pearson coefficient:  0.44115283481
-Pearson coefficient:  0.413316685551
-Pearson coefficient:  0.386223124579
-Pearson coefficient:  0.36088358388
-Pearson coefficient:  0.338006939904
-Pearson coefficient:  0.318249637229
-Pearson coefficient:  0.301829230773
-Pearson coefficient:  0.288882070417
-Pearson coefficient:  0.279631389733
-Pearson coefficient:  0.274294236774
-Pearson coefficient:  0.273184177887
-Pearson coefficient:  0.27648183849
-Pearson coefficient:  0.284569375458
-Pearson coefficient:  0.29741481642
-Pearson coefficient:  0.314722204413
-Pearson coefficient:  0.33591867085
-Pearson coefficient:  0.359957342475
-Pearson coefficient:  0.385832977032
-Pearson coefficient:  0.412374049585
-Pearson coefficient:  0.438508077557
-Pearson coefficient:  0.463186036401
-Pearson coefficient:  0.485459797732
-Pearson coefficient:  0.504636861654
-Pearson coefficient:  0.519978362547
-Pearson coefficient:  0.530912031695
-Pearson coefficient:  0.536944339543
-Pearson coefficient:  0.53773758024
-Pearson coefficient:  0.532920718387
-Pearson coefficient:  0.522486708784
-Pearson coefficient:  0.506700769121
-Pearson coefficient:  0.486286575804
-Pearson coefficient:  0.462527869264
-Pearson coefficient:  0.437439140408
-Pearson coefficient:  0.413568866126
-Pearson coefficient:  0.394173060461
-Pearson coefficient:  0.382621068263
-Pearson coefficient:  0.381898050345
-Pearson coefficient:  0.39374692692
-Pearson coefficient:  0.417743255611
-Pearson coefficient:  0.451090826859
-Pearson coefficient:  0.489316776395
-Pearson coefficient:  0.528020983547
-Pearson coefficient:  0.563963244284
-Pearson coefficient:  0.59516724958
-Pearson coefficient:  0.620720718364
-Pearson coefficient:  0.640500158236
-Pearson coefficient:  0.654533056483
-Pearson coefficient:  0.663048615801
-Pearson coefficient:  0.666506249937
-Pearson coefficient:  0.665450034381
-Pearson coefficient:  0.660484627168
-Pearson coefficient:  0.652473129965
-Pearson coefficient:  0.64241112746
-Pearson coefficient:  0.631471996332
-Pearson coefficient:  0.620874982645
-Pearson coefficient:  0.611975639786
-Pearson coefficient:  0.605979865037
-Pearson coefficient:  0.603861118504
-Pearson coefficient:  0.606216436542
-Pearson coefficient:  0.613080896456
-Pearson coefficient:  0.623943068383
-Pearson coefficient:  0.637805646909
-Pearson coefficient:  0.65329912006
-Pearson coefficient:  0.669095718504
-Pearson coefficient:  0.684060152864
-Pearson coefficient:  0.69732429521
-Pearson coefficient:  0.708436505673
-Pearson coefficient:  0.717182864303
-Pearson coefficient:  0.723524294351
-Pearson coefficient:  0.727579999263
-Pearson coefficient:  0.729497509734
-Pearson coefficient:  0.729478365454
-Pearson coefficient:  0.727737702527
-Pearson coefficient:  0.724496399784
-Pearson coefficient:  0.719943216838
-Pearson coefficient:  0.714233604168
-Pearson coefficient:  0.7074917407
-Pearson coefficient:  0.699749633939
-Pearson coefficient:  0.691038050276
-Pearson coefficient:  0.681334549742
-Pearson coefficient:  0.670587106133
-Pearson coefficient:  0.658789404642
-Pearson coefficient:  0.645955341313
-Pearson coefficient:  0.632213759379
-Pearson coefficient:  0.617749874136
-Pearson coefficient:  0.602892706139
-Pearson coefficient:  0.588027311292
-Pearson coefficient:  0.573567617073
-Pearson coefficient:  0.559929331667
-Pearson coefficient:  0.547490506895
-Pearson coefficient:  0.536464751046
-Pearson coefficient:  0.527009140182
-Pearson coefficient:  0.519126371041
-Pearson coefficient:  0.512751905043
-Pearson coefficient:  0.507747397454
-Pearson coefficient:  0.503983472356
-Pearson coefficient:  0.501271081532
-Pearson coefficient:  0.499473878416
-Pearson coefficient:  0.498432012044
-Pearson coefficient:  0.497968981949
-Pearson coefficient:  0.497957585427
-Pearson coefficient:  0.498245112397
-Pearson coefficient:  0.498701987616
-Pearson coefficient:  0.499250504845
-Pearson coefficient:  0.499838784489
-Pearson coefficient:  0.500474792874
-Pearson coefficient:  0.501220774557
-Pearson coefficient:  0.502142513683
-Pearson coefficient:  0.503316719664
-Pearson coefficient:  0.50479576113
-Pearson coefficient:  0.506581675632
-Pearson coefficient:  0.50863720578
-Pearson coefficient:  0.510878256848
-Pearson coefficient:  0.513228748445
-Pearson coefficient:  0.515586812442
-Pearson coefficient:  0.517885525116
-Pearson coefficient:  0.520092428172
-Pearson coefficient:  0.522182214614
-Pearson coefficient:  0.524192816087
-Pearson coefficient:  0.526124073427
-Pearson coefficient:  0.528023474565
-Pearson coefficient:  0.529875429383
-Pearson coefficient:  0.531698746872
-Pearson coefficient:  0.533453750108
-Pearson coefficient:  0.535089948316
-Pearson coefficient:  0.536547253473
-Pearson coefficient:  0.537731465382
-Pearson coefficient:  0.538558234491
-Pearson coefficient:  0.538970616027
-Pearson coefficient:  0.538912038816
-Pearson coefficient:  0.538354427579
-Pearson coefficient:  0.537329799805
-Pearson coefficient:  0.535878776686
-Pearson coefficient:  0.534105498691
-Pearson coefficient:  0.532155739528
-Pearson coefficient:  0.530181040564
-Pearson coefficient:  0.528401232565
-Pearson coefficient:  0.52702573883
-Pearson coefficient:  0.526279572446
-Pearson coefficient:  0.526375966838
-Pearson coefficient:  0.527500354952
-Pearson coefficient:  0.529804294349
-Pearson coefficient:  0.533371436855
-Pearson coefficient:  0.538228130149
-Pearson coefficient:  0.544324342857
-Pearson coefficient:  0.551534413571
-Pearson coefficient:  0.559675690295
-Pearson coefficient:  0.568525007847
-Pearson coefficient:  0.577819046916
-Pearson coefficient:  0.587277663464
-Pearson coefficient:  0.59663623796
-Pearson coefficient:  0.605609834505
-Pearson coefficient:  0.613935108331
-Pearson coefficient:  0.621363944748
-Pearson coefficient:  0.627693662445
-Pearson coefficient:  0.632752215367
-Pearson coefficient:  0.636426785728
-Pearson coefficient:  0.638678499803
-Pearson coefficient:  0.639506543467
-Pearson coefficient:  0.638967037837
-Pearson coefficient:  0.637173497055
-Pearson coefficient:  0.634325839067
-Pearson coefficient:  0.630705748655
-Pearson coefficient:  0.626645575737
-Pearson coefficient:  0.622551368848
-Pearson coefficient:  0.618822241893
-Pearson coefficient:  0.615804732893
-Pearson coefficient:  0.61377060108
-Pearson coefficient:  0.612841217731
-Pearson coefficient:  0.612981911107
-Pearson coefficient:  0.614042219215
-Pearson coefficient:  0.615755774357
-Pearson coefficient:  0.617819935603
-Pearson coefficient:  0.619909750956
-Pearson coefficient:  0.621743571621
-Pearson coefficient:  0.623062601922
-Pearson coefficient:  0.623662290494
-Pearson coefficient:  0.623378314341
-Pearson coefficient:  0.622060233146
-Pearson coefficient:  0.619577118425
-Pearson coefficient:  0.615823330218
-Pearson coefficient:  0.610728227777
-Pearson coefficient:  0.604268225999
-Pearson coefficient:  0.596503803377
-Pearson coefficient:  0.587618325706
-Pearson coefficient:  0.577895688258
-Pearson coefficient:  0.567764245389
-Pearson coefficient:  0.557762087638
-Pearson coefficient:  0.548448099091
-Pearson coefficient:  0.540398116412
-Pearson coefficient:  0.5340897284
-Pearson coefficient:  0.529863009525
-Pearson coefficient:  0.527885927326
-Pearson coefficient:  0.528124414084
-Pearson coefficient:  0.530370354738
-Pearson coefficient:  0.534262548395
-Pearson coefficient:  0.539304239312
-Pearson coefficient:  0.544961031664
-Pearson coefficient:  0.550648511386
-Pearson coefficient:  0.555863135417
-Pearson coefficient:  0.5601708589
-Pearson coefficient:  0.563279338714
-Pearson coefficient:  0.565020687927
-Pearson coefficient:  0.565355850309
-Pearson coefficient:  0.564340625362
-Pearson coefficient:  0.562125433421
-Pearson coefficient:  0.558924768696
-Pearson coefficient:  0.555005126887
-Pearson coefficient:  0.550688962413
-Pearson coefficient:  0.546325920588
-Pearson coefficient:  0.542292473719
-Pearson coefficient:  0.538930266221
-Pearson coefficient:  0.536534200424
-Pearson coefficient:  0.535268480386
-Pearson coefficient:  0.535150054096
-Pearson coefficient:  0.536017670767
-Pearson coefficient:  0.53754970069
-Pearson coefficient:  0.539303008179
-Pearson coefficient:  0.540783118842
-Pearson coefficient:  0.541511240628
-Pearson coefficient:  0.541093650102
-Pearson coefficient:  0.539268112906
-Pearson coefficient:  0.535913475101
-Pearson coefficient:  0.531054751742
-Pearson coefficient:  0.524838872981
-Pearson coefficient:  0.51750616378
-Pearson coefficient:  0.509341619949
-Pearson coefficient:  0.500647990323
-Pearson coefficient:  0.491700539832
-Pearson coefficient:  0.482724094834
-Pearson coefficient:  0.473883072513
-Pearson coefficient:  0.46526334016
-Pearson coefficient:  0.456905608395
-Pearson coefficient:  0.448796309843
-Pearson coefficient:  0.440897785271
-Pearson coefficient:  0.43316550515
-Pearson coefficient:  0.425571127241
-Pearson coefficient:  0.418100296247
-Pearson coefficient:  0.410771836115
-Pearson coefficient:  0.403605248278
-Pearson coefficient:  0.39664694083
-Pearson coefficient:  0.389925519598
-Pearson coefficient:  0.383468784722
-Pearson coefficient:  0.377280681694
-Pearson coefficient:  0.371346018045
-Pearson coefficient:  0.365620112992
-Pearson coefficient:  0.360038735674
-Pearson coefficient:  0.354512365951
-Pearson coefficient:  0.348930818126
-Pearson coefficient:  0.343164175452
-Pearson coefficient:  0.337084805725
-Pearson coefficient:  0.330559643806
-Pearson coefficient:  0.323487429426
-Pearson coefficient:  0.31579816489
-Pearson coefficient:  0.307494912661
-Pearson coefficient:  0.298639007909
-Pearson coefficient:  0.289361044262
-Pearson coefficient:  0.279848652252
-Pearson coefficient:  0.270311738739
-Pearson coefficient:  0.260970028843
-Pearson coefficient:  0.252042414403
-Pearson coefficient:  0.243709414498
-Pearson coefficient:  0.236145137928
-Pearson coefficient:  0.229484727616
-Pearson coefficient:  0.223808538176
-Pearson coefficient:  0.219157892573
-Pearson coefficient:  0.215469041629
-Pearson coefficient:  0.212622936037
-Pearson coefficient:  0.210426915661
-Pearson coefficient:  0.20863230571
-Pearson coefficient:  0.206993852113
-Pearson coefficient:  0.205322475194
-Pearson coefficient:  0.203496883629
-Pearson coefficient:  0.201495876554
-Pearson coefficient:  0.199366902464
-Pearson coefficient:  0.197181313119
-Pearson coefficient:  0.19500273033
-Pearson coefficient:  0.192850199337
-Pearson coefficient:  0.190694780734
-Pearson coefficient:  0.188461106618
-Pearson coefficient:  0.186032506113
-Pearson coefficient:  0.183261903579
-Pearson coefficient:  0.179989623378
-Pearson coefficient:  0.176043283444
-Pearson coefficient:  0.171252945125
-Pearson coefficient:  0.165455852089
-Pearson coefficient:  0.158524909273
-Pearson coefficient:  0.150381152886
-Pearson coefficient:  0.140989499595
-Pearson coefficient:  0.130349625123
-Pearson coefficient:  0.118476195533
-Pearson coefficient:  0.105354538105
-Pearson coefficient:  0.0909050509417
-Pearson coefficient:  0.0749635233739
-Pearson coefficient:  0.0573006479243
-Pearson coefficient:  0.0376554553081
-Pearson coefficient:  0.0158633924403
-Pearson coefficient:  -0.0080423385742
-Pearson coefficient:  -0.0336777435948
-Pearson coefficient:  -0.0603332146127
-Pearson coefficient:  -0.08707249334
-Pearson coefficient:  -0.113026505061
-Pearson coefficient:  -0.137616032687
-Pearson coefficient:  -0.160647015426
-Pearson coefficient:  -0.182218022596
-Pearson coefficient:  -0.202588189451
-Pearson coefficient:  -0.222035402601
-Pearson coefficient:  -0.240748804524
-Pearson coefficient:  -0.258775502724
-Pearson coefficient:  -0.275990406443
-Pearson coefficient:  -0.292126296553
-Pearson coefficient:  -0.306803909819
-Pearson coefficient:  -0.319590948607
-Pearson coefficient:  -0.330108709815
-Pearson coefficient:  -0.338085783547
-Pearson coefficient:  -0.343413072245
-Pearson coefficient:  -0.346156136949
-Pearson coefficient:  -0.346493225758
-Pearson coefficient:  -0.344696291259
-Pearson coefficient:  -0.341041412221
-Pearson coefficient:  -0.335775888049
-Pearson coefficient:  -0.329127957506
-Pearson coefficient:  -0.321275527102
-Pearson coefficient:  -0.312390090644
-Pearson coefficient:  -0.302667950269
-Pearson coefficient:  -0.292313141621
-Pearson coefficient:  -0.281564783897
-Pearson coefficient:  -0.270690502822
-Pearson coefficient:  -0.259968526974
-Pearson coefficient:  -0.249688575243
-Pearson coefficient:  -0.2401669543
-Pearson coefficient:  -0.231704480435
-Pearson coefficient:  -0.224572097684
-Pearson coefficient:  -0.218921779103
-Pearson coefficient:  -0.214801925679
-Pearson coefficient:  -0.212070280802
-Pearson coefficient:  -0.210435318695
-Pearson coefficient:  -0.209407630636
-Pearson coefficient:  -0.208331219112
-Pearson coefficient:  -0.206361104522
-Pearson coefficient:  -0.202524165828
-Pearson coefficient:  -0.195783318625
-Pearson coefficient:  -0.185273865851
-Pearson coefficient:  -0.170492959111
-Pearson coefficient:  -0.151505973633
-Pearson coefficient:  -0.128975703025
-Pearson coefficient:  -0.103949609838
-Pearson coefficient:  -0.0775532593835
-Pearson coefficient:  -0.0507394438006
-Pearson coefficient:  -0.0241478767516
-Pearson coefficient:  0.00182389301034
-Pearson coefficient:  0.0269514624499
-Pearson coefficient:  0.0510071744181
-Pearson coefficient:  0.0736819201129
-Pearson coefficient:  0.0944906786052
-Pearson coefficient:  0.112751716928
-Pearson coefficient:  0.127695761065
-Pearson coefficient:  0.138605061742
-Pearson coefficient:  0.144987988775
-Pearson coefficient:  0.146675372042
-Pearson coefficient:  0.143826662157
-Pearson coefficient:  0.136804147634
-Pearson coefficient:  0.125990892782
-Pearson coefficient:  0.111731561443
-Pearson coefficient:  0.0942221948235
-Pearson coefficient:  0.0735265442365
-Pearson coefficient:  0.0496254991096
-Pearson coefficient:  0.0224855391925
-Pearson coefficient:  -0.00781568533069
-Pearson coefficient:  -0.0409126222925
-Pearson coefficient:  -0.0760381836106
-Pearson coefficient:  -0.112004419687
-Pearson coefficient:  -0.14731047433
-Pearson coefficient:  -0.180431568263
-Pearson coefficient:  -0.210132676719
-Pearson coefficient:  -0.235669208567
-Pearson coefficient:  -0.256754584396
-Pearson coefficient:  -0.273411631275
-Pearson coefficient:  -0.285740212573
-Pearson coefficient:  -0.293780104894
-Pearson coefficient:  -0.297421045789
-Pearson coefficient:  -0.296447920222
-Pearson coefficient:  -0.290573893758
-Pearson coefficient:  -0.279606712324
-Pearson coefficient:  -0.26357699919
-Pearson coefficient:  -0.242807028219
-Pearson coefficient:  -0.217985650442
-Pearson coefficient:  -0.190070999418
-Pearson coefficient:  -0.160247325237
-Pearson coefficient:  -0.129701090537
-Pearson coefficient:  -0.0995507363252
-Pearson coefficient:  -0.0706621296326
-Pearson coefficient:  -0.0436154428353
-Pearson coefficient:  -0.0186947868904
-Pearson coefficient:  0.00408890676447
-Pearson coefficient:  0.0248956731832
-Pearson coefficient:  0.0439732474138
-Pearson coefficient:  0.0615591183198
-Pearson coefficient:  0.0778247558499
-Pearson coefficient:  0.0927847847711
 row
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
 Pearson coefficient:  nan
 Pearson coefficient:  nan
 Pearson coefficient:  nan
@@ -1338,701 +622,7 @@ Pearson coefficient:  -0.439606782247
 Pearson coefficient:  -0.433638002453
 Pearson coefficient:  -0.431911847347
 Pearson coefficient:  -0.433122757429
-Pearson coefficient:  -0.434918723559
-Pearson coefficient:  -0.43392336787
-Pearson coefficient:  -0.426613658284
-Pearson coefficient:  -0.411076267861
-Pearson coefficient:  -0.388177293172
-Pearson coefficient:  -0.360803420353
-Pearson coefficient:  -0.331990358032
-Pearson coefficient:  -0.303731090415
-Pearson coefficient:  -0.276823086376
-Pearson coefficient:  -0.251305643723
-Pearson coefficient:  -0.226825617822
-Pearson coefficient:  -0.202956954776
-Pearson coefficient:  -0.179397733817
-Pearson coefficient:  -0.156116035761
-Pearson coefficient:  -0.133375655134
-Pearson coefficient:  -0.111732836408
-Pearson coefficient:  -0.0919161273929
-Pearson coefficient:  -0.0747313868225
-Pearson coefficient:  -0.0609104053045
-Pearson coefficient:  -0.0511074690051
-Pearson coefficient:  -0.0457998757625
-Pearson coefficient:  -0.0454030604597
-Pearson coefficient:  -0.0501418927236
-Pearson coefficient:  -0.0600223394236
-Pearson coefficient:  -0.0745477386437
-Pearson coefficient:  -0.0923754122211
-Pearson coefficient:  -0.111032563247
-Pearson coefficient:  -0.127157071434
-Pearson coefficient:  -0.137560523492
-Pearson coefficient:  -0.140446276168
-Pearson coefficient:  -0.135769478783
-Pearson coefficient:  -0.124706510316
-Pearson coefficient:  -0.108830758521
-Pearson coefficient:  -0.0896494177335
-Pearson coefficient:  -0.0684408125928
-Pearson coefficient:  -0.046249521396
-Pearson coefficient:  -0.0239210775772
-Pearson coefficient:  -0.00212638886978
-Pearson coefficient:  0.0185940279172
-Pearson coefficient:  0.037805565414
-Pearson coefficient:  0.0552015403024
-Pearson coefficient:  0.0705435989707
-Pearson coefficient:  0.0837396776237
-Pearson coefficient:  0.0947822690337
-Pearson coefficient:  0.103814957216
-Pearson coefficient:  0.111104115039
-Pearson coefficient:  0.117037162242
-Pearson coefficient:  0.122073325798
-Pearson coefficient:  0.126686013537
-Pearson coefficient:  0.131329345341
-Pearson coefficient:  0.136390307901
-Pearson coefficient:  0.1421416542
-Pearson coefficient:  0.148755238406
-Pearson coefficient:  0.156300589664
-Pearson coefficient:  0.164765314884
-Pearson coefficient:  0.174089504061
-Pearson coefficient:  0.184188033026
-Pearson coefficient:  0.194939075892
-Pearson coefficient:  0.206218652011
-Pearson coefficient:  0.217900042207
-Pearson coefficient:  0.229848949178
-Pearson coefficient:  0.241959307733
-Pearson coefficient:  0.254104164945
-Pearson coefficient:  0.266219666676
-Pearson coefficient:  0.278220886754
-Pearson coefficient:  0.290018937067
-Pearson coefficient:  0.301529165765
-Pearson coefficient:  0.312650582437
-Pearson coefficient:  0.323227385652
-Pearson coefficient:  0.333168864966
-Pearson coefficient:  0.342379452084
-Pearson coefficient:  0.350790777211
-Pearson coefficient:  0.358453819053
-Pearson coefficient:  0.365409671823
-Pearson coefficient:  0.371753347865
-Pearson coefficient:  0.377547614366
-Pearson coefficient:  0.382774890663
-Pearson coefficient:  0.387315421869
-Pearson coefficient:  0.390907424623
-Pearson coefficient:  0.393140235727
-Pearson coefficient:  0.393602232108
-Pearson coefficient:  0.391884385174
-Pearson coefficient:  0.387834111903
-Pearson coefficient:  0.381563405348
-Pearson coefficient:  0.373528381621
-Pearson coefficient:  0.364523387205
-Pearson coefficient:  0.355483003079
-Pearson coefficient:  0.347373541053
-Pearson coefficient:  0.341075581979
-Pearson coefficient:  0.337269332766
-Pearson coefficient:  0.336427268032
-Pearson coefficient:  0.338749375124
-Pearson coefficient:  0.344222736958
-Pearson coefficient:  0.35269250047
-Pearson coefficient:  0.363838633259
-Pearson coefficient:  0.377210462303
-Pearson coefficient:  0.392246704993
-Pearson coefficient:  0.408279572848
-Pearson coefficient:  0.424626203292
-Pearson coefficient:  0.440471839705
-Pearson coefficient:  0.455221120665
-Pearson coefficient:  0.468347894046
-Pearson coefficient:  0.4796522178
-Pearson coefficient:  0.489098486891
-Pearson coefficient:  0.496824990544
-Pearson coefficient:  0.502970958976
-Pearson coefficient:  0.507629502468
-Pearson coefficient:  0.510802281293
-Pearson coefficient:  0.512465364927
-Pearson coefficient:  0.512579235382
-Pearson coefficient:  0.511112171451
-Pearson coefficient:  0.508183681599
-Pearson coefficient:  0.503982854048
-Pearson coefficient:  0.498796768061
-Pearson coefficient:  0.493035401301
-Pearson coefficient:  0.487208940591
-Pearson coefficient:  0.481836884512
-Pearson coefficient:  0.477382813861
-Pearson coefficient:  0.474308160323
-Pearson coefficient:  0.472904702077
-Pearson coefficient:  0.473350193152
-Pearson coefficient:  0.475694143564
-Pearson coefficient:  0.479838314326
-Pearson coefficient:  0.485522171598
-Pearson coefficient:  0.492372231496
-Pearson coefficient:  0.499919528405
-Pearson coefficient:  0.507605919731
-Pearson coefficient:  0.514710633512
-Pearson coefficient:  0.520583288178
-Pearson coefficient:  0.524475670222
-Pearson coefficient:  0.525726748359
-Pearson coefficient:  0.523819305967
-Pearson coefficient:  0.518457581617
-Pearson coefficient:  0.50969880747
-Pearson coefficient:  0.498016838197
-Pearson coefficient:  0.484456252054
-Pearson coefficient:  0.470336558212
-Pearson coefficient:  0.457311469175
-Pearson coefficient:  0.446967985161
-Pearson coefficient:  0.440736588704
-Pearson coefficient:  0.439590821356
-Pearson coefficient:  0.444082130996
-Pearson coefficient:  0.454329957555
-Pearson coefficient:  0.469992908503
-Pearson coefficient:  0.490365323423
-Pearson coefficient:  0.514376392632
-Pearson coefficient:  0.540586120789
-Pearson coefficient:  0.567256425448
-Pearson coefficient:  0.592414819645
-Pearson coefficient:  0.613850243639
-Pearson coefficient:  0.629251984179
-Pearson coefficient:  0.636465376806
-Pearson coefficient:  0.633876854329
-Pearson coefficient:  0.620757606615
-Pearson coefficient:  0.597569629924
-Pearson coefficient:  0.566371189349
-Pearson coefficient:  0.5304895503
-Pearson coefficient:  0.493778409767
-Pearson coefficient:  0.460004981989
-Pearson coefficient:  0.432065289633
-Pearson coefficient:  0.411710894657
-Pearson coefficient:  0.399506253257
-Pearson coefficient:  0.395291555676
-Pearson coefficient:  0.397918997216
-Pearson coefficient:  0.405946334872
-Pearson coefficient:  0.417322853523
-Pearson coefficient:  0.429604710352
-Pearson coefficient:  0.43993653564
-Pearson coefficient:  0.445511828147
-Pearson coefficient:  0.443986853942
-Pearson coefficient:  0.43415643289
-Pearson coefficient:  0.416649694602
-Pearson coefficient:  0.393719726968
-Pearson coefficient:  0.368827219547
-Pearson coefficient:  0.345775474134
-Pearson coefficient:  0.328022281098
-Pearson coefficient:  0.318160934527
-Pearson coefficient:  0.317789918138
-Pearson coefficient:  0.327767612969
-Pearson coefficient:  0.347970936873
-Pearson coefficient:  0.377612127129
-Pearson coefficient:  0.41544665214
-Pearson coefficient:  0.459555778327
-Pearson coefficient:  0.50768043508
-Pearson coefficient:  0.557381202247
-Pearson coefficient:  0.605873767375
-Pearson coefficient:  0.650491014749
-Pearson coefficient:  0.688723950825
-Pearson coefficient:  0.718581084353
-Pearson coefficient:  0.738701315813
-Pearson coefficient:  0.748767042136
-Pearson coefficient:  0.749368135433
-Pearson coefficient:  0.741816306108
-Pearson coefficient:  0.72822450203
-Pearson coefficient:  0.711004762059
-Pearson coefficient:  0.692511418657
-Pearson coefficient:  0.674815277132
-Pearson coefficient:  0.659485212673
-Pearson coefficient:  0.647406019928
-Pearson coefficient:  0.638907424211
-Pearson coefficient:  0.633800045603
-Pearson coefficient:  0.63163489924
-Pearson coefficient:  0.631754449543
-Pearson coefficient:  0.633386203747
-Pearson coefficient:  0.635576305952
-Pearson coefficient:  0.637583807573
-Pearson coefficient:  0.6384941466
-Pearson coefficient:  0.637561692764
-Pearson coefficient:  0.634123074658
-Pearson coefficient:  0.627572508116
-Pearson coefficient:  0.61775973871
-Pearson coefficient:  0.604718194628
-Pearson coefficient:  0.58893419361
-Pearson coefficient:  0.57143413975
-Pearson coefficient:  0.553562670184
-Pearson coefficient:  0.537069983799
-Pearson coefficient:  0.523902555269
-Pearson coefficient:  0.51607578248
-Pearson coefficient:  0.515474062522
-Pearson coefficient:  0.523872260366
-Pearson coefficient:  0.542772802998
-Pearson coefficient:  0.572970664572
-Pearson coefficient:  0.61428554866
-Pearson coefficient:  0.664920212462
-Pearson coefficient:  0.721063595905
-Pearson coefficient:  0.777317509634
-Pearson coefficient:  0.828243991629
-Pearson coefficient:  0.869735774895
-Pearson coefficient:  0.900249042641
-Pearson coefficient:  0.920273263134
-Pearson coefficient:  0.931376825903
-Pearson coefficient:  0.935258167934
-Pearson coefficient:  0.933369704056
-Pearson coefficient:  0.926809643643
-Pearson coefficient:  0.916423929031
-Pearson coefficient:  0.902832503563
-Pearson coefficient:  0.886673369305
-Pearson coefficient:  0.868659832247
-Pearson coefficient:  0.849643396726
-Pearson coefficient:  0.830607701298
-Pearson coefficient:  0.812769276759
-Pearson coefficient:  0.79752642344
-Pearson coefficient:  0.786299825018
-Pearson coefficient:  0.780382367081
-Pearson coefficient:  0.780606593506
-Pearson coefficient:  0.787364034152
-Pearson coefficient:  0.800153805454
-Pearson coefficient:  0.817472479322
-Pearson coefficient:  0.837330237955
-Pearson coefficient:  0.857412369556
-Pearson coefficient:  0.875683261355
-Pearson coefficient:  0.890572066983
-Pearson coefficient:  0.901380034674
-Pearson coefficient:  0.907985385822
-Pearson coefficient:  0.910596682372
-Pearson coefficient:  0.909645401135
-Pearson coefficient:  0.905622776492
-Pearson coefficient:  0.899006435564
-Pearson coefficient:  0.890249658142
-Pearson coefficient:  0.879744525704
-Pearson coefficient:  0.867861642276
-Pearson coefficient:  0.855108426757
-Pearson coefficient:  0.841970248025
-Pearson coefficient:  0.828984348829
-Pearson coefficient:  0.816872861796
-Pearson coefficient:  0.806323627821
-Pearson coefficient:  0.79807682033
-Pearson coefficient:  0.792870628201
-Pearson coefficient:  0.791534585656
-Pearson coefficient:  0.794632635645
-Pearson coefficient:  0.802579148056
-Pearson coefficient:  0.815313426239
-Pearson coefficient:  0.832063678084
-Pearson coefficient:  0.85124641463
-Pearson coefficient:  0.870889606365
-Pearson coefficient:  0.8891274904
-Pearson coefficient:  0.904917686776
-Pearson coefficient:  0.917914688804
-Pearson coefficient:  0.928403478334
-Pearson coefficient:  0.936755839399
-Pearson coefficient:  0.943187138871
-Pearson coefficient:  0.947739610395
-Pearson coefficient:  0.95017239204
-Pearson coefficient:  0.950141216918
-Pearson coefficient:  0.947157418271
-Pearson coefficient:  0.940690437899
-Pearson coefficient:  0.930139341851
-Pearson coefficient:  0.914955166494
-Pearson coefficient:  0.894660017869
-Pearson coefficient:  0.869070834888
-Pearson coefficient:  0.838345724155
-Pearson coefficient:  0.803261524004
-Pearson coefficient:  0.765265245211
-Pearson coefficient:  0.726601855118
-Pearson coefficient:  0.690361851911
-Pearson coefficient:  0.6600068069
-Pearson coefficient:  0.639364741066
-Pearson coefficient:  0.631791091068
-Pearson coefficient:  0.639087761374
-Pearson coefficient:  0.660797994451
-Pearson coefficient:  0.693466711205
-Pearson coefficient:  0.731309622008
-Pearson coefficient:  0.768311954972
-Pearson coefficient:  0.800221159769
-Pearson coefficient:  0.82502997882
-Pearson coefficient:  0.842550674322
-Pearson coefficient:  0.853354405252
-Pearson coefficient:  0.85814222333
-Pearson coefficient:  0.857754841532
-Pearson coefficient:  0.852842949397
-Pearson coefficient:  0.844058323341
-Pearson coefficient:  0.832156883573
-Pearson coefficient:  0.817961545956
-Pearson coefficient:  0.802455033981
-Pearson coefficient:  0.786652916838
-Pearson coefficient:  0.7717801892
-Pearson coefficient:  0.758918019287
-Pearson coefficient:  0.749133128462
-Pearson coefficient:  0.74313535222
-Pearson coefficient:  0.741326606451
-Pearson coefficient:  0.743541020112
-Pearson coefficient:  0.749138544568
-Pearson coefficient:  0.756952833903
-Pearson coefficient:  0.765500851006
-Pearson coefficient:  0.773377563337
-Pearson coefficient:  0.779368486008
-Pearson coefficient:  0.782780834058
-Pearson coefficient:  0.783357821889
-Pearson coefficient:  0.781217613754
-Pearson coefficient:  0.776659650438
-Pearson coefficient:  0.770072636139
-Pearson coefficient:  0.761778965478
-Pearson coefficient:  0.752072234978
-Pearson coefficient:  0.741167766756
-Pearson coefficient:  0.729229104246
-Pearson coefficient:  0.716368644222
-Pearson coefficient:  0.70272873776
-Pearson coefficient:  0.688478671142
-Pearson coefficient:  0.673813936471
-Pearson coefficient:  0.658962747273
-Pearson coefficient:  0.644210881082
-Pearson coefficient:  0.629842785691
-Pearson coefficient:  0.616138207715
-Pearson coefficient:  0.603361682415
-Pearson coefficient:  0.591713026683
-Pearson coefficient:  0.581343689645
-Pearson coefficient:  0.572332205618
-Pearson coefficient:  0.564710679185
-Pearson coefficient:  0.558518371126
-Pearson coefficient:  0.553722339951
-Pearson coefficient:  0.55032288109
-Pearson coefficient:  0.548241130191
-Pearson coefficient:  0.547379399972
-Pearson coefficient:  0.547590887425
-Pearson coefficient:  0.548640947681
-Pearson coefficient:  0.550247411989
-Pearson coefficient:  0.552116715943
-Pearson coefficient:  0.553922228432
-Pearson coefficient:  0.555287631377
-Pearson coefficient:  0.555887392158
-Pearson coefficient:  0.555370022315
-Pearson coefficient:  0.553422067746
-Pearson coefficient:  0.54983706711
-Pearson coefficient:  0.544493870264
-Pearson coefficient:  0.537401373626
-Pearson coefficient:  0.528770645476
-Pearson coefficient:  0.518926952926
-Pearson coefficient:  0.508379256683
-Pearson coefficient:  0.497683334149
-Pearson coefficient:  0.487424073173
-Pearson coefficient:  0.478084690695
-Pearson coefficient:  0.470026150653
-Pearson coefficient:  0.463452187826
-Pearson coefficient:  0.458397512542
-Pearson coefficient:  0.454775233396
-Pearson coefficient:  0.452419094595
-Pearson coefficient:  0.451155181122
-Pearson coefficient:  0.450812824009
-Pearson coefficient:  0.451254363157
-Pearson coefficient:  0.452378173278
-Pearson coefficient:  0.454129198721
-Pearson coefficient:  0.456428526636
-Pearson coefficient:  0.459210461972
-Pearson coefficient:  0.462335872317
-Pearson coefficient:  0.465690270136
-Pearson coefficient:  0.469071666574
-Pearson coefficient:  0.472284517793
-Pearson coefficient:  0.47511884523
-Pearson coefficient:  0.477361638565
-Pearson coefficient:  0.478850160766
-Pearson coefficient:  0.479488498473
-Pearson coefficient:  0.479221444094
-Pearson coefficient:  0.478053727076
-Pearson coefficient:  0.476100836921
-Pearson coefficient:  0.473482870368
-Pearson coefficient:  0.470413392185
-Pearson coefficient:  0.467154067712
-Pearson coefficient:  0.463944773959
-Pearson coefficient:  0.461102345533
-Pearson coefficient:  0.458887561463
-Pearson coefficient:  0.457559296696
-Pearson coefficient:  0.457319599687
-Pearson coefficient:  0.458312197708
-Pearson coefficient:  0.460617291553
-Pearson coefficient:  0.464243483569
-Pearson coefficient:  0.469111373
-Pearson coefficient:  0.475089283011
-Pearson coefficient:  0.482009504261
-Pearson coefficient:  0.489666414172
-Pearson coefficient:  0.497855651208
-Pearson coefficient:  0.506373131292
-Pearson coefficient:  0.515017317551
-Pearson coefficient:  0.523618687165
-Pearson coefficient:  0.531991427352
-Pearson coefficient:  0.539947504252
-Pearson coefficient:  0.547303796477
-Pearson coefficient:  0.553902440522
-Pearson coefficient:  0.559608899589
-Pearson coefficient:  0.56432441246
-Pearson coefficient:  0.568049286118
-Pearson coefficient:  0.570825762338
-Pearson coefficient:  0.572795750995
-Pearson coefficient:  0.574153674577
-Pearson coefficient:  0.575201516436
-Pearson coefficient:  0.576312630768
-Pearson coefficient:  0.577865947942
-Pearson coefficient:  0.580252803755
-Pearson coefficient:  0.583783540857
-Pearson coefficient:  0.588636040746
-Pearson coefficient:  0.594811601676
-Pearson coefficient:  0.602098328898
-Pearson coefficient:  0.610068412454
-Pearson coefficient:  0.618178648523
-Pearson coefficient:  0.62581205854
-Pearson coefficient:  0.632377832018
-Pearson coefficient:  0.637396427949
-Pearson coefficient:  0.640545999993
-Pearson coefficient:  0.641659934718
-Pearson coefficient:  0.640726506679
-Pearson coefficient:  0.637863346049
-Pearson coefficient:  0.63325232332
-Pearson coefficient:  0.627128626632
-Pearson coefficient:  0.619751484
-Pearson coefficient:  0.611397388222
-Pearson coefficient:  0.60234709476
-Pearson coefficient:  0.592893861251
-Pearson coefficient:  0.583368954972
-Pearson coefficient:  0.574110077373
-Pearson coefficient:  0.56547812105
-Pearson coefficient:  0.5578526853
-Pearson coefficient:  0.551549838791
-Pearson coefficient:  0.546855054655
-Pearson coefficient:  0.54392750344
-Pearson coefficient:  0.542796603994
-Pearson coefficient:  0.543343633382
-Pearson coefficient:  0.545282978715
-Pearson coefficient:  0.548213841102
-Pearson coefficient:  0.551628366336
-Pearson coefficient:  0.554967108566
-Pearson coefficient:  0.557672907306
-Pearson coefficient:  0.559252896482
-Pearson coefficient:  0.559354603443
-Pearson coefficient:  0.557757879525
-Pearson coefficient:  0.554450734069
-Pearson coefficient:  0.549552613168
-Pearson coefficient:  0.543327822738
-Pearson coefficient:  0.536136564925
-Pearson coefficient:  0.528379467764
-Pearson coefficient:  0.520473724352
-Pearson coefficient:  0.512826559732
-Pearson coefficient:  0.505817096394
-Pearson coefficient:  0.499757778025
-Pearson coefficient:  0.494891110513
-Pearson coefficient:  0.491341569795
-Pearson coefficient:  0.489117791963
-Pearson coefficient:  0.488074643792
-Pearson coefficient:  0.4879156197
-Pearson coefficient:  0.488228865175
-Pearson coefficient:  0.488514943806
-Pearson coefficient:  0.488278933779
-Pearson coefficient:  0.487062052398
-Pearson coefficient:  0.484531048858
-Pearson coefficient:  0.480506110238
-Pearson coefficient:  0.474970434548
-Pearson coefficient:  0.468045533598
-Pearson coefficient:  0.459977188495
-Pearson coefficient:  0.451091135289
-Pearson coefficient:  0.441739256959
-Pearson coefficient:  0.432289765302
-Pearson coefficient:  0.423074465923
-Pearson coefficient:  0.41437134502
-Pearson coefficient:  0.406388571406
-Pearson coefficient:  0.399261408161
-Pearson coefficient:  0.393043978111
-Pearson coefficient:  0.387723388353
-Pearson coefficient:  0.383232432372
-Pearson coefficient:  0.379448977204
-Pearson coefficient:  0.376229201358
-Pearson coefficient:  0.373412335471
-Pearson coefficient:  0.370846058928
-Pearson coefficient:  0.368398898126
-Pearson coefficient:  0.365960262453
-Pearson coefficient:  0.363460428239
-Pearson coefficient:  0.360860080285
-Pearson coefficient:  0.358146318731
-Pearson coefficient:  0.355331234351
-Pearson coefficient:  0.352427750311
-Pearson coefficient:  0.349445787234
-Pearson coefficient:  0.346360562543
-Pearson coefficient:  0.343121312972
-Pearson coefficient:  0.339612321815
-Pearson coefficient:  0.335678033767
-Pearson coefficient:  0.331101746661
-Pearson coefficient:  0.325636312606
-Pearson coefficient:  0.319036935408
-Pearson coefficient:  0.311068654355
-Pearson coefficient:  0.301564173253
-Pearson coefficient:  0.290448312115
-Pearson coefficient:  0.277732456347
-Pearson coefficient:  0.263538011323
-Pearson coefficient:  0.248058656105
-Pearson coefficient:  0.231544013043
-Pearson coefficient:  0.214278482923
-Pearson coefficient:  0.196560565441
-Pearson coefficient:  0.178676988552
-Pearson coefficient:  0.160887073693
-Pearson coefficient:  0.143402419593
-Pearson coefficient:  0.12638706207
-Pearson coefficient:  0.109950099781
-Pearson coefficient:  0.0941805787792
-Pearson coefficient:  0.0791643181237
-Pearson coefficient:  0.0650062232643
-Pearson coefficient:  0.0518511743499
-Pearson coefficient:  0.0398889738874
-Pearson coefficient:  0.0292904747631
-Pearson coefficient:  0.0201976652008
-Pearson coefficient:  0.0126834815057
-Pearson coefficient:  0.00673589830254
-Pearson coefficient:  0.0022552137972
-Pearson coefficient:  -0.000912512127263
-Pearson coefficient:  -0.00297903678021
-Pearson coefficient:  -0.00419467493699
-Pearson coefficient:  -0.0048327663439
-Pearson coefficient:  -0.00519680872351
-Pearson coefficient:  -0.0056065495986
-Pearson coefficient:  -0.00639307412652
-Pearson coefficient:  -0.00788840364213
-Pearson coefficient:  -0.0104011099816
-Pearson coefficient:  -0.0142278129157
-Pearson coefficient:  -0.019615021899
-Pearson coefficient:  -0.0267767230773
-Pearson coefficient:  -0.0359105632593
-Pearson coefficient:  -0.0472051020415
-Pearson coefficient:  -0.0608874767876
-Pearson coefficient:  -0.0772277764002
-Pearson coefficient:  -0.0965369283706
-Pearson coefficient:  -0.119121670206
-Pearson coefficient:  -0.145160950531
-Pearson coefficient:  -0.174566277886
-Pearson coefficient:  -0.206793046155
-Pearson coefficient:  -0.240763624397
-Pearson coefficient:  -0.274999737722
-Pearson coefficient:  -0.307939054574
-Pearson coefficient:  -0.338391129823
-Pearson coefficient:  -0.365792689176
-Pearson coefficient:  -0.390193708211
-Pearson coefficient:  -0.411998688441
-Pearson coefficient:  -0.431717166433
-Pearson coefficient:  -0.449753665223
-Pearson coefficient:  -0.466313424226
-Pearson coefficient:  -0.481358415217
-Pearson coefficient:  -0.49462223998
-Pearson coefficient:  -0.505681683301
-Pearson coefficient:  -0.514026882492
-Pearson coefficient:  -0.519165704703
-Pearson coefficient:  -0.520745307433
-Pearson coefficient:  -0.518605741139
-Pearson coefficient:  -0.512837673762
-Pearson coefficient:  -0.503696416044
-Pearson coefficient:  -0.491549741286
-Pearson coefficient:  -0.476777447316
-Pearson coefficient:  -0.45969023899
-Pearson coefficient:  -0.440494426319
-Pearson coefficient:  -0.419325694256
-Pearson coefficient:  -0.396286726013
-Pearson coefficient:  -0.37152198316
-Pearson coefficient:  -0.345305111526
-Pearson coefficient:  -0.318056891128
-Pearson coefficient:  -0.29038819404
-Pearson coefficient:  -0.263061597356
-Pearson coefficient:  -0.236915352375
-Pearson coefficient:  -0.212777803444
-Pearson coefficient:  -0.191369217999
-Pearson coefficient:  -0.173189384082
-Pearson coefficient:  -0.158471184775
-Pearson coefficient:  -0.147104450678
-Pearson coefficient:  -0.13871183197
-Pearson coefficient:  -0.132668948469
-Pearson coefficient:  -0.128173888043
-Pearson coefficient:  -0.1242704183
-Pearson coefficient:  -0.119905768311
-Pearson coefficient:  -0.113907743867
-Pearson coefficient:  -0.105094239719
-Pearson coefficient:  -0.0923574510281
-Pearson coefficient:  -0.0748972744078
-Pearson coefficient:  -0.0524033523515
-Pearson coefficient:  -0.0251823756414
-Pearson coefficient:  0.00590713688879
-Pearson coefficient:  0.0397406577838
-Pearson coefficient:  0.0752500949657
-Pearson coefficient:  0.111647944038
-Pearson coefficient:  0.14847899541
-Pearson coefficient:  0.185512463087
-Pearson coefficient:  0.222578518707
-Pearson coefficient:  0.259362711359
-Pearson coefficient:  0.295312501046
-Pearson coefficient:  0.329478973733
-Pearson coefficient:  0.360567285006
-Pearson coefficient:  0.38713198977
-Pearson coefficient:  0.407898844574
-Pearson coefficient:  0.422058388465
-Pearson coefficient:  0.429498512289
-Pearson coefficient:  0.43070132236
-Pearson coefficient:  0.42652545314
-Pearson coefficient:  0.417881620415
-Pearson coefficient:  0.405534967406
-Pearson coefficient:  0.389919370054
-Pearson coefficient:  0.371147234364
-Pearson coefficient:  0.34899430301
-Pearson coefficient:  0.323021627607
-Pearson coefficient:  0.292707213462
-Pearson coefficient:  0.257674020796
-Pearson coefficient:  0.21797577884
-Pearson coefficient:  0.174330244681
-Pearson coefficient:  0.128228701152
-Pearson coefficient:  0.0817478847921
-Pearson coefficient:  0.0371400398561
-Pearson coefficient:  -0.00360106759123
-Pearson coefficient:  -0.039003327837
-Pearson coefficient:  -0.0681450773476
-Pearson coefficient:  -0.0905339216228
-Pearson coefficient:  -0.105924718064
-Pearson coefficient:  -0.114237723345
-Pearson coefficient:  -0.115484308241
-Pearson coefficient:  -0.109835024088
-Pearson coefficient:  -0.0976667206368
-Pearson coefficient:  -0.0796504197547
-Pearson coefficient:  -0.0567416106135
-Pearson coefficient:  -0.0301478499102
-Pearson coefficient:  -0.00123370262733
-Pearson coefficient:  0.0286633829734
-Pearson coefficient:  0.0583111222544
-Pearson coefficient:  0.0867597567499
-Pearson coefficient:  0.113371336284
-Pearson coefficient:  0.137810950347
-Pearson coefficient:  0.160033457238
-Pearson coefficient:  0.180181583877
-Pearson coefficient:  0.19851041916
-Pearson coefficient:  0.215315238811
-Pearson coefficient:  0.230865238603
-Pearson coefficient:  0.245359794212
-Pearson coefficient:  0.258895629075
 row
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
-Pearson coefficient:  nan
 Pearson coefficient:  nan
 Pearson coefficient:  nan
 Pearson coefficient:  nan
@@ -2339,665 +929,315 @@ Pearson coefficient:  -0.0352363410961
 Pearson coefficient:  -0.0488814819638
 Pearson coefficient:  -0.06700356731
 Pearson coefficient:  -0.0929845841519
-Pearson coefficient:  -0.130358262047
-Pearson coefficient:  -0.181668488329
-Pearson coefficient:  -0.246769695813
-Pearson coefficient:  -0.321935375968
-Pearson coefficient:  -0.401148970037
-Pearson coefficient:  -0.478798033467
-Pearson coefficient:  -0.551409898082
-Pearson coefficient:  -0.61757607685
-Pearson coefficient:  -0.677115333245
-Pearson coefficient:  -0.730137864242
-Pearson coefficient:  -0.776624358063
-Pearson coefficient:  -0.816119249627
-Pearson coefficient:  -0.847812797896
-Pearson coefficient:  -0.870811075453
-Pearson coefficient:  -0.884519553607
-Pearson coefficient:  -0.889050457558
-Pearson coefficient:  -0.885432854139
-Pearson coefficient:  -0.875546409154
-Pearson coefficient:  -0.861865099972
-Pearson coefficient:  -0.847087667846
-Pearson coefficient:  -0.833826033342
-Pearson coefficient:  -0.824444932153
-Pearson coefficient:  -0.820803000221
-Pearson coefficient:  -0.824042224717
-Pearson coefficient:  -0.834132584923
-Pearson coefficient:  -0.849385996318
-Pearson coefficient:  -0.866408421956
-Pearson coefficient:  -0.881195615237
-Pearson coefficient:  -0.891249986803
-Pearson coefficient:  -0.896851040358
-Pearson coefficient:  -0.900269182962
-Pearson coefficient:  -0.903839192745
-Pearson coefficient:  -0.908752349815
-Pearson coefficient:  -0.915018342597
-Pearson coefficient:  -0.921976716894
-Pearson coefficient:  -0.9287866651
-Pearson coefficient:  -0.934765835356
-Pearson coefficient:  -0.93951326018
-Pearson coefficient:  -0.942875134373
-Pearson coefficient:  -0.944904547372
-Pearson coefficient:  -0.945788078925
-Pearson coefficient:  -0.94578357844
-Pearson coefficient:  -0.945158900703
-Pearson coefficient:  -0.944167358402
-Pearson coefficient:  -0.943003626841
-Pearson coefficient:  -0.941789525895
-Pearson coefficient:  -0.940577624855
-Pearson coefficient:  -0.939344676768
-Pearson coefficient:  -0.938031737696
-Pearson coefficient:  -0.93656139871
-Pearson coefficient:  -0.934860475195
-Pearson coefficient:  -0.932877688201
-Pearson coefficient:  -0.930588111078
-Pearson coefficient:  -0.92798469224
-Pearson coefficient:  -0.925099413012
-Pearson coefficient:  -0.921965811064
-Pearson coefficient:  -0.918635435545
-Pearson coefficient:  -0.915154043655
-Pearson coefficient:  -0.911554672818
-Pearson coefficient:  -0.907871919601
-Pearson coefficient:  -0.904138638701
-Pearson coefficient:  -0.900416477951
-Pearson coefficient:  -0.896812748271
-Pearson coefficient:  -0.89347407556
-Pearson coefficient:  -0.890551948763
-Pearson coefficient:  -0.888152565741
-Pearson coefficient:  -0.886262427156
-Pearson coefficient:  -0.884734991446
-Pearson coefficient:  -0.883314537765
-Pearson coefficient:  -0.881669375447
-Pearson coefficient:  -0.879470042229
-Pearson coefficient:  -0.876437005654
-Pearson coefficient:  -0.872368401474
-Pearson coefficient:  -0.867173338832
-Pearson coefficient:  -0.860864693567
-Pearson coefficient:  -0.853532880974
-Pearson coefficient:  -0.845345978073
-Pearson coefficient:  -0.836540173928
-Pearson coefficient:  -0.827418473706
-Pearson coefficient:  -0.818391017611
-Pearson coefficient:  -0.809930455659
-Pearson coefficient:  -0.802603984836
-Pearson coefficient:  -0.796936757905
-Pearson coefficient:  -0.793359875077
-Pearson coefficient:  -0.792077702516
-Pearson coefficient:  -0.792943399769
-Pearson coefficient:  -0.795535833839
-Pearson coefficient:  -0.799193681153
-Pearson coefficient:  -0.803171096615
-Pearson coefficient:  -0.806717190706
-Pearson coefficient:  -0.809206778404
-Pearson coefficient:  -0.810120474043
-Pearson coefficient:  -0.809142558792
-Pearson coefficient:  -0.806006895582
-Pearson coefficient:  -0.800530276524
-Pearson coefficient:  -0.792606905667
-Pearson coefficient:  -0.782153149151
-Pearson coefficient:  -0.769176750716
-Pearson coefficient:  -0.75378336319
-Pearson coefficient:  -0.736379865505
-Pearson coefficient:  -0.717601094032
-Pearson coefficient:  -0.698458175599
-Pearson coefficient:  -0.680102317803
-Pearson coefficient:  -0.663691790511
-Pearson coefficient:  -0.650104446947
-Pearson coefficient:  -0.639819602304
-Pearson coefficient:  -0.632957024627
-Pearson coefficient:  -0.629221933359
-Pearson coefficient:  -0.628065674753
-Pearson coefficient:  -0.628796779503
-Pearson coefficient:  -0.630582657768
-Pearson coefficient:  -0.632567947175
-Pearson coefficient:  -0.633844978208
-Pearson coefficient:  -0.633609638987
-Pearson coefficient:  -0.631017747792
-Pearson coefficient:  -0.625414315022
-Pearson coefficient:  -0.616293254509
-Pearson coefficient:  -0.603519832362
-Pearson coefficient:  -0.587214752879
-Pearson coefficient:  -0.568012964728
-Pearson coefficient:  -0.546836224526
-Pearson coefficient:  -0.524917515677
-Pearson coefficient:  -0.503524453847
-Pearson coefficient:  -0.483822882757
-Pearson coefficient:  -0.466657482888
-Pearson coefficient:  -0.45260553523
-Pearson coefficient:  -0.441730774392
-Pearson coefficient:  -0.433814562453
-Pearson coefficient:  -0.42832194274
-Pearson coefficient:  -0.424645633962
-Pearson coefficient:  -0.422035977656
-Pearson coefficient:  -0.419920989533
-Pearson coefficient:  -0.417889390582
-Pearson coefficient:  -0.415839144359
-Pearson coefficient:  -0.414041280086
-Pearson coefficient:  -0.41291470624
-Pearson coefficient:  -0.413171716302
-Pearson coefficient:  -0.415364950891
-Pearson coefficient:  -0.419786552153
-Pearson coefficient:  -0.426435799303
-Pearson coefficient:  -0.434906150941
-Pearson coefficient:  -0.444358589368
-Pearson coefficient:  -0.453877806749
-Pearson coefficient:  -0.462412351747
-Pearson coefficient:  -0.468943778541
-Pearson coefficient:  -0.472714768041
-Pearson coefficient:  -0.473099463632
-Pearson coefficient:  -0.469813882
-Pearson coefficient:  -0.462855049249
-Pearson coefficient:  -0.452607524456
-Pearson coefficient:  -0.439682870988
-Pearson coefficient:  -0.425045014344
-Pearson coefficient:  -0.409827588516
-Pearson coefficient:  -0.395317634644
-Pearson coefficient:  -0.382726041133
-Pearson coefficient:  -0.372967017593
-Pearson coefficient:  -0.366698977254
-Pearson coefficient:  -0.363911212052
-Pearson coefficient:  -0.364278358735
-Pearson coefficient:  -0.3671174595
-Pearson coefficient:  -0.37157583177
-Pearson coefficient:  -0.376593643501
-Pearson coefficient:  -0.38114223941
-Pearson coefficient:  -0.384181454211
-Pearson coefficient:  -0.384615627434
-Pearson coefficient:  -0.381374948555
-Pearson coefficient:  -0.373427824219
-Pearson coefficient:  -0.360142533776
-Pearson coefficient:  -0.341318615769
-Pearson coefficient:  -0.317651841608
-Pearson coefficient:  -0.290891002669
-Pearson coefficient:  -0.263459742894
-Pearson coefficient:  -0.238208638309
-Pearson coefficient:  -0.217608448356
-Pearson coefficient:  -0.203155098408
-Pearson coefficient:  -0.195380663054
-Pearson coefficient:  -0.193844597451
-Pearson coefficient:  -0.197512486364
-Pearson coefficient:  -0.204887233695
-Pearson coefficient:  -0.214494850864
-Pearson coefficient:  -0.224600140701
-Pearson coefficient:  -0.233921634232
-Pearson coefficient:  -0.241301143193
-Pearson coefficient:  -0.24593984605
-Pearson coefficient:  -0.247319841706
-Pearson coefficient:  -0.245281834935
-Pearson coefficient:  -0.240191382215
-Pearson coefficient:  -0.232485304714
-Pearson coefficient:  -0.223045469281
-Pearson coefficient:  -0.212788412695
-Pearson coefficient:  -0.202681242503
-Pearson coefficient:  -0.193422176157
-Pearson coefficient:  -0.185504474812
-Pearson coefficient:  -0.179024258117
-Pearson coefficient:  -0.173921916499
-Pearson coefficient:  -0.169935498915
-Pearson coefficient:  -0.166927692183
-Pearson coefficient:  -0.164772596933
-Pearson coefficient:  -0.163320137504
-Pearson coefficient:  -0.162700339656
-Pearson coefficient:  -0.162903552366
-Pearson coefficient:  -0.163904637183
-Pearson coefficient:  -0.165531823045
-Pearson coefficient:  -0.16754211034
-Pearson coefficient:  -0.169461028338
-Pearson coefficient:  -0.170489965199
-Pearson coefficient:  -0.169976912006
-Pearson coefficient:  -0.167038968971
-Pearson coefficient:  -0.160949956674
-Pearson coefficient:  -0.151230787127
-Pearson coefficient:  -0.137697644085
-Pearson coefficient:  -0.120693679872
-Pearson coefficient:  -0.100996278035
-Pearson coefficient:  -0.0798101195213
-Pearson coefficient:  -0.0585463741429
-Pearson coefficient:  -0.038841942846
-Pearson coefficient:  -0.0221535421007
-Pearson coefficient:  -0.00964591891859
-Pearson coefficient:  -0.00220540917526
-Pearson coefficient:  -0.000581221684115
-Pearson coefficient:  -0.00504562957481
-Pearson coefficient:  -0.0157082428922
-Pearson coefficient:  -0.032363077704
-Pearson coefficient:  -0.0541035393555
-Pearson coefficient:  -0.0792015947495
-Pearson coefficient:  -0.105120994767
-Pearson coefficient:  -0.129029486135
-Pearson coefficient:  -0.14849761345
-Pearson coefficient:  -0.16209299443
-Pearson coefficient:  -0.16949174808
-Pearson coefficient:  -0.171302856936
-Pearson coefficient:  -0.168479771725
-Pearson coefficient:  -0.162083386004
-Pearson coefficient:  -0.153292991507
-Pearson coefficient:  -0.143057930428
-Pearson coefficient:  -0.132403657141
-Pearson coefficient:  -0.122094147512
-Pearson coefficient:  -0.113099807229
-Pearson coefficient:  -0.105815087335
-Pearson coefficient:  -0.100908348503
-Pearson coefficient:  -0.0987111110232
-Pearson coefficient:  -0.0991104756859
-Pearson coefficient:  -0.101960697551
-Pearson coefficient:  -0.106685628739
-Pearson coefficient:  -0.112556127294
-Pearson coefficient:  -0.118567443674
-Pearson coefficient:  -0.12352201837
-Pearson coefficient:  -0.126646512492
-Pearson coefficient:  -0.12690088845
-Pearson coefficient:  -0.124227170079
-Pearson coefficient:  -0.118458304637
-Pearson coefficient:  -0.110399421614
-Pearson coefficient:  -0.100637843401
-Pearson coefficient:  -0.0902089004477
-Pearson coefficient:  -0.0799036317725
-Pearson coefficient:  -0.070393450452
-Pearson coefficient:  -0.0621895187751
-Pearson coefficient:  -0.0555512482703
-Pearson coefficient:  -0.0507192650099
-Pearson coefficient:  -0.0474350636888
-Pearson coefficient:  -0.0454527981667
-Pearson coefficient:  -0.0442562766041
-Pearson coefficient:  -0.0431745316106
-Pearson coefficient:  -0.0414780622034
-Pearson coefficient:  -0.0384947408611
-Pearson coefficient:  -0.033669181738
-Pearson coefficient:  -0.026905633801
-Pearson coefficient:  -0.0183231836282
-Pearson coefficient:  -0.00850845396625
-Pearson coefficient:  0.00141754351092
-Pearson coefficient:  0.0100724025401
-Pearson coefficient:  0.0157910326764
-Pearson coefficient:  0.0170497988679
-Pearson coefficient:  0.0127503127971
-Pearson coefficient:  0.00299450386801
-Pearson coefficient:  -0.01138278764
-Pearson coefficient:  -0.0283255155204
-Pearson coefficient:  -0.045915838077
-Pearson coefficient:  -0.0621371057602
-Pearson coefficient:  -0.0758471212525
-Pearson coefficient:  -0.0862944546216
-Pearson coefficient:  -0.0932876125817
-Pearson coefficient:  -0.0969269058399
-Pearson coefficient:  -0.0974999707338
-Pearson coefficient:  -0.0952256067782
-Pearson coefficient:  -0.0904299105258
-Pearson coefficient:  -0.0834067574749
-Pearson coefficient:  -0.0743859402311
-Pearson coefficient:  -0.0638052918326
-Pearson coefficient:  -0.051888250065
-Pearson coefficient:  -0.0392843690234
-Pearson coefficient:  -0.0266321978597
-Pearson coefficient:  -0.0148288746645
-Pearson coefficient:  -0.00496632550901
-Pearson coefficient:  0.00168027062232
-Pearson coefficient:  0.00374060157146
-Pearson coefficient:  -4.72973794458e-05
-Pearson coefficient:  -0.0107487891352
-Pearson coefficient:  -0.0286601930951
-Pearson coefficient:  -0.0529485600407
-Pearson coefficient:  -0.0812754945735
-Pearson coefficient:  -0.110126293742
-Pearson coefficient:  -0.135835514311
-Pearson coefficient:  -0.155841017533
-Pearson coefficient:  -0.169148960722
-Pearson coefficient:  -0.176027827895
-Pearson coefficient:  -0.17730464227
-Pearson coefficient:  -0.174153488676
-Pearson coefficient:  -0.167477175403
-Pearson coefficient:  -0.158212246314
-Pearson coefficient:  -0.147203211279
-Pearson coefficient:  -0.135127468264
-Pearson coefficient:  -0.12265689114
-Pearson coefficient:  -0.110440474551
-Pearson coefficient:  -0.0991582164522
-Pearson coefficient:  -0.0893811114611
-Pearson coefficient:  -0.0816518543142
-Pearson coefficient:  -0.0764349915673
-Pearson coefficient:  -0.0740616933938
-Pearson coefficient:  -0.0747446246258
-Pearson coefficient:  -0.0783878454247
-Pearson coefficient:  -0.0847409565606
-Pearson coefficient:  -0.0932256427359
-Pearson coefficient:  -0.103124320017
-Pearson coefficient:  -0.113638651703
-Pearson coefficient:  -0.123913361258
-Pearson coefficient:  -0.13335723836
-Pearson coefficient:  -0.14160907551
-Pearson coefficient:  -0.148450845491
-Pearson coefficient:  -0.154028448617
-Pearson coefficient:  -0.15840645403
-Pearson coefficient:  -0.161804815432
-Pearson coefficient:  -0.164393849072
-Pearson coefficient:  -0.166278017286
-Pearson coefficient:  -0.167574858928
-Pearson coefficient:  -0.168375781205
-Pearson coefficient:  -0.168678626449
-Pearson coefficient:  -0.168499391972
-Pearson coefficient:  -0.167899776933
-Pearson coefficient:  -0.166959981974
-Pearson coefficient:  -0.165815036617
-Pearson coefficient:  -0.164587714116
-Pearson coefficient:  -0.16353443427
-Pearson coefficient:  -0.162845738051
-Pearson coefficient:  -0.162706979827
-Pearson coefficient:  -0.163318390866
-Pearson coefficient:  -0.164682946295
-Pearson coefficient:  -0.166844163876
-Pearson coefficient:  -0.169663818058
-Pearson coefficient:  -0.173008198383
-Pearson coefficient:  -0.176596216804
-Pearson coefficient:  -0.180228348663
-Pearson coefficient:  -0.183618836872
-Pearson coefficient:  -0.186558351603
-Pearson coefficient:  -0.188899010372
-Pearson coefficient:  -0.190447569816
-Pearson coefficient:  -0.191128742894
-Pearson coefficient:  -0.190857782443
-Pearson coefficient:  -0.189584364429
-Pearson coefficient:  -0.187312430329
-Pearson coefficient:  -0.184024693132
-Pearson coefficient:  -0.17980429017
-Pearson coefficient:  -0.174763644896
-Pearson coefficient:  -0.169061270025
-Pearson coefficient:  -0.162938575081
-Pearson coefficient:  -0.156649588667
-Pearson coefficient:  -0.150494819246
-Pearson coefficient:  -0.144719895566
-Pearson coefficient:  -0.1395508853
-Pearson coefficient:  -0.13509560508
-Pearson coefficient:  -0.131351724435
-Pearson coefficient:  -0.128224661745
-Pearson coefficient:  -0.125523415537
-Pearson coefficient:  -0.123011320308
-Pearson coefficient:  -0.120514775498
-Pearson coefficient:  -0.117853075121
-Pearson coefficient:  -0.114959021941
-Pearson coefficient:  -0.111841905727
-Pearson coefficient:  -0.108559080917
-Pearson coefficient:  -0.105262826504
-Pearson coefficient:  -0.102104853786
-Pearson coefficient:  -0.0992339390526
-Pearson coefficient:  -0.0968116840669
-Pearson coefficient:  -0.0949263358725
-Pearson coefficient:  -0.0936633297483
-Pearson coefficient:  -0.0930194056266
-Pearson coefficient:  -0.0929685897388
-Pearson coefficient:  -0.0934277149065
-Pearson coefficient:  -0.0943029648159
-Pearson coefficient:  -0.0954516649402
-Pearson coefficient:  -0.096795937512
-Pearson coefficient:  -0.0982396204115
-Pearson coefficient:  -0.0997189573529
-Pearson coefficient:  -0.101235971206
-Pearson coefficient:  -0.102819544954
-Pearson coefficient:  -0.104471929282
-Pearson coefficient:  -0.106306543723
-Pearson coefficient:  -0.10836849572
-Pearson coefficient:  -0.110727555709
-Pearson coefficient:  -0.11346499601
-Pearson coefficient:  -0.116610838438
-Pearson coefficient:  -0.120204313661
-Pearson coefficient:  -0.124225564804
-Pearson coefficient:  -0.128645659615
-Pearson coefficient:  -0.133383703098
-Pearson coefficient:  -0.138304159765
-Pearson coefficient:  -0.143156043233
-Pearson coefficient:  -0.147709376343
-Pearson coefficient:  -0.151668482561
-Pearson coefficient:  -0.15472389248
-Pearson coefficient:  -0.156639200677
-Pearson coefficient:  -0.157216480253
-Pearson coefficient:  -0.156362766908
-Pearson coefficient:  -0.154147137491
-Pearson coefficient:  -0.150679332035
-Pearson coefficient:  -0.146237014479
-Pearson coefficient:  -0.141099701742
-Pearson coefficient:  -0.135648222743
-Pearson coefficient:  -0.13022834653
-Pearson coefficient:  -0.125131461496
-Pearson coefficient:  -0.120599289685
-Pearson coefficient:  -0.11677265599
-Pearson coefficient:  -0.113681996709
-Pearson coefficient:  -0.11127435272
-Pearson coefficient:  -0.109419015388
-Pearson coefficient:  -0.107939502362
-Pearson coefficient:  -0.106675413494
-Pearson coefficient:  -0.105499319061
-Pearson coefficient:  -0.104272085406
-Pearson coefficient:  -0.102934732712
-Pearson coefficient:  -0.10146281224
-Pearson coefficient:  -0.0998792238874
-Pearson coefficient:  -0.0982459451847
-Pearson coefficient:  -0.0966079062823
-Pearson coefficient:  -0.0950942205432
-Pearson coefficient:  -0.0937629741396
-Pearson coefficient:  -0.0926826907166
-Pearson coefficient:  -0.0919312965452
-Pearson coefficient:  -0.0914836357046
-Pearson coefficient:  -0.0913034356523
-Pearson coefficient:  -0.0913067024319
-Pearson coefficient:  -0.0913689888787
-Pearson coefficient:  -0.0913079974702
-Pearson coefficient:  -0.0909207390781
-Pearson coefficient:  -0.090007117858
-Pearson coefficient:  -0.0883650667311
-Pearson coefficient:  -0.0858279782325
-Pearson coefficient:  -0.0823113588109
-Pearson coefficient:  -0.0778029692229
-Pearson coefficient:  -0.072376267853
-Pearson coefficient:  -0.0661863074317
-Pearson coefficient:  -0.0594315860281
-Pearson coefficient:  -0.0523314604966
-Pearson coefficient:  -0.0450803181544
-Pearson coefficient:  -0.0378281366068
-Pearson coefficient:  -0.0306928297157
-Pearson coefficient:  -0.0237373814483
-Pearson coefficient:  -0.0170143209472
-Pearson coefficient:  -0.0105668255044
-Pearson coefficient:  -0.00445262483105
-Pearson coefficient:  0.00125169172116
-Pearson coefficient:  0.00643730182201
-Pearson coefficient:  0.0109828971717
-Pearson coefficient:  0.0147731394154
-Pearson coefficient:  0.0177070778167
-Pearson coefficient:  0.0197132288068
-Pearson coefficient:  0.0207704763894
-Pearson coefficient:  0.0209026021083
-Pearson coefficient:  0.0201931046236
-Pearson coefficient:  0.0187480162396
-Pearson coefficient:  0.0167301679119
-Pearson coefficient:  0.0143110853767
-Pearson coefficient:  0.0116592378696
-Pearson coefficient:  0.00895500333312
-Pearson coefficient:  0.00632842702031
-Pearson coefficient:  0.00390259783735
-Pearson coefficient:  0.00175334049091
-Pearson coefficient:  -5.66282996522e-05
-Pearson coefficient:  -0.00148116549167
-Pearson coefficient:  -0.00249401378426
-Pearson coefficient:  -0.00306762588985
-Pearson coefficient:  -0.00317330623769
-Pearson coefficient:  -0.00279324373787
-Pearson coefficient:  -0.00190972403442
-Pearson coefficient:  -0.0004963804414
-Pearson coefficient:  0.00145495183705
-Pearson coefficient:  0.0039336451613
-Pearson coefficient:  0.0069586283005
-Pearson coefficient:  0.0105081892921
-Pearson coefficient:  0.0145713131861
-Pearson coefficient:  0.0191177510237
-Pearson coefficient:  0.0241204225831
-Pearson coefficient:  0.0295043791601
-Pearson coefficient:  0.0351981326528
-Pearson coefficient:  0.0411049620032
-Pearson coefficient:  0.047087524919
-Pearson coefficient:  0.0530114307151
-Pearson coefficient:  0.0587185064682
-Pearson coefficient:  0.0640578075849
-Pearson coefficient:  0.0688798743614
-Pearson coefficient:  0.0730167648375
-Pearson coefficient:  0.0763262771771
-Pearson coefficient:  0.0786402456788
-Pearson coefficient:  0.0797710899904
-Pearson coefficient:  0.0794966201182
-Pearson coefficient:  0.0775400633336
-Pearson coefficient:  0.0735899878637
-Pearson coefficient:  0.0672895673751
-Pearson coefficient:  0.0583016031686
-Pearson coefficient:  0.0463212359259
-Pearson coefficient:  0.0311602882362
-Pearson coefficient:  0.0128022775585
-Pearson coefficient:  -0.00854642952012
-Pearson coefficient:  -0.0323699720383
-Pearson coefficient:  -0.0578815918369
-Pearson coefficient:  -0.0840093986571
-Pearson coefficient:  -0.109520528902
-Pearson coefficient:  -0.133098334352
-Pearson coefficient:  -0.153523015514
-Pearson coefficient:  -0.169782624234
-Pearson coefficient:  -0.181229212832
-Pearson coefficient:  -0.187566018128
-Pearson coefficient:  -0.18892418009
-Pearson coefficient:  -0.18577221624
-Pearson coefficient:  -0.178856281642
-Pearson coefficient:  -0.16907228303
-Pearson coefficient:  -0.157372911861
-Pearson coefficient:  -0.144683918597
-Pearson coefficient:  -0.131788805948
-Pearson coefficient:  -0.119362395525
-Pearson coefficient:  -0.107941479135
-Pearson coefficient:  -0.0979259372215
-Pearson coefficient:  -0.0896261578394
-Pearson coefficient:  -0.0833313621351
-Pearson coefficient:  -0.0791908604327
-Pearson coefficient:  -0.0773513408871
-Pearson coefficient:  -0.0778888063496
-Pearson coefficient:  -0.0807996778713
-Pearson coefficient:  -0.0860521732607
-Pearson coefficient:  -0.0935351208833
-Pearson coefficient:  -0.103081205424
-Pearson coefficient:  -0.114458449217
-Pearson coefficient:  -0.127328112236
-Pearson coefficient:  -0.141280757149
-Pearson coefficient:  -0.155800160629
-Pearson coefficient:  -0.170281823698
-Pearson coefficient:  -0.184050161919
-Pearson coefficient:  -0.196392117075
-Pearson coefficient:  -0.206623271792
-Pearson coefficient:  -0.214145917545
-Pearson coefficient:  -0.218552248424
-Pearson coefficient:  -0.219599615439
-Pearson coefficient:  -0.217292600422
-Pearson coefficient:  -0.21175750738
-Pearson coefficient:  -0.203219315575
-Pearson coefficient:  -0.191898469034
-Pearson coefficient:  -0.177949139421
-Pearson coefficient:  -0.161474493216
-Pearson coefficient:  -0.142558755814
-Pearson coefficient:  -0.121399995368
-Pearson coefficient:  -0.0984057558783
-Pearson coefficient:  -0.0742923244719
-Pearson coefficient:  -0.0499963527643
-Pearson coefficient:  -0.026460687495
-Pearson coefficient:  -0.00439280827015
-Pearson coefficient:  0.01584876075
-Pearson coefficient:  0.0342619271395
-Pearson coefficient:  0.0510503098774
-Pearson coefficient:  0.066502693092
-Pearson coefficient:  0.0808813429587
-Pearson coefficient:  0.0943455924994
-Pearson coefficient:  0.106941571139
-Pearson coefficient:  0.118589298573
-Pearson coefficient:  0.129104573786
-Pearson coefficient:  0.138256041807
-Pearson coefficient:  0.145821980601
-Pearson coefficient:  0.151647028564
-Pearson coefficient:  0.155657241546
-Pearson coefficient:  0.157894415477
-Pearson coefficient:  0.158476618364
-Pearson coefficient:  0.157563147091
-Pearson coefficient:  0.155312762384
-Pearson coefficient:  0.151844579529
-Pearson coefficient:  0.147226341498
-Pearson coefficient:  0.141479976463
-Pearson coefficient:  0.134584535413
-Pearson coefficient:  0.126498539187
-Pearson coefficient:  0.117217085183
-Pearson coefficient:  0.106788921054
-Pearson coefficient:  0.0953544326986
-Pearson coefficient:  0.0831753898087
-Pearson coefficient:  0.0706088473357
-Pearson coefficient:  0.0581057067973
-Pearson coefficient:  0.0461190200472
-Pearson coefficient:  0.0350475448344
-Pearson coefficient:  0.025171604817
-Pearson coefficient:  0.0166348003965
-Pearson coefficient:  0.00947459276297
-Pearson coefficient:  0.00363154456487
-Pearson coefficient:  -0.000967299212613
-Pearson coefficient:  -0.00439804215369
-Pearson coefficient:  -0.0066789493765
-Pearson coefficient:  -0.00776772624685
-Pearson coefficient:  -0.00755744280614
-Pearson coefficient:  -0.00591862714386
-Pearson coefficient:  -0.00270352070637
-Pearson coefficient:  0.00217596738276
-Pearson coefficient:  0.00874847022951
-Pearson coefficient:  0.0169966063501
-Pearson coefficient:  0.0269015715852
-Pearson coefficient:  0.0384981833069
-Pearson coefficient:  0.0518634247135
-Pearson coefficient:  0.0671425901095
-Pearson coefficient:  0.0844525415035
-Pearson coefficient:  0.103845865084
-Pearson coefficient:  0.125201188421
-Pearson coefficient:  0.14814750626
-Pearson coefficient:  0.17200645193
-Pearson coefficient:  0.195854856121
-Pearson coefficient:  0.218647268557
-Pearson coefficient:  0.23946234103
-Pearson coefficient:  0.257676447903
-Pearson coefficient:  0.273101286912
-Pearson coefficient:  0.285893025123
-Pearson coefficient:  0.296467358356
-Pearson coefficient:  0.305315101983
-Pearson coefficient:  0.312902015861
-Pearson coefficient:  0.319569467829
-Pearson coefficient:  0.325461682015
-Pearson coefficient:  0.330489686084
-Pearson coefficient:  0.334293992302
-Pearson coefficient:  0.336302249356
-Pearson coefficient:  0.335821606034
-Pearson coefficient:  0.332269820819
-Pearson coefficient:  0.325429549563
-Pearson coefficient:  0.315606685666
-Pearson coefficient:  0.303659140505
-Pearson coefficient:  0.29075804815
-Pearson coefficient:  0.278149090575
-Pearson coefficient:  0.266877762217
-Pearson coefficient:  0.257718102618
-Pearson coefficient:  0.251103235262
-Pearson coefficient:  0.247170726214
-Pearson coefficient:  0.245761375265
-Pearson coefficient:  0.246484931908
-Pearson coefficient:  0.248776967152
-Pearson coefficient:  0.251950580255
-Pearson coefficient:  0.255292138165
-Pearson coefficient:  0.258161136723
-Pearson coefficient:  0.260053170125
-Pearson coefficient:  0.260656187818
-Pearson coefficient:  0.259867556675
-Pearson coefficient:  0.257763965135
-Pearson coefficient:  0.254546250536
-Pearson coefficient:  0.250464503781
-Pearson coefficient:  0.245764067056
-Pearson coefficient:  0.24061706255
-Pearson coefficient:  0.235109454877
-Pearson coefficient:  0.229218265921
-Pearson coefficient:  0.222832670569
-Pearson coefficient:  0.215757230508
-Pearson coefficient:  0.207749724796
+[[ 0.00622]
+ [ 0.07932]
+ [ 0.29243]
+ [ 0.15499]]
+[[  0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   1.53544e-307   1.31253e-304
+    8.81040e-302   5.73366e-299   3.61880e-296   2.21516e-293
+    1.31506e-290   7.57184e-288   4.22820e-285   2.29001e-282
+    1.20288e-279   6.12779e-277   3.02761e-274   1.45079e-271
+    6.74225e-269   3.03901e-266   1.32850e-263   5.63252e-261
+    2.31598e-258   9.23623e-256   3.57228e-253   1.34002e-250
+    4.87518e-248   1.72022e-245   5.88698e-243   1.95380e-240
+    6.28913e-238   1.96348e-235   5.94517e-233   1.74582e-230
+    4.97230e-228   1.37345e-225   3.67944e-223   9.56012e-221
+    2.40909e-218   5.88778e-216   1.39561e-213   3.20842e-211
+    7.15363e-209   1.54692e-206   3.24426e-204   6.59897e-202
+    1.30185e-199   2.49081e-197   4.62193e-195   8.31875e-193
+    1.45200e-190   2.45810e-188   4.03596e-186   6.42679e-184
+    9.92574e-182   1.48675e-179   2.15990e-177   3.04322e-175
+    4.15877e-173   5.51172e-171   7.08460e-169   8.83207e-167
+    1.06791e-164   1.25233e-162   1.42430e-160   1.57112e-158
+    1.68089e-156   1.74410e-154   1.75514e-152   1.71307e-150
+    1.62165e-148   1.48884e-146   1.32569e-144   1.14489e-142
+    9.58982e-141   7.79017e-139   6.13782e-137   4.69016e-135
+    3.47616e-133   2.49867e-131   1.74197e-129   1.17784e-127
+    7.72395e-126   4.91290e-124   3.03054e-122   1.81317e-120
+    1.05213e-118   5.92109e-117   3.23206e-115   1.71107e-113
+    8.78551e-112   4.37510e-110   2.11314e-108   9.89885e-107
+    4.49751e-105   1.98182e-103   8.47005e-102   3.51091e-100
+    1.41150e-098   5.50369e-097   2.08139e-095   7.63445e-094
+    2.71592e-092   9.37108e-091   3.13598e-089   1.01786e-087
+    3.20416e-086   9.78286e-085   2.89701e-083   8.32035e-082
+    2.31779e-080   6.26224e-079   1.64099e-077   4.17081e-076
+    1.02809e-074   2.45802e-073   5.69995e-072   1.28195e-070
+    2.79639e-069   5.91628e-068   1.21408e-066   2.41636e-065
+    4.66447e-064   8.73334e-063   1.58593e-061   2.79326e-060
+    4.77163e-059   7.90616e-058   1.27055e-056   1.98037e-055
+    2.99390e-054   4.38995e-053   6.24337e-052   8.61213e-051
+    1.15219e-049   1.49514e-048   1.88184e-047   2.29724e-046
+    2.72002e-045   3.12373e-044   3.47949e-043   3.75919e-042
+    3.93919e-041   4.00373e-040   3.94694e-039   3.77396e-038
+    3.50004e-037   3.14842e-036   2.74699e-035   2.32465e-034
+    1.90813e-033   1.51914e-032   1.17310e-031   8.78672e-031
+    6.38344e-030   4.49831e-029   3.07441e-028   2.03817e-027
+    1.31056e-026   8.17426e-026   4.94501e-025   2.90167e-024
+    1.65151e-023   9.11743e-023   4.88200e-022   2.53572e-021
+    1.27745e-020   6.24257e-020   2.95886e-019   1.36037e-018
+    6.06638e-018   2.62414e-017   1.10102e-016   4.48105e-016
+    1.76886e-015   6.77315e-015   2.51569e-014   9.06325e-014
+    3.16724e-013   1.07361e-012   3.53006e-012   1.12586e-011
+    3.48310e-011   1.04523e-010   3.04254e-010   8.59086e-010
+    2.35290e-009   6.25100e-009   1.61093e-008   4.02713e-008
+    9.76480e-008   2.29688e-007   5.24081e-007   1.15990e-006
+    2.49021e-006   5.18622e-006   1.04768e-005   2.05310e-005
+    3.90284e-005   7.19700e-005   1.28741e-004   2.23400e-004
+    3.76065e-004   6.14117e-004   9.72945e-004   1.49540e-003
+    2.22992e-003   3.22656e-003   4.53052e-003   6.17409e-003
+    8.16832e-003   1.04947e-002   1.31023e-002   1.59064e-002
+    1.87992e-002   2.16663e-002   2.44081e-002   2.69691e-002
+    2.93648e-002   3.17010e-002   3.41890e-002   3.71413e-002
+    4.09578e-002   4.60970e-002   5.30366e-002   6.22337e-002
+    7.40774e-002   8.88561e-002   1.06726e-001   1.27701e-001
+    1.51645e-001   1.78287e-001   2.07244e-001   2.38053e-001
+    2.70192e-001   3.03139e-001   3.36344e-001   3.69305e-001
+    4.01509e-001   4.32443e-001   4.61566e-001   4.88268e-001
+    5.11880e-001   5.31590e-001   5.46488e-001   5.55519e-001
+    5.57498e-001   5.51167e-001   5.35220e-001   5.08409e-001
+    4.69673e-001   4.18270e-001   3.53993e-001   2.77242e-001
+    1.89230e-001   9.19840e-002  -1.16547e-002  -1.18196e-001
+   -2.23657e-001  -3.23910e-001  -4.14949e-001  -4.93289e-001
+   -5.56222e-001  -6.01993e-001  -6.29993e-001  -6.40690e-001
+   -6.35553e-001  -6.16795e-001  -5.87152e-001  -5.49597e-001
+   -5.07009e-001  -4.62023e-001  -4.16796e-001  -3.72972e-001
+   -3.31647e-001  -2.93453e-001  -2.58634e-001  -2.27156e-001
+   -1.98850e-001  -1.73459e-001  -1.50739e-001  -1.30468e-001
+   -1.12490e-001  -9.66811e-002  -8.29468e-002  -7.12139e-002
+   -6.13981e-002  -5.34005e-002  -4.70909e-002  -4.23008e-002
+   -3.88206e-002  -3.64070e-002]
+ [  0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   9.28723e-308   7.93895e-305
+    5.32905e-302   3.46806e-299   2.18886e-296   1.33986e-293
+    7.95424e-291   4.57989e-288   2.55747e-285   1.38513e-282
+    7.27573e-280   3.70645e-277   1.83128e-274   8.77525e-272
+    4.07811e-269   1.83817e-266   8.03557e-264   3.40688e-261
+    1.40084e-258   5.58661e-256   2.16073e-253   8.10524e-251
+    2.94879e-248   1.04049e-245   3.56079e-243   1.18178e-240
+    3.80403e-238   1.18763e-235   3.59599e-233   1.05598e-230
+    3.00754e-228   8.30746e-226   2.22554e-223   5.78252e-221
+    1.45716e-218   3.56128e-216   8.44146e-214   1.94064e-211
+    4.32694e-209   9.35666e-207   1.96232e-204   3.99144e-202
+    7.87438e-200   1.50659e-197   2.79561e-195   5.03167e-193
+    8.78254e-191   1.48680e-188   2.44119e-186   3.88730e-184
+    6.00367e-182   8.99277e-180   1.30643e-177   1.84072e-175
+    2.51547e-173   3.33381e-171   4.28518e-169   5.34216e-167
+    6.45933e-165   7.57481e-163   8.61503e-161   9.50305e-159
+    1.01670e-156   1.05493e-154   1.06161e-152   1.03617e-150
+    9.80868e-149   9.00539e-147   8.01857e-145   6.92494e-143
+    5.80048e-141   4.71195e-139   3.71251e-137   2.83688e-135
+    2.10258e-133   1.51135e-131   1.05365e-129   7.12425e-128
+    4.67190e-126   2.97161e-124   1.83305e-122   1.09671e-120
+    6.36393e-119   3.58142e-117   1.95494e-115   1.03495e-113
+    5.31400e-112   2.64632e-110   1.27815e-108   5.98741e-107
+    2.72036e-105   1.19872e-103   5.12319e-102   2.12361e-100
+    8.53759e-099   3.32895e-097   1.25895e-095   4.61776e-094
+    1.64275e-092   5.66818e-091   1.89682e-089   6.15661e-088
+    1.93807e-086   5.91725e-085   1.75228e-083   5.03264e-082
+    1.40193e-080   3.78777e-079   9.92569e-078   2.52275e-076
+    6.21852e-075   1.48675e-073   3.44766e-072   7.75397e-071
+    1.69142e-069   3.57851e-068   7.34346e-067   1.46156e-065
+    2.82135e-064   5.28244e-063   9.59262e-062   1.68953e-060
+    2.88616e-059   4.78211e-058   7.68502e-057   1.19785e-055
+    1.81089e-054   2.65530e-053   3.77636e-052   5.20912e-051
+    6.96913e-050   9.04350e-049   1.13825e-047   1.38950e-046
+    1.64523e-045   1.88942e-044   2.10460e-043   2.27378e-042
+    2.38266e-041   2.42169e-040   2.38734e-039   2.28271e-038
+    2.11703e-037   1.90435e-036   1.66154e-035   1.40608e-034
+    1.15415e-033   9.18867e-033   7.09560e-032   5.31472e-031
+    3.86108e-030   2.72084e-029   1.85958e-028   1.23280e-027
+    7.92705e-027   4.94427e-026   2.99103e-025   1.75510e-024
+    9.98929e-024   5.51476e-023   2.95292e-022   1.53375e-021
+    7.72678e-021   3.77587e-020   1.78969e-019   8.22832e-019
+    3.66930e-018   1.58723e-017   6.65961e-017   2.71040e-016
+    1.06991e-015   4.09680e-015   1.52164e-014   5.48198e-014
+    1.91573e-013   6.49380e-013   2.13519e-012   6.80988e-012
+    2.10678e-011   6.32217e-011   1.84031e-010   5.19626e-010
+    1.42317e-009   3.78097e-009   9.74386e-009   2.43584e-008
+    5.90633e-008   1.38929e-007   3.16995e-007   7.01574e-007
+    1.50622e-006   3.13693e-006   6.33698e-006   1.24183e-005
+    2.36066e-005   4.35316e-005   7.78700e-005   1.35125e-004
+    2.27464e-004   3.71449e-004   5.88481e-004   9.04469e-004
+    1.34870e-003   1.95141e-003   2.73985e-003   3.73339e-003
+    4.93837e-003   6.34295e-003   7.91515e-003   9.60157e-003
+    1.13335e-002   1.30357e-002   1.46389e-002   1.60959e-002
+    1.73967e-002   1.85799e-002   1.97420e-002   2.10372e-002
+    2.26736e-002   2.49041e-002   2.80151e-002   3.23152e-002
+    3.81259e-002   4.57733e-002   5.55801e-002   6.78562e-002
+    8.28837e-002   1.00893e-001   1.22038e-001   1.46357e-001
+    1.73751e-001   2.03941e-001   2.36461e-001   2.70679e-001
+    3.05788e-001   3.40877e-001   3.74966e-001   4.07089e-001
+    4.36370e-001   4.62049e-001   4.83597e-001   5.00669e-001
+    5.13166e-001   5.21204e-001   5.25039e-001   5.24982e-001
+    5.21303e-001   5.14108e-001   5.03192e-001   4.88002e-001
+    4.67565e-001   4.40541e-001   4.05362e-001   3.60452e-001
+    3.04481e-001   2.36674e-001   1.57002e-001   6.65037e-002
+   -3.27555e-002  -1.37719e-001  -2.44459e-001  -3.48553e-001
+   -4.45398e-001  -5.30695e-001  -6.00808e-001  -6.53038e-001
+   -6.86013e-001  -6.99618e-001  -6.95023e-001  -6.74521e-001
+   -6.41218e-001  -5.98601e-001  -5.50299e-001  -4.99582e-001
+   -4.49180e-001  -4.01099e-001  -3.56573e-001  -3.16145e-001
+   -2.79796e-001  -2.47170e-001  -2.17707e-001  -1.90890e-001
+   -1.66271e-001  -1.43588e-001  -1.22742e-001  -1.03753e-001
+   -8.67004e-002  -7.16791e-002]
+ [  0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000  -2.89673e-307  -2.47619e-304
+   -1.66215e-301  -1.08170e-298  -6.82716e-296  -4.17908e-293
+   -2.48096e-290  -1.42849e-287  -7.97685e-285  -4.32030e-282
+   -2.26933e-279  -1.15606e-276  -5.71184e-274  -2.73704e-271
+   -1.27198e-268  -5.73334e-266  -2.50633e-263  -1.06262e-260
+   -4.36929e-258  -1.74249e-255  -6.73940e-253  -2.52806e-250
+   -9.19742e-248  -3.24533e-245  -1.11063e-242  -3.68601e-240
+   -1.18650e-237  -3.70426e-235  -1.12161e-232  -3.29364e-230
+   -9.38066e-228  -2.59113e-225  -6.94157e-223  -1.80359e-220
+   -4.54495e-218  -1.11078e-215  -2.63293e-213  -6.05294e-211
+   -1.34959e-208  -2.91838e-206  -6.12056e-204  -1.24495e-201
+   -2.45605e-199  -4.69911e-197  -8.71964e-195  -1.56940e-192
+   -2.73931e-190  -4.63740e-188  -7.61416e-186  -1.21247e-183
+   -1.87257e-181  -2.80488e-179  -4.07482e-177  -5.74129e-175
+   -7.84586e-173  -1.03983e-170  -1.33657e-168  -1.66624e-166
+   -2.01469e-164  -2.36262e-162  -2.68707e-160  -2.96404e-158
+   -3.17113e-156  -3.29039e-154  -3.31121e-152  -3.23186e-150
+   -3.05937e-148  -2.80882e-146  -2.50103e-144  -2.15992e-142
+   -1.80920e-140  -1.46968e-138  -1.15795e-136  -8.84836e-135
+   -6.55806e-133  -4.71395e-131  -3.28637e-129  -2.22209e-127
+   -1.45719e-125  -9.26860e-124  -5.71736e-122  -3.42070e-120
+   -1.98494e-118  -1.11706e-116  -6.09754e-115  -3.22807e-113
+   -1.65746e-111  -8.25398e-110  -3.98661e-108  -1.86750e-106
+   -8.48492e-105  -3.73886e-103  -1.59794e-101  -6.62363e-100
+   -2.66291e-098  -1.03832e-096  -3.92672e-095  -1.44030e-093
+   -5.12381e-092  -1.76793e-090  -5.91627e-089  -1.92027e-087
+   -6.04492e-086  -1.84562e-084  -5.46545e-083  -1.56970e-081
+   -4.37269e-080  -1.18142e-078  -3.09587e-077  -7.86858e-076
+   -1.93958e-074  -4.63725e-073  -1.07534e-071  -2.41850e-070
+   -5.27563e-069  -1.11615e-067  -2.29046e-066  -4.55866e-065
+   -8.79990e-064  -1.64762e-062  -2.99198e-061  -5.26972e-060
+   -9.00207e-059  -1.49156e-057  -2.39699e-056  -3.73614e-055
+   -5.64823e-054  -8.28199e-053  -1.17786e-051  -1.62475e-050
+   -2.17370e-049  -2.82071e-048  -3.55025e-047  -4.33393e-046
+   -5.13154e-045  -5.89318e-044  -6.56434e-043  -7.09202e-042
+   -7.43161e-041  -7.55336e-040  -7.44622e-039  -7.11988e-038
+   -6.60311e-037  -5.93975e-036  -5.18242e-035  -4.38564e-034
+   -3.59984e-033  -2.86599e-032  -2.21315e-031  -1.65769e-030
+   -1.20429e-029  -8.48643e-029  -5.80012e-028  -3.84517e-027
+   -2.47248e-026  -1.54214e-025  -9.32917e-025  -5.47423e-024
+   -3.11570e-023  -1.72008e-022  -9.21029e-022  -4.78384e-021
+   -2.41002e-020  -1.17771e-019  -5.58213e-019  -2.56645e-018
+   -1.14447e-017  -4.95065e-017  -2.07716e-016  -8.45387e-016
+   -3.33710e-015  -1.27781e-014  -4.74606e-014  -1.70986e-013
+   -5.97526e-013  -2.02545e-012  -6.65974e-012  -2.12403e-011
+   -6.57115e-011  -1.97191e-010  -5.74000e-010  -1.62074e-009
+   -4.43895e-009  -1.17930e-008  -3.03915e-008  -7.59751e-008
+   -1.84221e-007  -4.33324e-007  -9.88721e-007  -2.18824e-006
+   -4.69798e-006  -9.78424e-006  -1.97653e-005  -3.87334e-005
+   -7.36302e-005  -1.35777e-004  -2.42881e-004  -4.21463e-004
+   -7.09475e-004  -1.15858e-003  -1.83553e-003  -2.82115e-003
+   -4.20683e-003  -6.08688e-003  -8.54649e-003  -1.16462e-002
+   -1.54061e-002  -1.97899e-002  -2.46982e-002  -2.99655e-002
+   -3.53774e-002  -4.06982e-002  -4.57063e-002  -5.02407e-002
+   -5.42410e-002  -5.77705e-002  -6.10279e-002  -6.43237e-002
+   -6.80388e-002  -7.25629e-002  -7.82259e-002  -8.52364e-002
+   -9.36373e-002  -1.03294e-001  -1.13906e-001  -1.25061e-001
+   -1.36288e-001  -1.47126e-001  -1.57185e-001  -1.66177e-001
+   -1.73939e-001  -1.80384e-001  -1.85499e-001  -1.89266e-001
+   -1.91610e-001  -1.92380e-001  -1.91307e-001  -1.88006e-001
+   -1.82014e-001  -1.72816e-001  -1.59928e-001  -1.42923e-001
+   -1.21529e-001  -9.56958e-002  -6.56312e-002  -3.18436e-002
+    4.81550e-003   4.32027e-002   8.19227e-002   1.19448e-001
+    1.54222e-001   1.84828e-001   2.10183e-001   2.29600e-001
+    2.42962e-001   2.50655e-001   2.53585e-001   2.52965e-001
+    2.50181e-001   2.46570e-001   2.43231e-001   2.40865e-001
+    2.39717e-001   2.39549e-001   2.39739e-001   2.39366e-001
+    2.37411e-001   2.32907e-001   2.25091e-001   2.13529e-001
+    1.98186e-001   1.79413e-001   1.57944e-001   1.34763e-001
+    1.11019e-001   8.78667e-002   6.63493e-002   4.72824e-002
+    3.11979e-002   1.83028e-002   8.50311e-003   1.45578e-003
+   -3.36195e-003  -6.56135e-003  -8.76588e-003  -1.05452e-002
+   -1.23643e-002  -1.45588e-002]
+ [  0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   0.00000e+000   0.00000e+000
+    0.00000e+000   0.00000e+000   3.86434e-309   3.30333e-306
+    2.21737e-303   1.44303e-300   9.10768e-298   5.57505e-295
+    3.30970e-292   1.90566e-289   1.06414e-286   5.76343e-284
+    3.02737e-281   1.54222e-278   7.61980e-276   3.65131e-273
+    1.69687e-270   7.64848e-268   3.34354e-265   1.41758e-262
+    5.82879e-260   2.32455e-257   8.99061e-255   3.37253e-252
+    1.22697e-249   4.32939e-247   1.48162e-244   4.91727e-242
+    1.58283e-239   4.94162e-237   1.49626e-234   4.39384e-232
+    1.25141e-229   3.45667e-227   9.26030e-225   2.40606e-222
+    6.06313e-220   1.48182e-217   3.51242e-215   8.07485e-213
+    1.80040e-210   3.89323e-208   8.16505e-206   1.66081e-203
+    3.27646e-201   6.26879e-199   1.16323e-196   2.09364e-194
+    3.65434e-192   6.18646e-190   1.01576e-187   1.61747e-185
+    2.49808e-183   3.74182e-181   5.43596e-179   7.65909e-177
+    1.04667e-174   1.38717e-172   1.78303e-170   2.22283e-168
+    2.68768e-166   3.15182e-164   3.58465e-162   3.95414e-160
+    4.23040e-158   4.38949e-156   4.41727e-154   4.31141e-152
+    4.08131e-150   3.74707e-148   3.33646e-146   2.88141e-144
+    2.41354e-142   1.96061e-140   1.54475e-138   1.18040e-136
+    8.74869e-135   6.28859e-133   4.38414e-131   2.96434e-129
+    1.94394e-127   1.23646e-125   7.62717e-124   4.56333e-122
+    2.64798e-120   1.49020e-118   8.13434e-117   4.30636e-115
+    2.21111e-113   1.10111e-111   5.31828e-110   2.49131e-108
+    1.13192e-106   4.98778e-105   2.13172e-103   8.83616e-102
+    3.55242e-100   1.38515e-098   5.23838e-097   1.92141e-095
+    6.83535e-094   2.35848e-092   7.89253e-091   2.56172e-089
+    8.06414e-088   2.46212e-086   7.29111e-085   2.09404e-083
+    5.83333e-082   1.57606e-080   4.13000e-079   1.04970e-077
+    2.58747e-076   6.18626e-075   1.43455e-073   3.22636e-072
+    7.03788e-071   1.48899e-069   3.05556e-068   6.08141e-067
+    1.17394e-065   2.19798e-064   3.99141e-063   7.03000e-062
+    1.20091e-060   1.98980e-059   3.19768e-058   4.98414e-057
+    7.53495e-056   1.10485e-054   1.57131e-053   2.16747e-052
+    2.89980e-051   3.76293e-050   4.73616e-049   5.78162e-048
+    6.84566e-047   7.86172e-046   8.75707e-045   9.46101e-044
+    9.91404e-043   1.00765e-041   9.93354e-041   9.49818e-040
+    8.80879e-039   7.92384e-038   6.91354e-037   5.85061e-036
+    4.80232e-035   3.82333e-034   2.95242e-033   2.21141e-032
+    1.60657e-031   1.13212e-030   7.73758e-030   5.12960e-029
+    3.29838e-028   2.05727e-027   1.24455e-026   7.30283e-026
+    4.15646e-025   2.29465e-024   1.22869e-023   6.38182e-023
+    3.21505e-022   1.57111e-021   7.44677e-021   3.42374e-020
+    1.52677e-019   6.60434e-019   2.77101e-018   1.12778e-017
+    4.45182e-017   1.70465e-016   6.33141e-016   2.28101e-015
+    7.97121e-015   2.70202e-014   8.88434e-014   2.83354e-013
+    8.76616e-013   2.63061e-012   7.65737e-012   2.16212e-011
+    5.92172e-011   1.57323e-010   4.05434e-010   1.01354e-009
+    2.45758e-009   5.78071e-009   1.31899e-008   2.91919e-008
+    6.26728e-008   1.30525e-007   2.63677e-007   5.16718e-007
+    9.82255e-007   1.81132e-006   3.24013e-006   5.62250e-006
+    9.46474e-006   1.54561e-005   2.44872e-005   3.76368e-005
+    5.61245e-005   8.12108e-005   1.14036e-004   1.55416e-004
+    2.05637e-004   2.64248e-004   3.29995e-004   4.00790e-004
+    4.74001e-004   5.46872e-004   6.17099e-004   6.83586e-004
+    7.47168e-004   8.11149e-004   8.81739e-004   9.68031e-004
+    1.08173e-003   1.23657e-003   1.44743e-003   1.72955e-003
+    2.09758e-003   2.56491e-003   3.14330e-003   3.84268e-003
+    4.67130e-003   5.63598e-003   6.74268e-003   7.99685e-003
+    9.40387e-003   1.09693e-002   1.26984e-002   1.45970e-002
+    1.66703e-002   1.89226e-002   2.13573e-002   2.39760e-002
+    2.67792e-002   2.97646e-002   3.29290e-002   3.62648e-002
+    3.97613e-002   4.34032e-002   4.71693e-002   5.10294e-002
+    5.49449e-002   5.88666e-002   6.27352e-002   6.64789e-002
+    7.00188e-002   7.32682e-002   7.61377e-002   7.85377e-002
+    8.03856e-002   8.16092e-002   8.21496e-002   8.19680e-002
+    8.10451e-002   7.93836e-002   7.70113e-002   7.39756e-002
+    7.03465e-002   6.62098e-002   6.16662e-002   5.68247e-002
+    5.18008e-002   4.67094e-002   4.16600e-002   3.67544e-002
+    3.20814e-002   2.77133e-002   2.37070e-002   2.00986e-002
+    1.69074e-002   1.41347e-002   1.17678e-002   9.78191e-003
+    8.14479e-003   6.81974e-003   5.76865e-003   4.95537e-003
+    4.34608e-003   3.91066e-003   3.62207e-003   3.45536e-003
+    3.38666e-003   3.39258e-003]]

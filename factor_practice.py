@@ -1,4 +1,5 @@
 from sklearn import decomposition
+from sklearn.pls import PLSRegression
 import numpy
 from mdp.nodes import FANode
 from numpy.linalg import inv
@@ -28,6 +29,17 @@ def practice(matr):
 	V = varimax(FA.A)
 	print "V:\n", V
 	print "V^-1:\n", inv(V)
+
+def umm(X_T, beta):
+	X = numpy.transpose(X_T)
+	beta_T = numpy.transpose(beta)
+	V_beta_T = varimax(beta_T)
+	V_beta_T_inv = inv(V_beta_T)
+	new_coeffs = V_beta_T_inv * beta_T
+	return new_coeffs
+
+def pls(coords, intens):
+	print PLSRegression().fit(coords, intens)
 
 """
 matr = [[3.0, 6, 5],

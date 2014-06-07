@@ -8,7 +8,7 @@ from pylab import plot, show
 from mdp.nodes import PCANode
 
 def pretty_print():
-	np.set_printoptions(threshold='nan', precision=5)
+	np.set_printoptions(threshold='nan', precision=5, suppress=True)
 
 def normalize(data):
 	"""
@@ -20,7 +20,7 @@ def normalize(data):
 		All elements need to be floats
 	"""
 	data = np.transpose(data)
-	length = len(data[0]) # I expect every column of the input to the same length
+	length = len(data[0])
 	for i in range(len(data)):
 		row = data[i]
 		mean = sum(row) / length # <X>
@@ -29,7 +29,7 @@ def normalize(data):
 		i += 1
 	return np.transpose(data)
 
-def _remove_intens_dict(intensities):
+def remove_intens_dict(intensities):
 	"""
 	INPUT: Matrix with each row a different atom. One column. Contains a dictionary of 1000 (energy, intensity) pairs.
 	OUTPUT: Matrix such that intensities[row] is an array of intensities.
@@ -39,10 +39,9 @@ def _remove_intens_dict(intensities):
         for row in intensities:
                 energies = row[0].keys()
                 energies = sorted([float(energy) for energy in energies])
-                energies = [str(energy) for energy in energies]
                 new_row = []
                 for energy in energies:
-                        inten = row[0][energy]
+                        inten = row[0][str(energy)]
                         new_row.append(inten)
                 new_intens.append(new_row)
 		new_energies.append(energies)
@@ -68,6 +67,10 @@ def energy_tracking(intensities, energies, E_peak):
 		#widths = np.array([.1, .2, .3, .4, .5, .7, .9, 1.1, 1.3])
 		#maxima_indices = signal.find_peaks_cwt(row, widths)
 		maxima = [float(E_row[maxima_index]) for maxima_index in maxima_indices] #Replace row with intensities that correspond to indices returned.
+		if len(maxima) == 0:
+			max_inten = max(I_row)
+			index = list(I_row).index(max_inten)
+			maxima = [E_row[index]]
 		nearest = maxima[0]
 		nearest_dist = abs(E_peak-nearest)
 		for maximum in maxima:
@@ -75,7 +78,8 @@ def energy_tracking(intensities, energies, E_peak):
 				nearest = maximum
 				nearest_dist = abs(E_peak-maximum)
 		new_energies.append([nearest])
-		new_intens.append([float(I_row[np.where(E_row == str(nearest))])])
+		nearest_index = list(E_row).index(nearest)
+		new_intens.append([I_row[nearest_index]])
 		i += 1
 	intensities = np.array(new_intens)
 	energies = np.array(new_energies)
@@ -86,7 +90,7 @@ def correlations(data, intens):
 	intens2 = np.transpose(intens)
 	for row in data2:
 		print "row"
-		for i in range(343, 362):
+		for i in range(len(intens2)):
 			coeff = stats.pearsonr(row, intens2[i])[0]
 			print "Pearson coefficient: ", coeff
 
@@ -106,7 +110,7 @@ def filter_peak(intensities, peak_energy, interval):
 	left = peak_index - interval
 	right = peak_index + interval
 	#energies = energies[peak_energy-interval:peak_energy+interval] #todo: prevent array out of bounds exception
-	intensities, energies = _remove_intens_dict(intensities)
+	intensities, energies = remove_intens_dict(intensities)
 	for i in range(len(intensities)):
 		new_intens.append(intensities[i][left:right]) #same todo as above
 		new_energies.append(energies[i][left:right])
@@ -114,16 +118,22 @@ def filter_peak(intensities, peak_energy, interval):
 
 def lin_reg(coords, intensities):
 	pretty_print()
-	peak_energy = 5.71
-	interval = 32
-	filtered_intens, filtered_energies = filter_peak(intensities, peak_energy, interval)
-	tracked_intens, tracked_energies = energy_tracking(filtered_intens, filtered_energies, peak_energy)
+	#peak_energy = 6.97
+	#interval = 300
+	#filtered_intens, filtered_energies = filter_peak(intensities, peak_energy, interval)
+	#tracked_intens, tracked_energies = energy_tracking(filtered_intens, filtered_energies, peak_energy)
 	ones_column = np.array([ones(len(coords))]).T
 	coords = normalize(coords)
+	big_peak_intens = filter_intens(remove_intens_dict(intensities)[0], 313, 359)
+	#print "tracking:"
+	#correlations(coords, tracked_intens)
+	#print "\nno tracking:"
+	correlations(coords, big_peak_intens)
+
 	coords = np.hstack((coords, ones_column)) #matrix variable instantiations to be right multiplied by coeff matrix to obtain intensities. Goal is to find coeff matrix.
-	print tracked_intens
-	coeffs = linalg.lstsq(coords, tracked_intens)[0] #1st elem of tuple. In each column (corresponding to an energy), each row represents a coefficient to fit the coordinates to the intensity at a certain energy. The last row is the constant b.
-	print coeffs
+	#coeffs = linalg.lstsq(coords, tracked_intens)[0] #1st elem of tuple. In each column (corresponding to an energy), each row represents a coefficient to fit the coordinates to the intensity at a certain energy. The last row is the constant b.
+	#print coeffs
+	return (coords, linalg.lstsq(coords, big_peak_intens)[0])
 	
 def PCA():
 	col1 = np.array([[1.0, 2, 3, 4, 5, 6, 7, 8, 9]]).T
