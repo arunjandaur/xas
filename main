@@ -1,13 +1,30 @@
 #!/bin/bash
 
+XAS_FOLDER_NAME="xas/"
+declare -a XASFiles
+XASFiles=$(ls $XAS_FOLDER_NAME)
+
+for i in "${XASFiles[@]}"
+do
+	temp=$(echo $i | sed -e 's/\(.+_[0-9]+-.+\.[A-Za-z]\)0*\([0-9]+-XCH\.xas\.5\.xas\)/\1\2/')
+	#echo $temp
+	old_file="$XAS_FOLDER_NAME$i"
+	new_file="$XAS_FOLDER_NAME$temp"
+	#echo $new_file
+	#mv $old_file $new_file
+done
+
+
 CIF=$1
 
-#LATTICE_A=grep _cell_length_a $CIF | grep -e []
+#LATTICE_A=$(grep _cell_length_a $CIF | sed -e 's/.*\([0-9]*\.[0-9]+\)/\1/')
+#echo $LATTICE_A
 #LATTICE_B=grep _cell_length_b $CIF
 #LATTICE_C=grep _cell_length_c $CIF
 #ALPHA=grep _cell_angle_alpha $CIF
 #BETA=grep _cell_angle_beta $CIF
 #GAMMA=grep _cell_angle_gamma $CIF
 
-python main.py > distance_intensities
+rm dist_and_intens/*
+python main.py #> distance_intensities
 rm *.pyc

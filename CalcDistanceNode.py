@@ -4,6 +4,10 @@ from math import sqrt
 from LatticeTransformNode import *
 
 def coordsToDistance(x1, y1, z1, x2, y2, z2):
+	"""
+	Input: 6 floats that represent the xyz coordinates of atom 1 and atom 2
+	Output: 1 float that represents the euclidean distance between atom 1 and atom 2
+	"""
 	return sqrt((x1 - x2)**2 + (y1 - y2)**2 + (z1 - z2)**2)
 
 class CalcDistanceNode(mdp.Node):
@@ -11,6 +15,14 @@ class CalcDistanceNode(mdp.Node):
 		return False
 
 	def _execute(self, coordsArray, lattice_a, lattice_b, lattice_c, alpha, beta, gamma):
+		"""
+		Input:
+			coordsArray: A 2D array where each row is an array of 3 elements: x, y, and z
+			lattice_a,b,c: lattice vectors
+			alpha, beta, gamma: lattice angles
+		Output:
+			A distance array where each (i, j)th element is the distance between atom i and atom j. Note, these coordinates belong to periodic molcules, so we must obey lattice algebra. When computing the distance between any atom i to all other atoms {J}, we must apply the periodicity node (lattice transformation) so that all coordinates are shifted such that atom i is in the middle of the lattice space. Then we can compute all the distances between i and J. Repeat for all i.
+		"""
 		numRows = coordsArray.shape[0]
 		numCols = coordsArray.shape[0]
 		distanceArray = zeros(shape=(numRows, numCols))
@@ -19,14 +31,14 @@ class CalcDistanceNode(mdp.Node):
 		i = 0
 		for atomCoord1 in coordsArray:
 			j = 0
-			centeredCoords = latticeNode(array([atomCoord1]), coordsArray)
-			center_coord = centeredCoords[0]
-			centeredCoordsArray = centeredCoords[1]
-			x1 = center_coord[0][0]
+			centeredCoords = latticeNode(array([atomCoord1]), coordsArray) #Center the coordinates around atomCoord1
+			center_coord = centeredCoords[0] #The centered coordinate
+			centeredCoordsArray = centeredCoords[1] #The coordinates surrounding center_coord
+			x1 = center_coord[0][0] #Get x, y, and z
 			y1 = center_coord[0][1]
 			z1 = center_coord[0][2]
-			for atomCoord2 in centeredCoordsArray:
-				x2 = atomCoord2[0]
+			for atomCoord2 in centeredCoordsArray: #for each element j in J, compute dist(i, j)
+				x2 = atomCoord2[0]#Get x, y, and z
 				y2 = atomCoord2[1]
 				z2 = atomCoord2[2]
 				distanceArray[i][j] = coordsToDistance(x1, y1, z1, x2, y2, z2)

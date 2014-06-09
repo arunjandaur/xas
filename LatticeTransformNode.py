@@ -18,13 +18,13 @@ class LatticeTransformNode(mdp.Node):
 		rad_alpha = radians(alpha)
 		rad_beta = radians(beta)
 		rad_gamma = radians(gamma)
-		self.lat_2_xyz_mat = self._lattice_xyz_matrix( a, b, c, rad_alpha, rad_beta, rad_gamma)
+		self.lat_2_xyz_mat = self._lattice_xyz_matrix(a, b, c, rad_alpha, rad_beta, rad_gamma)
 		self.xyz_2_lat_mat = self._xyz_lattice_matrix(a, b, c, rad_alpha, rad_beta, rad_gamma)
 
 	def _lattice_xyz_matrix(self, a, b, c, alpha, beta, gamma):
 		"""
 		Inputs:
-			a,b,c = lenghts of lattice vectors(Angstrom)
+			a,b,c = lengths of lattice vectors(Angstrom)
 			alpha, beta, gamma = angles between lattice vectors(in radians)
 			
 		Returns a transformation matrix that will yield cartesian coordinates 
