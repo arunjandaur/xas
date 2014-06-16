@@ -6,6 +6,8 @@ from scipy.signal import argrelextrema
 from analysis import remove_intens_dict
 from Peak import Peak
 
+NUM_ENERGIES = 1000
+
 def get_extrema(energies, intensities):
 	"""
 	INPUT:
@@ -25,22 +27,37 @@ def get_extrema(energies, intensities):
 	for i in range(len(intensities)):
 		Irow = intensities[i]
 		Erow = energies[i]
-		min_indices = argrelextrema(Irow, np.less)[0]
+		#Find extrema and calibrate
+		min_indices = sorted(list(argrelextrema(Irow, np.less)[0]))
+		max_indices = sorted(list(argrelextrema(Irow, np.greater)[0]))
+		if min_indices[0] > max_indices[0]:
+			min_indices.insert(0, 0)
+		if min_indices[-1] < max_indices[-1]:
+			min_indices.insert(len(min_indices), NUM_ENERGIES-1)
+		#Minima
 		row_minimaE = [Erow[index] for index in min_indices]
-		minimaE.append(row_minimaE)
 		row_minimaI = [Irow[index] for index in min_indices]
-		minimaI.append(row_minimaI)
-
-		max_indices = argrelextrema(Irow, np.greater)[0]
+		#Maxima
 		row_maximaE = [Erow[index] for index in max_indices]
-		maximaE.append(row_maximaE)
 		row_maximaI = [Irow[index] for index in max_indices]
+		#Update master
+		minimaE.append(row_minimaE)
+		minimaI.append(row_minimaI)
+		maximaE.append(row_maximaE)
 		maximaI.append(row_maximaI)
 	minimaE = np.array(minimaE)
 	maximaE = np.array(maximaE)
 	minimaI = np.array(minimaI)
 	maximaI = np.array(maximaI)
 	return (minimaE, maximaE, minimaI, maximaI)
+
+def find_left_right(energy_extrema, maxE):
+	#Find extrema to the left of maxE
+	#This needs more error checking
+	i = 0
+	while energy_extrema[i] < maxE:
+		i += 1
+	return (energy_extrema[i-1], energy_extrema[i])
 
 def extrema_to_peaks(minimaE, maximaE, minimaI, maximaI):
 	"""
@@ -53,6 +70,7 @@ def extrema_to_peaks(minimaE, maximaE, minimaI, maximaI):
 		Converting extrema of energies and intensities into peaks for the peak_tracking(*params) method to use
 	IMPORTANT POINTS:
 		I am assuming that the first and last extrema are minima. If not, indexing the minima based on j will be off.
+		Yeah, indexing is causing problems. Especially with the min_row_E[j+1] snippet
 	"""
 	peaks = []
 	for i in range(len(maximaE)):
@@ -63,8 +81,7 @@ def extrema_to_peaks(minimaE, maximaE, minimaI, maximaI):
 		for j in range(len(max_row_E)):
 			curr_max_E = max_row_E[j]
 			curr_max_I = max_row_I[j]
-			left_min_E = min_row_E[j]
-			right_min_E = min_row_E[j+1]
+			left_min_E, right_min_E = find_left_right(minimaE[i], curr_max_E)
 			row_peaks.append(Peak(curr_max_E, curr_max_I, left_min_E, right_min_E))
 		peaks.append(row_peaks)
 	return peaks

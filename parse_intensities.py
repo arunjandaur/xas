@@ -1,6 +1,7 @@
 import re
 import numpy as np
 import os
+import glob
 
 XAS_FOLDER_NAME = "xas"
 
@@ -27,3 +28,17 @@ def parse_intensities(atomName, atomNum, xyz_name):
                 intensities[0][0] = -1
 
         return intensities
+
+def parse_average():
+	#Looks for average spectra
+	filename = glob.glob(XAS_FOLDER_NAME + '/Spectrum-Ave-*')[0]
+	intensities = np.array([[{}]])
+	raw_xas = np.loadtxt(filename, usecols=(0, 1))
+	if type(raw_xas[0]) != type(np.array([[]])):
+		key = str(float(raw_xas[0]))
+		intensities[0][0][key] = raw_xas[1]
+	else:
+		for row in raw_xas:
+			key = str(float(row[0]))
+			intensities[0][0][key] = row[1]
+	return intensities
