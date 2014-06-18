@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.cluster import *
 
 def peak_crossing():
-	x1 = np.array([list(np.arange(1, 15, .5))])
+	x1 = np.array([list(np.arange(1, 100, .5))])
 	x2 = np.array([list(np.arange(8, 13, 1))])
 	y1 = x1
 	y2 = -1 * x1
