@@ -10,7 +10,6 @@ from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
 from parse_intensities import parse_average
 from factor_practice import *
-import cluster
 import analysis
 import energy_analysis as EA
 
