@@ -25,29 +25,34 @@ def peak_crossing():
 def peak_split():
 	pass
 
-def gauss(E, sigma, a):
+def gauss(E, sigma, a, b):
 	x = E[:, 0]
 	energy = E[:, 1]
 	A = 1 / (sigma * sqrt(2*pi))
-	return A * np.exp(-.5 * np.power((energy - a*x) / sigma, 2))
+	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
 
 if __name__ == "__main__":
 	X = np.array([100, 120, 140, 160, 180, 200, 210, 215, 500])
 	sigma = 50
-	a = 3
+	a = 5
+	b = 20
 	E = np.array([[], []])
 
 	for x in X:
 		mean = a*x
-		xdata = np.linspace(mean-200, mean+200, 10000)
+		xdata = np.linspace(mean-200, mean+200, 1000)
 		x_s = [x for _ in range(len(xdata))]
 		temp = np.vstack((x_s, xdata))
 		E = np.hstack((E, temp))
 
 	E = np.transpose(E)
-	I = gauss(E, sigma, a)
+	I = gauss(E, sigma, a, b)
+	noise = random.random(len(I)) * .25
+	noisyI = I + noise
+	noise = np.transpose(np.vstack((np.zeros(len(E)), random.random(len(E)) * 25.0)))
+	noisyE = E + noise
 
-	fitparams, fitcovariance = curve_fit(gauss, E, I, p0 = [5000, 0])
-	plt.plot(E, I, label = 'original data')
+	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [5000, 0, 0])
+	plt.plot(noisyE, noisyI, label = 'original data')
 	plt.plot(E, gauss(E, *fitparams) ,'bo',label = "fit curve")
 	plt.legend()
