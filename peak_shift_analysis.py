@@ -32,27 +32,27 @@ def gauss(E, sigma, a, b):
 	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
 
 if __name__ == "__main__":
-	X = np.array([100, 120, 140, 160, 180, 200, 210, 215, 225])
-	sigma = 50
-	a = 5
-	b = 20
+	X = np.array([1, 2, 2.5, 3, 4])
+	sigma = .5
+	a = 12
+	b = 0
 	E = np.array([[], []])
 
 	for x in X:
 		mean = a*x
-		xdata = np.linspace(mean-200, mean+200, 1000)
+		xdata = np.linspace(mean-2.5*sigma, mean+2.5*sigma, 1000)
 		x_s = [x for _ in range(len(xdata))]
 		temp = np.vstack((x_s, xdata))
 		E = np.hstack((E, temp))
 
 	E = np.transpose(E)
 	I = gauss(E, sigma, a, b)
-	noise = random.random(len(I)) * .25
+	noise = random.random(len(I)) * max(I)*.05
 	noisyI = I + noise
-	noise = np.transpose(np.vstack((np.zeros(len(E)), random.random(len(E)) * 25.0)))
+	noise = np.transpose(np.vstack((np.zeros(len(E)), random.random(len(E)) * .05*max(X))))
 	noisyE = E + noise
 
-	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [500, 0, 0])
+	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [2.5, -6, 5], maxfev=4000)
 	plt.plot(noisyE[:, 0], noisyI, label = 'original data')
 	plt.plot(E[:, 0], gauss(E, *fitparams) ,'bo',label = "fit curve")
 	plt.legend()
