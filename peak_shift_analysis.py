@@ -32,10 +32,10 @@ def gauss(E, sigma, a, b):
 	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
 
 if __name__ == "__main__":
-	X = np.array([1, 2, 2.5, 3, 4])
+	X = np.array([1, 2, 3, 4, 5])
 	sigma = .5
-	a = 12
-	b = 0
+	a = 3
+	b = 1
 	E = np.array([[], []])
 
 	for x in X:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 	noise = np.transpose(np.vstack((np.zeros(len(E)), random.random(len(E)) * .05*max(X))))
 	noisyE = E + noise
 
-	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [2.5, -6, 5], maxfev=4000)
+	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [2.5, 1, 0], maxfev=4000)
 	plt.plot(noisyE[:, 0], noisyI, label = 'original data')
 	plt.plot(E[:, 0], gauss(E, *fitparams) ,'bo',label = "fit curve")
 	plt.legend()
