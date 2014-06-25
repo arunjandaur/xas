@@ -25,34 +25,40 @@ def peak_crossing():
 def peak_split():
 	pass
 
-def gauss(E, sigma, a, b):
+def gauss(E, sigma, a, b, a2):
 	x = E[:, 0]
-	energy = E[:, 1]
+	x2 = E[:, 1]
+	energy = E[:, 2]
 	A = 1 / (sigma * sqrt(2*pi))
-	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
+	return A * np.exp(-.5 * np.power((energy - (a*x+b+a2*x2)) / sigma, 2))
 
 if __name__ == "__main__":
 	X = np.array([1, 2, 3, 4, 5])
+	X2 = np.array([1, 1.4, 2.8, 3.2, 4.5])
 	sigma = .5
 	a = 3
-	b = 1
-	E = np.array([[], []])
+	b = 3
+	a2 = 0
+	E = np.array([[], [], []])
 
-	for x in X:
-		mean = a*x
+	for i in range(len(X)):
+		x = X[i]
+		x2 = X2[i]
+		mean = a*x + b + a2*x2
 		xdata = np.linspace(mean-2.5*sigma, mean+2.5*sigma, 1000)
 		x_s = [x for _ in range(len(xdata))]
-		temp = np.vstack((x_s, xdata))
+		x2_s = [x2 for _ in range(len(xdata))]
+		temp = np.vstack((x_s, x2_s, xdata))
 		E = np.hstack((E, temp))
 
 	E = np.transpose(E)
-	I = gauss(E, sigma, a, b)
+	I = gauss(E, sigma, a, b, a2)
 	noise = random.random(len(I)) * max(I)*.05
 	noisyI = I + noise
-	noise = np.transpose(np.vstack((np.zeros(len(E)), random.random(len(E)) * .05*max(X))))
+	noise = np.transpose(np.vstack((np.zeros(len(E)), np.zeros(len(E)), random.random(len(E)) * .05*max(X))))
 	noisyE = E + noise
 
-	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [2.5, 1, 0], maxfev=4000)
+	fitparams, fitcovariance = curve_fit(gauss, noisyE, noisyI, p0 = [2.5, 1, 0, 4], maxfev=4000)
 	plt.plot(noisyE[:, 0], noisyI, label = 'original data')
 	plt.plot(E[:, 0], gauss(E, *fitparams) ,'bo',label = "fit curve")
 	plt.legend()
