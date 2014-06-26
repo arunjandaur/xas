@@ -25,12 +25,12 @@ def peak_crossing():
 def peak_split():
 	pass
 
-def gauss(E, sigma, a, b, a2):
+def gauss(E, sigma, a, b, c):
 	x = E[:, 0]
 	x2 = E[:, 1]
 	energy = E[:, 2]
 	A = 1 / (sigma * sqrt(2*pi))
-	return A * np.exp(-.5 * np.power((energy - (a*x+b+a2*x2)) / sigma, 2))
+	return A * np.exp(-.5 * np.power((energy - (a*x+b*x2+c)) / sigma, 2))
 
 def gauss2(E, sigma1, sigma2, a1, b1, c1, a2, b2, c2):
 	return gauss(E, sigma1, a1, b1, c1) + gauss(E, sigma2, a2, b2, c2)
