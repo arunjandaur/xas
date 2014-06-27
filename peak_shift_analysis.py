@@ -39,13 +39,13 @@ if __name__ == "__main__":
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
 	sigma1 = .5
-	sigma2 = .55
+	sigma2 = .5
 	a1 = .8
 	b1 = 0
-	c1 = 1
+	c1 = 3
 	a2 = -.8
 	b2 = 0
-	c2 = 6
+	c2 = 3
 	E = np.array([[], [], []])
 
 	for i in range(len(X)):
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 		#interv1 = np.linspace(mean-2.5*sigma1, mean+2.5*sigma1, 10000)
 		#interv2 = np.linspace(mean2-2.5*sigma2, mean2+2.5*sigma2, 10000)
 		#xdata = np.hstack((interv1, interv2))
-		xdata = np.linspace(mean-2.5*sigma1, mean2+2.5*sigma2)
+		xdata = np.linspace(mean-2.5*sigma1, mean2+2.5*sigma2, 1000)
 		x_s = [x for _ in range(len(xdata))]
 		x2_s = [x2 for _ in range(len(xdata))]
 		temp = np.vstack((x_s, x2_s, xdata))
@@ -64,12 +64,12 @@ if __name__ == "__main__":
 
 	E = np.transpose(E)
 	I = gauss2(E, sigma1, sigma2, a1, b1, c1, a2, b2, c2)
-	noise = random.random(len(I)) * np.mean(I)*.025
+	noise = random.random(len(I)) * np.mean(I)*.05
 	noisyI = I + noise
-	noise = np.transpose(np.vstack((np.zeros(len(E)), np.zeros(len(E)), random.random(len(E)) * .025*np.mean(E[:,2]))))
+	noise = np.transpose(np.vstack((np.zeros(len(E)), np.zeros(len(E)), random.random(len(E)) * .05*np.mean(E[:,2]))))
 	noisyE = E + noise
 
-	fitparams, fitcovariance = curve_fit(gauss2, noisyE, noisyI, p0 = [50, 50, 1, 1, 1, -1, 1, 4], maxfev=4000)
+	fitparams, fitcovariance = curve_fit(gauss2, noisyE, noisyI, p0 = [50, 50, 1, 1, 1, 1, 1, 1], maxfev=4000)
 	plt.plot(noisyE[:,2], noisyI, 'ro', label = 'original data')
 	plt.plot(E[:,2], gauss2(E, *fitparams), 'bo', label = "fit curve")
 	plt.legend()
