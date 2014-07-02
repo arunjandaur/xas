@@ -37,7 +37,7 @@ def get_zero_crossings(energies, data, interval):
                         left_val = left[i][j]
                         right_val = right[i][j]
                         right2_val = right2[i][j]
-                        if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and rightval < 0)):
+                        if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
 				row_zeros.append(energies[j+1])
                         elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
 				row_zeros.append(energies[j])
@@ -60,7 +60,7 @@ def smooth_gaussians(data, sigmas):
 	retval = np.empty(data.shape)
 	for sig in sigmas:
 		newdata = np.empty(data.shape)
-		gaussian_filter1d(data, sigma=sig, output=newdata, mode='constant', cval=0.0)
+		gaussian_filter1d(data, sigma=sig, output=newdata, mode='constant')
 		retval = np.vstack((retval, newdata))
 	return retval
 
@@ -72,14 +72,12 @@ if __name__ == "__main__":
 	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	
-	plt.plot(arc_data[:, 0], arc_data[:, 1], 'ro', label = 'arc space')
-	plt.show()
-	"""
+	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
+	
 	for i in range(len(smoothed)):
 		plt.plot(E, smoothed[i], 'b', label='fit')
 	plt.plot(E, I, 'ro', label='original')
 	plt.show()
-	"""
 	"""	
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
