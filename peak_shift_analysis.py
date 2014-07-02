@@ -23,29 +23,8 @@ def derivative(data, interval, order):
 		retval = (retval[:, 1:retval.shape[1]-1] - retval[:, 0:retval.shape[1]-2]) / interval
 	return retval
 
-def num_gaussians(data, interval):
-	deriv2 = derivative(data, interval, 2)
-	left = deriv2[:, 0:deriv2.shape[1]-3]
-	right = deriv2[:, 1:deriv2.shape[1]-2]
-	right2 = deriv2[:, 2:deriv2.shape[1]-1]
-
-	nums = []
-	for i in range(len(left)):
-		num = 0
-		for j in range(len(left[0])):
-			left_val = left[i][j]
-			right_val = right[i][j]
-			right2_val = right2[i][j]
-			if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and rightval < 0)):
-				num += 1
-			elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
-				num += 1
-		nums.append(num)
-	nums = np.array(nums)
-	nums = np.ceil(nums / 2.0)
-	return nums
-
 def get_zero_crossings(energies, data, interval):
+	#TODO: index out of bounds error checking
 	deriv2 = derivative(data, interval, 2)
 	left = deriv2[:, 0:deriv2.shape[1]-3]
 	right = deriv2[:, 1:deriv2.shape[1]-2]
