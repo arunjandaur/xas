@@ -23,6 +23,15 @@ def derivative(data, interval, order):
 		retval = (retval[:, 1:retval.shape[1]-1] - retval[:, 0:retval.shape[1]-2]) / interval
 	return retval
 
+def smooth_gaussians(data, sigmas):
+        retval = np.empty(data.shape)
+        for sig in sigmas:
+                newdata = np.empty(data.shape)
+                gaussian_filter1d(data, sigma=sig, output=newdata, mode='constant')
+                retval = np.vstack((retval, newdata))
+	return retval
+
+
 def get_zero_crossings(energies, data, interval):
 	#TODO: index out of bounds error checking
 	deriv2 = derivative(data, interval, 2)
@@ -53,25 +62,45 @@ def to_arc_space(zeros, sigmas):
 			arc_data.append([zero, sigma])
 	return np.array(arc_data)
 
+def estimate_means(arc_data):
+	most_zeros = arc_data[0]
+	means = []
+	i = 0
+	while i < len(most_zeros)-1:
+		mean = (most_zeros[i] + most_zeros[i+1]) / 2.0
+		means.append(mean)
+		i += 2
+	return np.array(means)
+
+def estimate_sigmas(arc_data):
+	most_zeros = arc_data[0]
+	sigmas = []
+	i = 0
+	while i < len(most_zeros)-1:
+		sigma = abs(most_zeros[i] - most_zeros[i+1]) / 2.0
+		sigmas.append(sigma)
+		i += 2
+	return np.array(sigmas)
+
+def estimate_amplitudes(arc_data):
+	#IDK
+	pass
+
 def gauss_simple(E, A, avg, sigma):
 	return A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
-
-def smooth_gaussians(data, sigmas):
-	retval = np.empty(data.shape)
-	for sig in sigmas:
-		newdata = np.empty(data.shape)
-		gaussian_filter1d(data, sigma=sig, output=newdata, mode='constant')
-		retval = np.vstack((retval, newdata))
-	return retval
 
 if __name__ == "__main__":
 	E = np.linspace(0, 8, 100)
 	I = gauss_simple(E, .5, 3, .5) + gauss_simple(E, 8, 7, .5) + gauss_simple(E, 1, 5, .01)
-	sigmas = np.linspace(1, 10, 10)
+	sigmas = np.linspace(.5, 10, 20)
 	smoothed = smooth_gaussians(I, sigmas)
 	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	
+	means = estimate_means(zero_crossings)
+	sigmas = estimate_sigmas(zero_crossings)
+	print means
+	print sigmas
+
 	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
 	
 	for i in range(len(smoothed)):
