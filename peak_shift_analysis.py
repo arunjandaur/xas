@@ -82,24 +82,35 @@ def estimate_sigmas(arc_data):
 		i += 2
 	return np.array(sigmas)
 
-def estimate_amplitudes(arc_data):
-	#IDK
-	pass
+def estimate_amplitudes(energies, intensities, means):
+	amps = []
+	for mean in means:
+		min_dist = 40
+		amp = 0
+		for i in range(len(energies)):
+			energy = energies[i]
+			if abs(energy - mean) < min_dist:
+				min_dist = abs(energy - mean)
+				amp = intensities[i]
+		amps.append(amp)
+	return amps
 
 def gauss_simple(E, A, avg, sigma):
 	return A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
 
 if __name__ == "__main__":
 	E = np.linspace(0, 8, 100)
-	I = gauss_simple(E, .5, 3, .5) + gauss_simple(E, 8, 7, .5) + gauss_simple(E, 1, 5, .01)
+	I = gauss_simple(E, 2, 3, .5) + gauss_simple(E, 8, 7, .5) + gauss_simple(E, 1, 5, .01)
 	sigmas = np.linspace(.5, 10, 20)
 	smoothed = smooth_gaussians(I, sigmas)
 	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	means = estimate_means(zero_crossings)
 	sigmas = estimate_sigmas(zero_crossings)
+	amps = estimate_amplitudes(E, smoothed[0], means)
 	print means
 	print sigmas
+	print amps
 
 	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
 	
