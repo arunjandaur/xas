@@ -24,13 +24,14 @@ def derivative(data, interval, order):
 	return retval
 
 def smooth_gaussians(data, sigmas):
-        retval = np.empty(data.shape)
-        for sig in sigmas:
-                newdata = np.empty(data.shape)
-                gaussian_filter1d(data, sigma=sig, output=newdata, mode='constant')
-                retval = np.vstack((retval, newdata))
+	#TODO: Indexing error checking
+	newdata = np.empty(data.shape)
+        gaussian_filter1d(data, sigma=sigmas[0], output=newdata, mode='reflect')
+	retval = newdata
+        for sig in sigmas[1:]:
+        	gaussian_filter1d(data, sigma=sig, output=newdata, mode='reflect')
+        	retval = np.vstack((retval, newdata))
 	return retval
-
 
 def get_zero_crossings(energies, data, interval):
 	#TODO: index out of bounds error checking
@@ -62,8 +63,47 @@ def to_arc_space(zeros, sigmas):
 			arc_data.append([zero, sigma])
 	return np.array(arc_data)
 
-def estimate_means(arc_data):
-	most_zeros = arc_data[0]
+def find_pairs(pairs, crossings):
+	#TODO: Fix problem when crossings is empty
+	new_pairs = []
+	copy = crossings #This is acting weird
+	for pair in pairs:
+		left = pair[0]
+		right = pair[1]
+		min_left_dist = 40
+		min_right_dist = 40
+		min_left = 0
+		min_right = 0
+		for cross in copy:
+			if abs(cross - left) < min_left_dist:
+				min_left_dist = abs(cross - left)
+				min_left = cross
+			elif abs(cross - right) < min_right_dist:
+				min_right_dist = abs(cross - right)
+				min_right = cross
+		copy.remove(min_left)
+		copy.remove(min_right)
+		new_pairs.append([min_left, min_right])
+	if len(copy) == 2:
+		#GOOD
+		new_pairs.append([copy[0], copy[1]])
+	elif len(copy) != 0:
+		return False
+	return new_pairs
+
+def label_arches(zero_crossings):
+	i = len(zero_crossings)-1
+	prev_pairs = []
+	while i >= 0:
+		crossings = zero_crossings[i]
+		prev_pairs = find_pairs(prev_pairs, crossings)
+		if prev_pairs == False:
+			return False
+		i -= 1
+	return prev_pairs
+
+def estimate_means(zero_crossings):
+	most_zeros = zero_crossings[0]
 	means = []
 	i = 0
 	while i < len(most_zeros)-1:
@@ -72,8 +112,8 @@ def estimate_means(arc_data):
 		i += 2
 	return np.array(means)
 
-def estimate_sigmas(arc_data):
-	most_zeros = arc_data[0]
+def estimate_sigmas(zero_crossings):
+	most_zeros = zero_crossings[0]
 	sigmas = []
 	i = 0
 	while i < len(most_zeros)-1:
@@ -99,20 +139,21 @@ def gauss_simple(E, A, avg, sigma):
 	return A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
 
 if __name__ == "__main__":
-	E = np.linspace(0, 8, 100)
-	I = gauss_simple(E, 2, 3, .5) + gauss_simple(E, 8, 7, .5) + gauss_simple(E, 1, 5, .01)
-	sigmas = np.linspace(.5, 10, 20)
+	E = np.linspace(0, 30, 1000)
+	I = gauss_simple(E, .16, 5.5, .25) + gauss_simple(E, .04, 6.5, .25)
+	sigmas = np.linspace(.01, 30, 10)
 	smoothed = smooth_gaussians(I, sigmas)
 	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
-	arc_data = to_arc_space(zero_crossings, sigmas)
-	means = estimate_means(zero_crossings)
-	sigmas = estimate_sigmas(zero_crossings)
-	amps = estimate_amplitudes(E, smoothed[0], means)
-	print means
-	print sigmas
-	print amps
+	#arc_data = to_arc_space(zero_crossings, sigmas)
+	#means = estimate_means(zero_crossings)
+	#sigmas = estimate_sigmas(zero_crossings)
+	#amps = estimate_amplitudes(E, smoothed[0], means)
+	arcs = label_arches(zero_crossings)
+	#print means
+	#print sigmas
+	#print amps
 
-	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
+	#plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
 	
 	for i in range(len(smoothed)):
 		plt.plot(E, smoothed[i], 'b', label='fit')
