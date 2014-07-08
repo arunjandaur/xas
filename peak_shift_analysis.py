@@ -89,7 +89,7 @@ def find_pairs(pairs, crossings):
 		new_pairs.append([copy[0], copy[1]])
 	elif len(copy) != 0:
 		return False
-	return new_pairs
+	return np.array(new_pairs)
 
 def label_arches(zero_crossings):
 	i = len(zero_crossings)-1
@@ -97,29 +97,27 @@ def label_arches(zero_crossings):
 	while i >= 0:
 		crossings = zero_crossings[i]
 		prev_pairs = find_pairs(prev_pairs, crossings)
-		if prev_pairs == False:
+		if type(prev_pairs) == bool:
 			return False
 		i -= 1
 	return prev_pairs
 
-def estimate_means(zero_crossings):
-	most_zeros = zero_crossings[0]
+def estimate_means(arches):
 	means = []
-	i = 0
-	while i < len(most_zeros)-1:
-		mean = (most_zeros[i] + most_zeros[i+1]) / 2.0
+	for arch in arches:
+		left = arch[0]
+		right = arch[1]
+		mean = (left + right) / 2.0
 		means.append(mean)
-		i += 2
 	return np.array(means)
 
-def estimate_sigmas(zero_crossings):
-	most_zeros = zero_crossings[0]
+def estimate_sigmas(arches):
 	sigmas = []
-	i = 0
-	while i < len(most_zeros)-1:
-		sigma = abs(most_zeros[i] - most_zeros[i+1]) / 2.0
+	for arch in arches:
+		left = arch[0]
+		right = arch[1]
+		sigma = abs(left - right) / 2.0
 		sigmas.append(sigma)
-		i += 2
 	return np.array(sigmas)
 
 def estimate_amplitudes(energies, intensities, means):
@@ -138,6 +136,32 @@ def estimate_amplitudes(energies, intensities, means):
 def gauss_simple(E, A, avg, sigma):
 	return A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
 
+def gauss_simple2(E, A1, avg1, sigma1, A2=0, avg2=0, sigma2=0):
+	return gauss_simple(E, A1, avg1, sigma1) + gauss_simple(E, A2, avg2, sigma2)
+
+def estimate_num_gauss(arches, tol, E, I):
+	error = 1000
+	n = 1
+	m = len(arches)
+	while error > tol:
+		if n > m:
+			return m #maybe instead we should remember the n with the least error
+		n_dominant = arches[0:n]
+		means = estimate_means(n_dominant)
+		sigmas = estimate_sigmas(n_dominant)
+		amps = estimate_amplitudes(E, I, means)
+		initialparams = []
+		for i in range(n):
+			initialparams.append(amps[i])
+			initialparams.append(means[i])
+			initialparams.append(sigmas[i])
+		
+		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
+		error = np.sqrt(np.diag(covar))
+
+		n += 1
+	return n-1
+
 if __name__ == "__main__":
 	E = np.linspace(0, 30, 1000)
 	I = gauss_simple(E, .16, 5.5, .25) + gauss_simple(E, .04, 6.5, .25)
@@ -148,7 +172,8 @@ if __name__ == "__main__":
 	#means = estimate_means(zero_crossings)
 	#sigmas = estimate_sigmas(zero_crossings)
 	#amps = estimate_amplitudes(E, smoothed[0], means)
-	arcs = label_arches(zero_crossings)
+	arches = label_arches(zero_crossings)
+	print estimate_num_gauss(arches, .1, E, I)
 	#print means
 	#print sigmas
 	#print amps
