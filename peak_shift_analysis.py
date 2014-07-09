@@ -13,7 +13,7 @@ def gauss(E, A, sigma, a, b):
 	#energy = E[:, 2]
 	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
 
-def gauss3(E, A1, sigma1, A2=0, sigma2=.1, A3=0, sigma3=.1, a1, b1, a2=0, b2=0, a3=0, b3=0):
+def gauss3(E, A1=0, sigma1=.1, A2=0, sigma2=.1, A3=0, sigma3=.1, a1=0, b1=0, a2=0, b2=0, a3=0, b3=0):
 	return gauss(E, A1, sigma1, a1, b1) + gauss(E, A2, sigma2, a2, b2) + gauss(E, A3, sigma3, a3, b3)
 
 def derivative(data, interval, order):
@@ -162,22 +162,40 @@ def estimate_num_gauss(arches, tol, E, I):
 	return n-1, params
 
 if __name__ == "__main__":
-	E = np.linspace(0, 30, 1000)
-	I = gauss_simple(E, .16, 5.5, .25) + gauss_simple(E, .04, 6.5, .25) #+ gauss_simple(E, .1, 10, .15)
-	sigmas = np.linspace(.01, 30, 10)
-	smoothed = smooth_gaussians(I, sigmas)
-	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
+	E = np.array([[], []])
+	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
+	for i in range(len(X)):
+        	x = X[i]
+                energies = np.linspace(0, 30, 1000)
+                x_s = [x for _ in range(len(energies))]
+                temp = np.vstack((x_s, energies))
+                E = np.hstack((E, temp))
+	E = np.transpose(E)
+	I = gauss3(E, .16, .25, .04, .25, 0, .1, 1.2, 5.5, 1.2, 6.5, 0, 0)
+	I_1 = I[0:1000]
+	sigmas = np.linspace(.01, 30, 11)
+	smoothed = smooth_gaussians(I_1, sigmas)
+	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
 	arches = label_arches(zero_crossings)
-	num, params = estimate_num_gauss(arches, .001, E, I)
+	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
+	newparams = []
+	i = 0
+	while i < len(params)-2:
+		amp = params[i]
+		mean = params[i+1]
+		sigma = params[i+2]
+		newparams.append(amp)
+		newparams.append(sigma)
+		i += 3
 	
-	
-	
-	finalparams, covar = curve_fit(gauss3, E, I, p0=params, maxfev=4000)
+	print params
+	print newparams
+	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
 	print finalparams
 
 	for i in range(len(smoothed)):
-		plt.plot(E, smoothed[i], 'b', label='fit')
-	plt.plot(E, I, 'ro', label='original')
+		plt.plot(E[:, 1][0:1000], smoothed[i], 'b', label='fit')
+	plt.plot(E[:, 1][0:1000], I[0:1000], 'ro', label='original')
 	plt.show()
 	"""	
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
