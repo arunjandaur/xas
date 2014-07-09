@@ -6,15 +6,15 @@ from math import *
 from scipy.optimize import curve_fit
 from scipy.ndimage.filters import gaussian_filter1d
 
-def gauss(E, sigma, a, b, c):
+def gauss(E, A, sigma, a, b):
 	x = E[:, 0]
-	x2 = E[:, 1]
-	energy = E[:, 2]
-	A = 1 / (sigma * sqrt(2*pi))
-	return A * np.exp(-.5 * np.power((energy - (a*x+b*x2+c)) / sigma, 2))
+	energy = E[:, 1]
+	#x2 = E[:, 1]
+	#energy = E[:, 2]
+	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
 
-def gauss2(E, sigma1, sigma2, a1, b1, c1, a2, b2, c2):
-	return gauss(E, sigma1, a1, b1, c1) + gauss(E, sigma2, a2, b2, c2)
+def gauss3(E, A1, sigma1, A2=0, sigma2=.1, A3=0, sigma3=.1, a1, b1, a2=0, b2=0, a3=0, b3=0):
+	return gauss(E, A1, sigma1, a1, b1) + gauss(E, A2, sigma2, a2, b2) + gauss(E, A3, sigma3, a3, b3)
 
 def derivative(data, interval, order):
 	#TODO: index out of bounds error checking
@@ -136,13 +136,14 @@ def estimate_amplitudes(energies, intensities, means):
 def gauss_simple(E, A, avg, sigma):
 	return A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
 
-def gauss_simple2(E, A1, avg1, sigma1, A2=0, avg2=0, sigma2=0):
-	return gauss_simple(E, A1, avg1, sigma1) + gauss_simple(E, A2, avg2, sigma2)
+def gauss_simple2(E, A1, avg1, sigma1, A2=0, avg2=0, sigma2=.2, A3=0, avg3=0, sigma3=.2):
+	return gauss_simple(E, A1, avg1, sigma1) + gauss_simple(E, A2, avg2, sigma2) + gauss_simple(E, A3, avg3, sigma3)
 
 def estimate_num_gauss(arches, tol, E, I):
 	error = 1000
 	n = 1
 	m = len(arches)
+	params = []
 	while error > tol:
 		if n > m:
 			return m #maybe instead we should remember the n with the least error
@@ -155,31 +156,25 @@ def estimate_num_gauss(arches, tol, E, I):
 			initialparams.append(amps[i])
 			initialparams.append(means[i])
 			initialparams.append(sigmas[i])
-		
 		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
-		error = np.sqrt(np.diag(covar))
-
+		error = np.sqrt(np.sum(np.diag(covar))) #Should I take the mean before the sqrt?
 		n += 1
-	return n-1
+	return n-1, params
 
 if __name__ == "__main__":
 	E = np.linspace(0, 30, 1000)
-	I = gauss_simple(E, .16, 5.5, .25) + gauss_simple(E, .04, 6.5, .25)
+	I = gauss_simple(E, .16, 5.5, .25) + gauss_simple(E, .04, 6.5, .25) #+ gauss_simple(E, .1, 10, .15)
 	sigmas = np.linspace(.01, 30, 10)
 	smoothed = smooth_gaussians(I, sigmas)
 	zero_crossings = get_zero_crossings(E, smoothed, E[1]-E[0])
-	#arc_data = to_arc_space(zero_crossings, sigmas)
-	#means = estimate_means(zero_crossings)
-	#sigmas = estimate_sigmas(zero_crossings)
-	#amps = estimate_amplitudes(E, smoothed[0], means)
 	arches = label_arches(zero_crossings)
-	print estimate_num_gauss(arches, .1, E, I)
-	#print means
-	#print sigmas
-	#print amps
-
-	#plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label = 'arc space')
+	num, params = estimate_num_gauss(arches, .001, E, I)
 	
+	
+	
+	finalparams, covar = curve_fit(gauss3, E, I, p0=params, maxfev=4000)
+	print finalparams
+
 	for i in range(len(smoothed)):
 		plt.plot(E, smoothed[i], 'b', label='fit')
 	plt.plot(E, I, 'ro', label='original')
