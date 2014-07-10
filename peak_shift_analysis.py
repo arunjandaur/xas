@@ -68,7 +68,7 @@ def to_arc_space(zeros, sigmas):
 def find_pairs(pairs, crossings):
 	#TODO: Fix problem when crossings is empty
 	new_pairs = []
-	copy = crossings #This is acting weird
+	copy = list(np.copy(crossings)) #This is acting weird
 	for pair in pairs:
 		left = pair[0]
 		right = pair[1]
@@ -163,8 +163,7 @@ def estimate_num_gauss(arches, tol, E, I):
 			initialparams.append(0) #mean
 			initialparams.append(.1) #Sigma can't be 0
 		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
-		print np.diag(covar)
-		error = np.sqrt(np.absolute(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
+		error = np.sqrt(np.mean(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
 		n += 1
 	return n-1, params
 
@@ -181,12 +180,14 @@ if __name__ == "__main__":
                 temp = np.vstack((x_s, energies))
                 E = np.hstack((E, temp))
 	E = np.transpose(E)
-	I = gauss3(E, .16, .25, .04, .25, 0, .1, 1.2, 5.5, 1.2, 6.5, 0, 0)
+	I = gauss3(E, .16, .25, .04, .25, 0, .1, 0, 5.5, 0, 6.5, 0, 0)
 	I_1 = I[0:1000]
 	sigmas = np.linspace(.01, 30, 100)
 	smoothed = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
 	arches = label_arches(zero_crossings)
+	arc_data = to_arc_space(zero_crossings, sigmas)
+	print "Arches" + str(arches)
 	num, params = estimate_num_gauss(arches, .01, E[:, 1][0:1000], I_1)
 	newparams = []
 	i = 0
@@ -198,14 +199,15 @@ if __name__ == "__main__":
 		newparams.append(sigma)
 		i += 3
 	newparams.extend(estimate_mean_coeffs())
-	print params
-	print newparams
 	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
-	print finalparams
 
+	plt.figure(1)
+	plt.subplot(221)
 	for i in range(len(smoothed)):
 		plt.plot(E[:, 1][0:1000], smoothed[i], 'b', label='fit')
 	plt.plot(E[:, 1][0:1000], I[0:1000], 'ro', label='original')
+	plt.subplot(222)
+	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
 	plt.show()
 	"""	
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
