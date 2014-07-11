@@ -7,6 +7,7 @@ from scipy.optimize import curve_fit
 from scipy.ndimage.filters import gaussian_filter1d
 
 NUM = 3 #Max number of gaussians
+VARS = 2 #Max number of variables
 
 def gauss(E, A, sigma, a, b):
 	x = E[:, 0]
@@ -69,7 +70,11 @@ def find_pairs(pairs, crossings):
 	#TODO: Fix problem when crossings is empty
 	new_pairs = []
 	copy = list(np.copy(crossings)) #This is acting weird
-	for pair in pairs:
+	for i in range(len(pairs)):
+		pair = pairs[i]
+		if len(copy) == 0:
+			new_pairs.extend(pairs[i:])
+			return np.array(new_pairs)
 		left = pair[0]
 		right = pair[1]
 		min_left_dist = 40
@@ -85,7 +90,17 @@ def find_pairs(pairs, crossings):
 				min_right = cross
 		copy.remove(min_left)
 		copy.remove(min_right)
-		new_pairs.append([min_left, min_right])
+		if len(new_pairs) > 0:
+			prev = new_pairs[i-1]
+			prev_left = prev[0]
+			prev_right = prev[1]
+			if min_left > prev_left and min_left < prev_right and min_right > prev_left and min_right < prev_right:
+				new_pairs[i-1][1] = min_left
+				new_pairs.append([min_right, right])
+			else:
+				new_pairs.append([min_left, min_right])
+		else:
+			new_pairs.append([min_left, min_right])
 	if len(copy) == 2:
 		#GOOD
 		new_pairs.append([copy[0], copy[1]])
@@ -144,10 +159,6 @@ def gauss_simple(E, A, avg, sigma):
 def gauss_simple2(E, A1, avg1, sigma1, A2, avg2, sigma2, A3, avg3, sigma3):
 	return gauss_simple(E, A1, avg1, sigma1) + gauss_simple(E, A2, avg2, sigma2) + gauss_simple(E, A3, avg3, sigma3)
 
-def compute_error(E, I, fitparams):
-	error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_simple2(E, *fitparams), 2)))
-	return error
-
 def estimate_num_gauss(arches, tol, E, I):
 	error = 1000
 	n = 1
@@ -170,14 +181,13 @@ def estimate_num_gauss(arches, tol, E, I):
 			initialparams.append(0) #mean
 			initialparams.append(.1) #Sigma can't be 0
 		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
-		error = compute_error(E, I, params)
+		error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_simple2(E, *params), 2)))
 		#error = np.sqrt(np.mean(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
 		n += 1
 	return n-1, params
 
 def estimate_mean_coeffs(means):
 	copy = list(np.copy(means))
-	VARS = 2
 	coeffs = []
 	for i in range(VARS*NUM):
 		if i % 2 != 0 and len(copy) != 0:
@@ -208,16 +218,17 @@ if __name__ == "__main__":
                 temp = np.vstack((x_s, energies))
                 E = np.hstack((E, temp))
 	E = np.transpose(E)
-	I = gauss3(E, .16, .25, .04, .25, 0, .001, .5, 5.5, .5, 6.5, 0, 0)
+	I = gauss3(E, .16, .25, .16, .25, 0, .001, 0, 14.5, 0, 15.5, 0, 0)
 	I_1 = I[0:1000]
-	sigmas = np.linspace(.01, 30, 10)
+	sigmas = np.linspace(.001, 500, 1000)
 	smoothed = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
-	#print [len(cross) for cross in zero_crossings]
-	arches = label_arches(zero_crossings)
+	print [len(cross) for cross in zero_crossings]
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	graph()
-	#print "Arches" + str(arches)
+	arches = label_arches(zero_crossings)
+	print "Arches" + str(arches)
+	"""
 	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
 	newparams = []
 	i = 0
@@ -235,6 +246,7 @@ if __name__ == "__main__":
 	print params
 	print newparams
 	print finalparams
+	"""
 	"""
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
