@@ -28,16 +28,16 @@ def derivative(data, interval, order):
 def smooth_gaussians(data, sigmas):
 	#TODO: Indexing error checking
 	newdata = np.empty(data.shape)
-        gaussian_filter1d(data, sigma=sigmas[0], output=newdata, mode='reflect')
+        gaussian_filter1d(data, sigma=sigmas[0], order=2, output=newdata, mode='reflect')
 	retval = newdata
         for sig in sigmas[1:]:
-        	gaussian_filter1d(data, sigma=sig, output=newdata, mode='reflect')
+        	gaussian_filter1d(data, sigma=sig, order=2, output=newdata, mode='reflect')
         	retval = np.vstack((retval, newdata))
 	return retval
 
 def get_zero_crossings(energies, data, interval):
 	#TODO: index out of bounds error checking
-	deriv2 = derivative(data, interval, 2)
+	deriv2 = data#derivative(data, interval, 2)
 	left = deriv2[:, 0:deriv2.shape[1]-3]
 	right = deriv2[:, 1:deriv2.shape[1]-2]
 	right2 = deriv2[:, 2:deriv2.shape[1]-1]
@@ -104,6 +104,9 @@ def label_arches(zero_crossings):
 		i -= 1
 	return prev_pairs
 
+def find_arches():
+	pass
+
 def estimate_means(arches):
 	means = []
 	for arch in arches:
@@ -141,6 +144,10 @@ def gauss_simple(E, A, avg, sigma):
 def gauss_simple2(E, A1, avg1, sigma1, A2, avg2, sigma2, A3, avg3, sigma3):
 	return gauss_simple(E, A1, avg1, sigma1) + gauss_simple(E, A2, avg2, sigma2) + gauss_simple(E, A3, avg3, sigma3)
 
+def compute_error(E, I, fitparams):
+	error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_simple2(E, *fitparams), 2)))
+	return error
+
 def estimate_num_gauss(arches, tol, E, I):
 	error = 1000
 	n = 1
@@ -163,12 +170,33 @@ def estimate_num_gauss(arches, tol, E, I):
 			initialparams.append(0) #mean
 			initialparams.append(.1) #Sigma can't be 0
 		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
-		error = np.sqrt(np.mean(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
+		error = compute_error(E, I, params)
+		#error = np.sqrt(np.mean(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
 		n += 1
 	return n-1, params
 
-def estimate_mean_coeffs():
-	return [0 for _ in range(2*NUM)]
+def estimate_mean_coeffs(means):
+	copy = list(np.copy(means))
+	VARS = 2
+	coeffs = []
+	for i in range(VARS*NUM):
+		if i % 2 != 0 and len(copy) != 0:
+			coeffs.append(copy[0])
+			print copy[0]
+			copy.remove(copy[0])
+		else:
+			coeffs.append(0)
+	return coeffs
+
+def graph():
+	plt.figure(1)
+	plt.subplot(221)
+        for i in range(len(smoothed)):
+	        plt.plot(E[:, 1][0:1000], smoothed[i], 'b', label='fit')
+        plt.plot(E[:, 1][0:1000], I[0:1000], 'ro', label='original')
+        plt.subplot(222)
+        plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
+        plt.show()
 
 if __name__ == "__main__":
 	E = np.array([[], []])
@@ -180,36 +208,34 @@ if __name__ == "__main__":
                 temp = np.vstack((x_s, energies))
                 E = np.hstack((E, temp))
 	E = np.transpose(E)
-	I = gauss3(E, .16, .25, .04, .25, 0, .1, 0, 5.5, 0, 6.5, 0, 0)
+	I = gauss3(E, .16, .25, .04, .25, 0, .001, .5, 5.5, .5, 6.5, 0, 0)
 	I_1 = I[0:1000]
-	sigmas = np.linspace(.01, 30, 100)
+	sigmas = np.linspace(.01, 30, 10)
 	smoothed = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
+	#print [len(cross) for cross in zero_crossings]
 	arches = label_arches(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	print "Arches" + str(arches)
-	num, params = estimate_num_gauss(arches, .01, E[:, 1][0:1000], I_1)
+	graph()
+	#print "Arches" + str(arches)
+	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
 	newparams = []
 	i = 0
+	means = []
 	while i < len(params)-2:
 		amp = params[i]
 		mean = params[i+1]
 		sigma = params[i+2]
 		newparams.append(amp)
 		newparams.append(sigma)
+		means.append(mean)
 		i += 3
-	newparams.extend(estimate_mean_coeffs())
+	newparams.extend(estimate_mean_coeffs(means))
 	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
-
-	plt.figure(1)
-	plt.subplot(221)
-	for i in range(len(smoothed)):
-		plt.plot(E[:, 1][0:1000], smoothed[i], 'b', label='fit')
-	plt.plot(E[:, 1][0:1000], I[0:1000], 'ro', label='original')
-	plt.subplot(222)
-	plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
-	plt.show()
-	"""	
+	print params
+	print newparams
+	print finalparams
+	"""
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
 	sigma1 = .5
