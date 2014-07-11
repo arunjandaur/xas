@@ -9,6 +9,22 @@ from scipy.ndimage.filters import gaussian_filter1d
 NUM = 3 #Max number of gaussians
 VARS = 2 #Max number of variables
 
+def gauss_creator(num_of_gauss):
+	"""
+        Higher order function that returns a gaussian curve function 
+        with the number of gaussians specified
+        The variable inputs will be of the form
+        x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
+        """
+        if num_of_gauss <= 0:
+                raise Exception("gauss_creator needs a nonzero positive input")
+        def make_func(func):
+                return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
+        func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
+        for _ in range(num_of_gauss-1):
+                func = make_func(func)
+        return func
+
 def gauss(E, A, sigma, a, b):
 	x = E[:, 0]
 	energy = E[:, 1]
@@ -168,6 +184,7 @@ def estimate_num_gauss(arches, tol, E, I):
 		if n > m:
 			return m #maybe instead we should remember the n with the least error
 		n_dominant = arches[0:n]
+		gauss_func = gauss_creator(n)
 		means = estimate_means(n_dominant)
 		sigmas = estimate_sigmas(n_dominant)
 		amps = estimate_amplitudes(E, I, means)
@@ -176,26 +193,21 @@ def estimate_num_gauss(arches, tol, E, I):
 			initialparams.append(amps[i])
 			initialparams.append(means[i])
 			initialparams.append(sigmas[i])
-		while len(initialparams) != 3*NUM:
-			initialparams.append(0) #A
-			initialparams.append(0) #mean
-			initialparams.append(.1) #Sigma can't be 0
-		params, covar = curve_fit(gauss_simple2, E, I, p0=initialparams, maxfev=4000)
-		error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_simple2(E, *params), 2)))
+		#while len(initialparams) != 3*NUM:
+			#initialparams.append(0) #A
+			#initialparams.append(0) #mean
+			#initialparams.append(.1) #Sigma can't be 0
+		params, covar = curve_fit(gauss_func, E, I, p0=initialparams, maxfev=4000)
+		error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_func(E, *params), 2)))
 		#error = np.sqrt(np.mean(np.sum(np.diag(covar)))) #Should I take the mean before the sqrt?
 		n += 1
 	return n-1, params
 
 def estimate_mean_coeffs(means):
-	copy = list(np.copy(means))
 	coeffs = []
-	for i in range(VARS*NUM):
-		if i % 2 != 0 and len(copy) != 0:
-			coeffs.append(copy[0])
-			print copy[0]
-			copy.remove(copy[0])
-		else:
-			coeffs.append(0)
+	for mean in means:
+		coeffs.append(0)
+		coeffs.append(mean)
 	return coeffs
 
 def graph():
@@ -223,12 +235,12 @@ if __name__ == "__main__":
 	sigmas = np.linspace(.001, 500, 1000)
 	smoothed = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
-	print [len(cross) for cross in zero_crossings]
+	#print [len(cross) for cross in zero_crossings]
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	graph()
+	#graph()
 	arches = label_arches(zero_crossings)
-	print "Arches" + str(arches)
-	"""
+	#print "Arches" + str(arches)
+	
 	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
 	newparams = []
 	i = 0
@@ -242,11 +254,11 @@ if __name__ == "__main__":
 		means.append(mean)
 		i += 3
 	newparams.extend(estimate_mean_coeffs(means))
-	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
 	print params
 	print newparams
+	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
 	print finalparams
-	"""
+	
 	"""
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
