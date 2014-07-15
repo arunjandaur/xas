@@ -206,3 +206,22 @@ if __name__ == "__main__":
 	#graph()
 	arches = label_arches(zero_crossings)
 	print "Arches" + str(arches)
+	"""
+	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
+  	newparams = []
+  	i = 0
+  	means = []
+  	while i < len(params)-2:
+  		amp = params[i]
+  		mean = params[i+1]
+  		sigma = params[i+2]
+  		newparams.append(amp)
+  		newparams.append(sigma)
+  		means.append(mean)
+  		i += 3
+  	newparams.extend(estimate_mean_coeffs(means))
+  	print params
+  	print newparams
+  	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
+  	print finalparams
+	"""
