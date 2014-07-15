@@ -82,10 +82,22 @@ def to_arc_space(zeros, sigmas):
 			arc_data.append([zero, sigma])
 	return np.array(arc_data)
 
+def find_closest_crossing(val, crossings):
+	min_dist = 40
+        min_crossing = 0
+        for cross in crossings:
+        	if abs(cross - val) < min_dist:
+                	min_dist = abs(cross - val)
+                        min_crossing = cross
+	return min_crossing
+
 def find_pairs(pairs, crossings):
 	#TODO: Fix problem when crossings is empty
+	if len(pairs) * 2 > len(crossings):
+		print "Insufficient crossings!"
+		return np.array(pairs)
 	new_pairs = []
-	copy = list(np.copy(crossings)) #This is acting weird
+	copy = list(np.copy(crossings))
 	for i in range(len(pairs)):
 		pair = pairs[i]
 		if len(copy) == 0:
@@ -93,33 +105,30 @@ def find_pairs(pairs, crossings):
 			return np.array(new_pairs)
 		left = pair[0]
 		right = pair[1]
-		min_left_dist = 40
-		min_right_dist = 40
-		min_left = 0
-		min_right = 0
-		for cross in copy:
-			if abs(cross - left) < min_left_dist:
-				min_left_dist = abs(cross - left)
-				min_left = cross
-			elif abs(cross - right) < min_right_dist:
-				min_right_dist = abs(cross - right)
-				min_right = cross
+		min_left = find_closest_crossing(left, copy)
 		copy.remove(min_left)
+		min_right = find_closest_crossing(right, copy)
 		copy.remove(min_right)
-		if len(new_pairs) > 0:
-			prev = new_pairs[i-1]
-			prev_left = prev[0]
-			prev_right = prev[1]
-			if min_left > prev_left and min_left < prev_right and min_right > prev_left and min_right < prev_right:
-				new_pairs[i-1][1] = min_left
-				new_pairs.append([min_right, right])
-			else:
-				new_pairs.append([min_left, min_right])
-		else:
-			new_pairs.append([min_left, min_right])
+		new_pairs.append([min_left, min_right])
 	if len(copy) == 2:
 		#GOOD
-		new_pairs.append([copy[0], copy[1]])
+		new_left = copy[0]
+		new_right = copy[1]
+		inner = False
+		for i in range(len(new_pairs)):
+			old_pair = new_pairs[i]
+			old_left = old_pair[0]
+			old_right = old_pair[1]
+			if new_left > old_left and new_left < old_right and new_right > old_left and new_right < old_right:
+				print new_pairs
+				new_pairs[i][1] = new_left
+				new_pairs.append([new_right, old_right])
+				print new_pairs
+				inner = True
+				print "hi"
+				break
+		if inner == False:
+			new_pairs.append([copy[0], copy[1]])
 	elif len(copy) != 0:
 		return False
 	return np.array(new_pairs)
@@ -235,12 +244,12 @@ if __name__ == "__main__":
 	sigmas = np.linspace(.001, 500, 1000)
 	smoothed = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
-	#print [len(cross) for cross in zero_crossings]
+	print [len(cross) for cross in zero_crossings]
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	#graph()
 	arches = label_arches(zero_crossings)
-	#print "Arches" + str(arches)
-	
+	print "Arches" + str(arches)
+	"""
 	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
 	newparams = []
 	i = 0
@@ -258,7 +267,7 @@ if __name__ == "__main__":
 	print newparams
 	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
 	print finalparams
-	
+	"""
 	"""
 	X = (np.random.normal(loc=1.16, scale=.16, size=10) - 1.16) / .16
 	X2 = (np.random.normal(loc=3, scale=.3, size=10) - 3) / .3
