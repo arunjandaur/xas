@@ -6,31 +6,64 @@ from scipy.ndimage.filters import gaussian_filter1d
 import numpy as np
 import matplotlib.pyplot as plt
 
-def gauss_creator(num_of_gauss):
+def gauss_creator_simple(num_of_gauss):
 	"""
-        Higher order function that returns a gaussian curve function 
-        with the number of gaussians specified
-        The variable inputs will be of the form
-        x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
-        """
-        if num_of_gauss <= 0:
-                raise Exception("gauss_creator needs a nonzero positive input")
-        def make_func(func):
-                return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
-        func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
-        for _ in range(num_of_gauss-1):
-                func = make_func(func)
-        return func
+	Higher order function that returns a gaussian curve function 
+	with the number of gaussians specified
+	The variable inputs will be of the form
+	x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
+	"""
+	if num_of_gauss <= 0:
+        	raise Exception("gauss_creator needs a nonzero positive input")
+    
+	def make_func(func):
+		return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
+   
+	func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
+	for _ in range(num_of_gauss-1):
+		func = make_func(func)
+	return func
 
-def gauss(E, A, sigma, a, b):
-	x = E[:, 0]
-	energy = E[:, 1]
-	#x2 = E[:, 1]
-	#energy = E[:, 2]
-	return A * np.exp(-.5 * np.power((energy - (a*x+b)) / sigma, 2))
+def gauss_creator_complex(num_of_gauss, num_of_variables):
+	"""
+	Higher order function that returns a gaussian curve function 
+	with the number of gaussians specified
+	where the mean is a function of the variables given
+	(num of variables does not include the constant offset,
+	so if it is set to 0 then there are not extra variables and the mean
+	is constant)
 
-def gauss3(E, A1, sigma1, A2, sigma2, A3, sigma3, a1, b1, a2, b2, a3, b3):
-	return gauss(E, A1, sigma1, a1, b1) + gauss(E, A2, sigma2, a2, b2) + gauss(E, A3, sigma3, a3, b3)
+	The variable inputs will be of the form
+	x_position, amplitude1, sigma1, a1, b1...amplitude2, sigma2, a2, b2, etc
+	"""
+	if num_of_gauss <= 0:
+		raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
+	if num_of_variables <= 0:
+		raise ValueError("gauss_creator_complex needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
+
+	param_num = num_of_variables + 1
+
+	def mean_func(x,*params):
+		if len(params) != param_num:
+			if len(params) > param_num:
+				raise ValueError("too many params for mean function, can only take {}".format(param_num))
+			else:
+				raise ValueError("too few params for mean function, can only take {}".format(param_num))
+
+		copy = x.copy()
+		if x.shape[1] != num_of_variables:
+			raise ValueError("input array does not have enough variables") 
+		copy_con = np.insert(x, 0,1, axis=1)
+		return copy_con.dot(params)
+
+	def make_func(func):
+		return lambda E, A, sigma, *args: func(E, *(args[param_num:])) + A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num])))/sigma, 2))
+
+	func = lambda E, A, sigma, *args : A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num]))) / sigma, 2))
+
+	for _ in range(num_of_gauss-1):
+		func = make_func(func)
+	return func
 
 def smooth_gaussians(data, sigmas):
 	#TODO: Indexing error checking
@@ -47,7 +80,7 @@ def smooth_gaussians(data, sigmas):
 		retval2 = np.vstack((retval2, convolved))
 	return retval, retval2
 
-def get_zero_crossings(energies, data, interval):
+def get_zero_crossings(energies, data):
 	#TODO: index out of bounds error checking
 	left = data[:, 0:data.shape[1]-3]
 	right = data[:, 1:data.shape[1]-2]
@@ -112,6 +145,7 @@ def find_pairs(pairs, crossings):
 		if inner == False:
 			new_pairs.append([copy[0], copy[1]])
 	elif len(copy) != 0:
+		print pairs, crossings
 		return False
 	return np.array(new_pairs)
 
@@ -160,7 +194,7 @@ def estimate_num_gauss(arches, tol, E, I):
 		if n > m:
 			return m #maybe instead we should remember the n with the least error
 		n_dominant = arches[0:n]
-		gauss_func = gauss_creator(n)
+		gauss_func = gauss_creator_simple(n)
 		means = estimate_means(n_dominant)
 		sigmas = estimate_sigmas(n_dominant)
 		amps = estimate_amplitudes(E, I, means)
@@ -200,8 +234,8 @@ def graph():
 	plt.figure(1)
 	plt.subplot(221)
         for i in range(len(smoothed)):
-	        plt.plot(E[:, 1][0:1000], smoothed[i], 'b', label='fit')
-        plt.plot(E[:, 1][0:1000], I[0:1000], 'ro', label='original')
+	        plt.plot(E[:, 0][0:1000], smoothed[i], 'b', label='fit')
+        plt.plot(E[:, 0][0:1000], I[0:1000], 'ro', label='original')
         plt.subplot(222)
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
@@ -213,23 +247,23 @@ if __name__ == "__main__":
         	x = X[i]
                 energies = np.linspace(0, 30, 1000)
                 x_s = [x for _ in range(len(energies))]
-                temp = np.vstack((x_s, energies))
+                temp = np.vstack((energies, x_s))
                 E = np.hstack((E, temp))
 	E = np.transpose(E)
-	I = gauss3(E, .16, .25, .16, .25, 0, .001, 0, 14.5, 0, 15.5, 0, 0)
+	gauss_complex = gauss_creator_complex(2, 1)
+	I = gauss_complex(E, .16, .25, 14.5, .50, .16, .25, 15.5, .50)
 	I_1 = I[0:1000]
-	#sigmas = np.linspace(.1, 15, 1000)
-	sigmas = np.arange(.1, 15, 1)
+	sigmas = np.arange(1, 15, .1)
 	smoothed, convolved = smooth_gaussians(I_1, sigmas)
-	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
+	zero_crossings = get_zero_crossings(E[:, 0][0:1000], smoothed)
 	print [len(cross) for cross in zero_crossings]
-	zero_crossings = remove_odds(zero_crossings)
+	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	graph()
 	arches = label_arches(zero_crossings)
-	#print "Arches" + str(arches)
-	"""
-	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
+	print "Arches" + str(arches)
+	
+	num, params = estimate_num_gauss(arches, .001, E[:, 0][0:1000], I_1)
   	newparams = []
   	i = 0
   	means = []
@@ -239,11 +273,12 @@ if __name__ == "__main__":
   		sigma = params[i+2]
   		newparams.append(amp)
   		newparams.append(sigma)
-  		means.append(mean)
+		newparams.append(mean)
+  		newparams.append(0)
   		i += 3
-  	newparams.extend(estimate_mean_coeffs(means))
+	#newparams.extend(estimate_mean_coeffs(means))
   	print params
   	print newparams
-  	finalparams, covar = curve_fit(gauss3, E, I, p0=newparams, maxfev=4000)
+  	finalparams, covar = curve_fit(gauss_complex, E, I, p0=newparams, maxfev=4000)
   	print finalparams
-	"""
+	
