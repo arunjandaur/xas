@@ -36,7 +36,8 @@ def remove_intens_dict(intensities):
 	"""
 	new_intens = []
 	new_energies = []
-        for row in intensities:
+        for i in range(len(intensities)):
+		row = intensities[i]
                 energies = row[0].keys()
                 energies = sorted([float(energy) for energy in energies])
                 new_row = []
@@ -47,7 +48,7 @@ def remove_intens_dict(intensities):
 		new_energies.append(energies)
         intensities = np.array(new_intens)
 	energies = np.array(new_energies)
-	return (intensities, energies)
+	return (energies, intensities)
 
 def energy_tracking(intensities, energies, E_peak):
 	"""
