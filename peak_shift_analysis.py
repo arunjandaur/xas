@@ -65,6 +65,40 @@ def gauss_creator_complex(num_of_gauss, num_of_variables):
 		func = make_func(func)
 	return func
 
+def gauss_creator_minimal(num_gauss, num_vars, amps, sigmas):
+	"""
+	Returns a gaussian function that takes in only the mean coefficients, since the amplitudes and sigmas have already been estimated using estimate_num_gauss
+	"""
+	if num_gauss <= 0:
+                raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
+        if num_vars <= 0:
+                raise ValueError("gauss_creator_complex needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
+
+        param_num = num_vars + 1
+        def mean_func(x, *params):
+                if len(params) != param_num:
+                        if len(params) > param_num:
+                                raise ValueError("too many params for mean function, can only take {}".format(param_num))
+                        else:
+                                raise ValueError("too few params for mean function, can only take {}".format(param_num))
+
+		copy = x.copy()
+                if x.shape[1] != num_vars:
+                        raise ValueError("input array does not have enough variables")
+                copy_con = np.insert(x, 0, 1, axis=1) #Inserts a column of 1's so that we can have [1's] * CONST + [coeffs] * X (vars)
+                return copy_con.dot(params)
+
+        def make_func(func, A, sigma):
+                return lambda E, *args: func(E, *(args[param_num:])) + A * np.exp(-.5 * np.power((E[:, 0]-mean_func(E[:, 1:], *(args[:param_num]))) / sigma, 2))
+
+	A = amps[0]
+	sigma = sigmas[0]
+        func = lambda E, *args : A * np.exp(-.5 * np.power((E[:, 0] - mean_func(E[:, 1:], *(args[:param_num]))) / sigma, 2))
+
+        for i in range(num_gauss-1):
+                func = make_func(func, amps[i], sigmas[i])
+        return func
+
 def smooth_gaussians(data, sigmas):
 	#TODO: Indexing error checking
 	convolved = np.empty(data.shape)
@@ -250,7 +284,9 @@ if __name__ == "__main__":
                 temp = np.vstack((energies, x_s))
                 E = np.hstack((E, temp))
 	E = np.transpose(E)
-	gauss_complex = gauss_creator_complex(2, 1)
+	num_gauss = 2
+	num_vars = 1
+	gauss_complex = gauss_creator_complex(num_gauss, num_vars)
 	I = gauss_complex(E, .16, .25, 14.5, .50, .16, .25, 15.5, .50)
 	I_1 = I[0:1000]
 	sigmas = np.arange(1, 15, .1)
@@ -264,21 +300,26 @@ if __name__ == "__main__":
 	print "Arches" + str(arches)
 	
 	num, params = estimate_num_gauss(arches, .001, E[:, 0][0:1000], I_1)
-  	newparams = []
-  	i = 0
-  	means = []
+	
+	i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
   		amp = params[i]
   		mean = params[i+1]
   		sigma = params[i+2]
-  		newparams.append(amp)
-  		newparams.append(sigma)
-		newparams.append(mean)
-  		newparams.append(0)
+  		amps.append(amp)
+  		means.append(mean)
+		sigmas.append(sigma)
   		i += 3
-	#newparams.extend(estimate_mean_coeffs(means))
+	
+	gauss = gauss_creator_minimal(num_gauss, num_vars, amps, sigmas)
+	newparams = []
+	for mean in means:
+		newparams.append(mean)
+		for _ in range(num_vars):
+			newparams.append(0)
+	
   	print params
   	print newparams
-  	finalparams, covar = curve_fit(gauss_complex, E, I, p0=newparams, maxfev=4000)
+  	finalparams, covar = curve_fit(gauss, E, I, p0=newparams, maxfev=4000)
   	print finalparams
 	
