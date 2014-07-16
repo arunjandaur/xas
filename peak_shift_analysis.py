@@ -1,10 +1,10 @@
 from __future__ import division
-import numpy as np
 from numpy import random
-import matplotlib.pyplot as plt
 from math import *
 from scipy.optimize import curve_fit
 from scipy.ndimage.filters import gaussian_filter1d
+import numpy as np
+import matplotlib.pyplot as plt
 
 def gauss_creator(num_of_gauss):
 	"""
@@ -34,13 +34,18 @@ def gauss3(E, A1, sigma1, A2, sigma2, A3, sigma3, a1, b1, a2, b2, a3, b3):
 
 def smooth_gaussians(data, sigmas):
 	#TODO: Indexing error checking
+	convolved = np.empty(data.shape)
 	newdata = np.empty(data.shape)
         gaussian_filter1d(data, sigma=sigmas[0], order=2, output=newdata, mode='reflect')
+	gaussian_filter1d(data, sigma=sigmas[0], output=convolved, mode='reflect')
 	retval = newdata
+	retval2 = convolved
         for sig in sigmas[1:]:
         	gaussian_filter1d(data, sigma=sig, order=2, output=newdata, mode='reflect')
+		gaussian_filter1d(data, sigma=sig, output=convolved, mode='reflect')
         	retval = np.vstack((retval, newdata))
-	return retval
+		retval2 = np.vstack((retval2, convolved))
+	return retval, retval2
 
 def get_zero_crossings(energies, data, interval):
 	#TODO: index out of bounds error checking
@@ -75,7 +80,7 @@ def find_closest_crossing(val, crossings):
         for cross in crossings:
         	if abs(cross - val) < min_dist:
                 	min_dist = abs(cross - val)
-                        min_crossing = cross
+			min_crossing = cross
 	return min_crossing
 
 def find_pairs(pairs, crossings):
@@ -176,6 +181,21 @@ def estimate_mean_coeffs(means):
 		coeffs.append(mean)
 	return coeffs
 
+def remove_odds(crossings):
+	if len(crossings[-1]) > 3 and len(crossings[-1]) % 2 != 0:
+		return False
+	i = len(crossings)-1
+	cutoff = len(crossings)
+	while i >= 0:
+		num = len(crossings[i])
+		if num > 2 and num % 2 != 0:
+			return False
+		if num == 2:
+			cutoff = i + 1
+			break
+		i -= 1
+	return crossings[:cutoff]
+
 def graph():
 	plt.figure(1)
 	plt.subplot(221)
@@ -198,14 +218,16 @@ if __name__ == "__main__":
 	E = np.transpose(E)
 	I = gauss3(E, .16, .25, .16, .25, 0, .001, 0, 14.5, 0, 15.5, 0, 0)
 	I_1 = I[0:1000]
-	sigmas = np.linspace(.001, 500, 1000)
-	smoothed = smooth_gaussians(I_1, sigmas)
+	#sigmas = np.linspace(.1, 15, 1000)
+	sigmas = np.arange(.1, 15, 1)
+	smoothed, convolved = smooth_gaussians(I_1, sigmas)
 	zero_crossings = get_zero_crossings(E[:, 1][0:1000], smoothed, E[:, 1][1]-E[:, 1][0])
 	print [len(cross) for cross in zero_crossings]
+	zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	#graph()
+	graph()
 	arches = label_arches(zero_crossings)
-	print "Arches" + str(arches)
+	#print "Arches" + str(arches)
 	"""
 	num, params = estimate_num_gauss(arches, .001, E[:, 1][0:1000], I_1)
   	newparams = []
