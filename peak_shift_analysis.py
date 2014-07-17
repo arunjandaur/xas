@@ -214,11 +214,11 @@ def estimate_amplitudes(input_data, output_data, means):
 	amps = []
 	for mean in means:
 		min_dist, amp = 40, -1
-		for i in range(len(energies)):
-			energy = energies[i]
+		for i in range(len(input_data)):
+			energy = input_data[i]
 			if abs(energy - mean) < min_dist:
 				min_dist = abs(energy - mean)
-				amp = intensities[i]
+				amp = output_data[i]
 		amps.append(amp)
 	return amps
 
@@ -269,7 +269,7 @@ def graph():
 	plt.subplot(221)
         for i in range(len(smoothed)):
 	        plt.plot(input_data[:, 0][0:1000], smoothed[i], 'b', label='fit')
-        plt.plot(E[:, 0][0:1000], I[0:1000], 'ro', label='original')
+        plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
         plt.subplot(222)
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
@@ -288,7 +288,7 @@ if __name__ == "__main__":
 	num_vars = 1
 	gauss_complex = gauss_creator_complex(num_gauss, num_vars)
 	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, .16, .25, 15.5, .50)
-	output_1 = I[0:1000]
+	output_1 = output_data[0:1000]
 	sigmas = np.arange(1, 15, .1)
 	smoothed, convolved = smooth_gaussians(output_1, sigmas)
 	zero_crossings = get_zero_crossings(input_data[:, 0][0:1000], smoothed)
@@ -299,7 +299,8 @@ if __name__ == "__main__":
 	arches = label_arches(zero_crossings)
 	print "Arches" + str(arches)
 	
-	num, params = estimate_num_gauss(arches, .001, input_data[:, 0][0:1000], output_1)
+	num, params = estimate_num_gauss(arches, .000001, input_data[:, 0][0:1000], output_1)
+	print num
 	
 	i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
@@ -322,4 +323,3 @@ if __name__ == "__main__":
   	print newparams
   	finalparams, covar = curve_fit(gauss, input_data, output_data, p0=newparams, maxfev=4000)
   	print finalparams
-	
