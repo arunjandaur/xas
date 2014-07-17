@@ -9,7 +9,7 @@ from scipy.ndimage.filters import gaussian_filter1d
 NUM = 3 #Max number of gaussians
 VARS = 2 #Max number of variables
 
-def gauss_creator(num_of_gauss):
+def gauss_creator_simple(num_of_gauss):
 	"""
         Higher order function that returns a gaussian curve function 
         with the number of gaussians specified
@@ -24,7 +24,33 @@ def gauss_creator(num_of_gauss):
         for _ in range(num_of_gauss-1):
                 func = make_func(func)
         return func
+ 
+ def gauss_creator_complex(num_of_gauss, num_of_variables):
+	"""
+        Higher order function that returns a gaussian curve function 
+        with the number of gaussians specified
+        where the mean is a function of the variables given
+        (if num of variables does not include the constant offset,
+        so if it is set to 0 then there are not extra variables and the mean
+        is constant)
 
+        The variable inputs will be of the form
+        x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
+        """
+        if num_of_gauss <= 0:
+                raise Exception("gauss_creator needs a nonzero positive num of gaussians")
+        if num_of_variables < 0:
+                raise Exception("gauss_creator needs a nonnegative input for num of variables")
+        
+        def make_mean_func(*params)
+                return lambda x: np.array(params
+        def make_func(func):
+                return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
+        func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
+        for _ in range(num_of_gauss-1):
+                func = make_func(func)
+        return func
+   
 def gauss(E, A, sigma, a, b):
 	x = E[:, 0]
 	energy = E[:, 1]
@@ -184,7 +210,7 @@ def estimate_num_gauss(arches, tol, E, I):
 		if n > m:
 			return m #maybe instead we should remember the n with the least error
 		n_dominant = arches[0:n]
-		gauss_func = gauss_creator(n)
+		gauss_func = gauss_creator_simple(n)
 		means = estimate_means(n_dominant)
 		sigmas = estimate_sigmas(n_dominant)
 		amps = estimate_amplitudes(E, I, means)
