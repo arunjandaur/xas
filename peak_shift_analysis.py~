@@ -114,11 +114,11 @@ def smooth_gaussians(data, sigmas):
 		retval2 = np.vstack((retval2, convolved))
 	return retval, retval2
 
-def get_zero_crossings(input_data, output_data):
+def get_zero_crossings(energies, data):
 	#TODO: index out of bounds error checking
-	left = output_data[:, 0:output_data.shape[1]-3]
-	right = output_data[:, 1:output_data.shape[1]-2]
-	right2 = output_data[:, 2:output_data.shape[1]-1]
+	left = data[:, 0:data.shape[1]-3]
+	right = data[:, 1:data.shape[1]-2]
+	right2 = data[:, 2:data.shape[1]-1]
 
 	zero_crossings = []
         for i in range(len(left)):
@@ -128,9 +128,9 @@ def get_zero_crossings(input_data, output_data):
                         right_val = right[i][j]
                         right2_val = right2[i][j]
                         if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
-				row_zeros.append(input_data[j+1])
+				row_zeros.append(energies[j+1])
                         elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
-				row_zeros.append(input_data[j])
+				row_zeros.append(energies[j])
                 zero_crossings.append(row_zeros)
         return np.array(zero_crossings)
 
@@ -210,7 +210,7 @@ def estimate_sigmas(arches):
 		sigmas.append(sigma)
 	return np.array(sigmas)
 
-def estimate_amplitudes(input_data, output_data, means):
+def estimate_amplitudes(energies, intensities, means):
 	amps = []
 	for mean in means:
 		min_dist, amp = 40, -1
@@ -222,7 +222,7 @@ def estimate_amplitudes(input_data, output_data, means):
 		amps.append(amp)
 	return amps
 
-def estimate_num_gauss(arches, tol, input_data, output_data):
+def estimate_num_gauss(arches, tol, E, I):
 	n, m, error, params = 1, len(arches), 1000, []
 	while error > tol:
 		if n > m:
@@ -231,14 +231,14 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
 		gauss_func = gauss_creator_simple(n)
 		means = estimate_means(n_dominant)
 		sigmas = estimate_sigmas(n_dominant)
-		amps = estimate_amplitudes(input_data, output_data, means)
+		amps = estimate_amplitudes(E, I, means)
 		initialparams = []
 		for i in range(n):
 			initialparams.append(amps[i])
 			initialparams.append(means[i])
 			initialparams.append(sigmas[i])
-		params, covar = curve_fit(gauss_func, input_data, output_data, p0=initialparams, maxfev=4000)
-		error = np.sqrt(1/len(input_data) * np.sum(np.power(output_data - gauss_func(input_data, *params), 2)))
+		params, covar = curve_fit(gauss_func, E, I, p0=initialparams, maxfev=4000)
+		error = np.sqrt(1/len(E) * np.sum(np.power(I - gauss_func(E, *params), 2)))
 		n += 1
 	return n-1, params
 
