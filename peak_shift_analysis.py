@@ -43,7 +43,7 @@ def gauss_creator_complex(num_of_gauss, num_of_variables):
 
 	param_num = num_of_variables + 1
 
-	def mean_func(x,*params):
+	def mean_func(x, *params):
 		if len(params) != param_num:
 			if len(params) > param_num:
 				raise ValueError("too many params for mean function, can only take {}".format(param_num))
@@ -67,7 +67,7 @@ def gauss_creator_complex(num_of_gauss, num_of_variables):
 
 def gauss_creator_minimal(num_gauss, num_vars, amps, sigmas):
 	"""
-	Returns a gaussian function that takes in only the mean coefficients, since the amplitudes and sigmas have already been estimated using estimate_num_gauss
+	Returns a gaussian function that takes in only the mean coefficients, since the amplitudes and sigmas have already been estimated using estimate_num_gauss.
 	"""
 	if num_gauss <= 0:
                 raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
@@ -96,25 +96,34 @@ def gauss_creator_minimal(num_gauss, num_vars, amps, sigmas):
         func = lambda E, *args : A * np.exp(-.5 * np.power((E[:, 0] - mean_func(E[:, 1:], *(args[:param_num]))) / sigma, 2))
 
         for i in range(num_gauss-1):
-                func = make_func(func, amps[i], sigmas[i])
+                func = make_func(func, amps[i+1], sigmas[i+1])
         return func
 
 def smooth_gaussians(data, sigmas):
+	"""
+	Convolve data with 1d gaussian kernels of size sigma for all sigma in sigmas
+	INPUT: data are sigmas are 1d arrays
+	OUTPUT: Outputs convolution of the 0th and 2nd order.
+	"""
 	#TODO: Indexing error checking
-	convolved = np.empty(data.shape)
-	newdata = np.empty(data.shape)
-        gaussian_filter1d(data, sigma=sigmas[0], order=2, output=newdata, mode='reflect')
-	gaussian_filter1d(data, sigma=sigmas[0], output=convolved, mode='reflect')
-	retval = newdata
-	retval2 = convolved
+	convolved_0 = np.empty(data.shape)
+	convolved_2 = np.empty(data.shape)
+        gaussian_filter1d(data, sigma=sigmas[0], output=convolved_0, mode='reflect')
+	gaussian_filter1d(data, sigma=sigmas[0], order=2, output=convolved_2, mode='reflect')
+	retval = convolved_0
+	retval2 = convolved_2
         for sig in sigmas[1:]:
-        	gaussian_filter1d(data, sigma=sig, order=2, output=newdata, mode='reflect')
-		gaussian_filter1d(data, sigma=sig, output=convolved, mode='reflect')
-        	retval = np.vstack((retval, newdata))
-		retval2 = np.vstack((retval2, convolved))
+        	gaussian_filter1d(data, sigma=sig, output=convolved_0, mode='reflect')
+		gaussian_filter1d(data, sigma=sig, order=2, output=convolved_2, mode='reflect')
+        	retval = np.vstack((retval, convolved_0))
+		retval2 = np.vstack((retval2, convolved_2))
 	return retval, retval2
 
 def get_zero_crossings(input_data, output_data):
+	"""
+	Finds the points at which positive becomes negative, vice versa, or positive/negative becomes 0. If positive becomes negative or vice versa then the left value is selected. Even though that is not the zero crossing it will be close enough, given that the data was sufficiently sampled.
+	OUTPUT: The energies at which the zero crossings approximately occurs. Accuracy is based on sampling rate. The zero crossing will be at most 1 delta x off, where delta x is the sampling width.
+	"""
 	#TODO: index out of bounds error checking
 	left = output_data[:, 0:output_data.shape[1]-3]
 	right = output_data[:, 1:output_data.shape[1]-2]
@@ -135,6 +144,10 @@ def get_zero_crossings(input_data, output_data):
         return np.array(zero_crossings)
 
 def to_arc_space(zeros, sigmas):
+	"""
+	Only useful for plotting purposes. This converts rows of zeroes, where the ith row has the crossing locations when convolved with a 1d gaussian kernel with sigma = sigmas[i].
+	OUTPUT: Rows which contain 2 values each: The location and sigma at which the crossing appears. Each row is a separate crossing.
+	"""
 	arc_data = []
 	for i in range(len(sigmas)):
 		sigma = sigmas[i]
@@ -143,6 +156,11 @@ def to_arc_space(zeros, sigmas):
 	return np.array(arc_data)
 
 def find_closest_crossing(val, crossings):
+	"""
+	Takes an energy value and finds the closest crossing in crossings to val (distance metric is just horizontal distance).
+	INPUT: val is a float.
+	OUTPUT: crossings is a 1d array of energy values of crossings at a particular sigma.
+	"""
 	min_dist, min_crossings = 40, 0
         for cross in crossings:
         	if abs(cross - val) < min_dist:
@@ -151,6 +169,11 @@ def find_closest_crossing(val, crossings):
 	return min_crossing
 
 def find_pairs(pairs, crossings):
+	"""
+	Matches pairs with crossings and takes the leftover crossings and makes them into pairs
+	INPUT: pairs has rows where each row has two elements, the left and right zero crossings that denote a gaussian. crossings is a 1d array of energy positions of zero crossings taken at a different kernel sigma than ones in pairs.
+	OUTPUT: Rows where each row is a pair of crossings that most closely matched the pair in pairs at the corresponding index. Returns False if something went wrong.
+	"""
 	#TODO: Fix problem when crossings is empty
 	if len(pairs) * 2 > len(crossings):
 		print "Insufficient crossings!"
@@ -184,6 +207,11 @@ def find_pairs(pairs, crossings):
 	return np.array(new_pairs)
 
 def label_arches(zero_crossings):
+	"""
+	Pairs zero crossings by looking at decreasingly blurry data and labeling new zero crossings that appear as new Gaussians.
+	INPUT: Each row is a list of zero crossings in the second derivative that occured at sigmas[i]
+	OUTPUT: A 2d array where each row is a pair of crossings that represents a Gaussian. The first crossings to appear are placed towards the left side of the array. The 0th pair showed first, 1st appeared second, etc.
+	"""
 	i = len(zero_crossings)-1
 	prev_pairs = []
 	while i >= 0:
@@ -195,6 +223,10 @@ def label_arches(zero_crossings):
 	return prev_pairs
 
 def estimate_means(arches):
+	"""
+	INPUT: Each row in arches is a pair of zero crossings of the second derivative. Earlier indexed arches appeared earlier.
+	OUTPUT: 1d array of means corresponding to the same index as the input.
+	"""
 	means = []
 	for arch in arches:
 		left, right = arch[0], arch[1]
@@ -203,6 +235,9 @@ def estimate_means(arches):
 	return np.array(means)
 
 def estimate_sigmas(arches):
+	"""
+	Same as estimate_means
+	"""
 	sigmas = []
 	for arch in arches:
 		left, right = arch[0], arch[1]
@@ -223,6 +258,11 @@ def estimate_amplitudes(input_data, output_data, means):
 	return amps
 
 def estimate_num_gauss(arches, tol, input_data, output_data):
+	"""
+	This algorithm fits a variable number of gaussians and estimate their parameters. This is the algorithm from the research paper. It picks an increasing number of gaussians until the error is below a certain tolerance.
+	INPUT: arches have the same format as estimate_means. tol is the error tolerance for when the algorithm should stop increasing the number of gaussians to fit.
+	OUTPUT: The number of gaussians and their fit parameters (amp, mean, sigma).
+	"""
 	n, m, error, params = 1, len(arches), 1000, []
 	while error > tol:
 		if n > m:
@@ -243,6 +283,11 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
 	return n-1, params
 
 def estimate_mean_coeffs(means):
+	"""
+	Estimates the coefficients for sigma(X) = a + bx1 + cx2 + ...
+	INPUT: 1d array of means where means at smaller indices appear first (at higher sigmas)
+	OUPUT: List of coefficients in the order a, b, c, etc
+	"""
 	coeffs = []
 	for mean in means:
 		coeffs.append(0)
@@ -250,6 +295,9 @@ def estimate_mean_coeffs(means):
 	return coeffs
 
 def remove_odds(crossings):
+	"""
+	Sometimes zero crossings get pushed out of range and there is initially one 1 zero crossing. This takes care of that by creating the pair when the second appears. Not tested.
+	"""
 	if len(crossings[-1]) > 3 and len(crossings[-1]) % 2 != 0:
 		return False
 	i = len(crossings)-1
@@ -267,40 +315,42 @@ def remove_odds(crossings):
 def graph():
 	plt.figure(1)
 	plt.subplot(221)
-        for i in range(len(smoothed)):
-	        plt.plot(input_data[:, 0][0:1000], smoothed[i], 'b', label='fit')
+        for i in range(len(convolved_2)):
+	        plt.plot(input_data[:, 0][0:1000], convolved_2[i], 'b', label='fit')
         plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
         plt.subplot(222)
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
 
 if __name__ == "__main__":
-	input_data = np.array([[], []])
-	X = (np.random.normal(loc=1.16, scale=.16, size=100))
+	input_data = np.array([[], [], []])
+	X = np.random.normal(loc=1.16, scale=.16, size=100)
+	X2 = np.random.normal(loc=3, scale=.1, size=100)
 	for i in range(len(X)):
         	x = X[i]
+		x2 = X2[i]
                 energies = np.linspace(0, 30, 1000)
                 x_s = [x for _ in range(len(energies))]
-                temp = np.vstack((energies, x_s))
+		x2_s = [x2 for _ in range(len(energies))]
+                temp = np.vstack((energies, x_s, x2_s))
                 input_data = np.hstack((input_data, temp))
 	input_data = np.transpose(input_data)
 	num_gauss = 2
-	num_vars = 1
+	num_vars = 2
 	gauss_complex = gauss_creator_complex(num_gauss, num_vars)
-	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, .16, .25, 15.5, .50)
+	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, 1, .26, .25, 15.5, .50, 1)
 	output_1 = output_data[0:1000]
-	sigmas = np.arange(1, 15, .1)
-	smoothed, convolved = smooth_gaussians(output_1, sigmas)
-	zero_crossings = get_zero_crossings(input_data[:, 0][0:1000], smoothed)
+	sigmas = np.arange(1, 30, .1)
+	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
+	zero_crossings = get_zero_crossings(input_data[:, 0][0:1000], convolved_2)
 	print [len(cross) for cross in zero_crossings]
 	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	graph()
 	arches = label_arches(zero_crossings)
-	print "Arches" + str(arches)
+	print "Arches\n" + str(arches)
 	
-	num, params = estimate_num_gauss(arches, .000001, input_data[:, 0][0:1000], output_1)
-	print num
+	num, params = estimate_num_gauss(arches, .001, input_data[:, 0][0:1000], output_1)
 	
 	i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
@@ -312,7 +362,7 @@ if __name__ == "__main__":
 		sigmas.append(sigma)
   		i += 3
 	
-	gauss = gauss_creator_minimal(num_gauss, num_vars, amps, sigmas)
+	gauss = gauss_creator_minimal(num, num_vars, amps, sigmas)
 	newparams = []
 	for mean in means:
 		newparams.append(mean)
