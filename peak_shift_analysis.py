@@ -6,6 +6,7 @@ from scipy.ndimage.filters import gaussian_filter1d
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy as scp
+import os
 
 def gauss_creator_simple(num_of_gauss):
 	"""
@@ -255,6 +256,8 @@ def estimate_amplitudes(input_data, output_data, means, sigmas):
             for mean,sigma in zip(means[1:],sigmas[1:]):
                     temp = func(input_data, mean,sigma)
                     coef_table = np.column_stack((coef_table,temp))
+        if len(coef_table.shape) == 1:
+            coef_table.shape += (1,)
         return scp.linalg.lstsq(coef_table,output_data)[0] 
 
 def estimate_num_gauss(arches, tol, input_data, output_data):
@@ -322,8 +325,9 @@ def graph():
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
 
-if __name__ == "__main__":
-	input_data = np.array([[], [], []])
+if __name__ == "__main_":
+        """Lev"""
+        input_data = np.array([[], [], []])
 	X = np.random.normal(loc=1.16, scale=.16, size=100)
 	X2 = np.random.normal(loc=3, scale=.1, size=100)
 	for i in range(len(X)):
@@ -335,24 +339,51 @@ if __name__ == "__main__":
                 temp = np.vstack((energies, x_s, x2_s))
                 input_data = np.hstack((input_data, temp))
 	input_data = np.transpose(input_data)
-	num_gauss = 2
+        num_gauss = 1
+	gauss_complex = gauss_creator_simple(num_gauss)
+        output_data = gauss_complex(input_data[:,0], 5,15,3, 15,6,7)
+        print output_data.shape
+	output_1 = output_data[0:1000]
+        amps = estimate_amplitudes(input_data[:,0][0:1000],output_1,(15,),(3,))
+        print amps
+
+if __name__ == "__main__":
+	"""
+        input_data = np.array([[], [], []])
+	X = np.random.normal(loc=1.16, scale=.16, size=100)
+	X2 = np.random.normal(loc=3, scale=.1, size=100)
+	for i in range(len(X)):
+        	x = X[i]
+		x2 = X2[i]
+                energies = np.linspace(0, 30, 1000)
+                x_s = [x for _ in range(len(energies))]
+		x2_s = [x2 for _ in range(len(energies))]
+                temp = np.vstack((energies, x_s, x2_s))
+                input_data = np.hstack((input_data, temp))
+	input_data = np.transpose(input_data)
+        num_gauss = 2
 	num_vars = 2
 	gauss_complex = gauss_creator_complex(num_gauss, num_vars)
 	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, 1, .26, .25, 15.5, .50, 1)
 	output_1 = output_data[0:1000]
-	sigmas = np.arange(1, 30, .1)
+        """
+        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[0], usecols=(0,1))
+        input_1 = loaded_values[:,0][0:700]
+        output_1 = loaded_values[:,1][0:700]
+        sigmas = np.arange(1, 1000, 1)
 	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
-	zero_crossings = get_zero_crossings(input_data[:, 0][0:1000], convolved_2)
+	zero_crossings = get_zero_crossings(input_1, convolved_2)
 	print [len(cross) for cross in zero_crossings]
 	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	graph()
-	arches = label_arches(zero_crossings)
-	print "Arches\n" + str(arches)
+	#graph()
+        plt.plot(arc_data[
+        arches = label_arches(zero_crossings)
+	#print "Arches\n" + str(arches)
 	
-	num, params = estimate_num_gauss(arches, .001, input_data[:, 0][0:1000], output_1)
+	num, params = estimate_num_gauss(arches, .001, input_1, output_1)
 	
-	i, amps, means, sigmas = 0, [], [], []
+        i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
   		amp = params[i]
   		mean = params[i+1]
@@ -361,7 +392,14 @@ if __name__ == "__main__":
   		means.append(mean)
 		sigmas.append(sigma)
   		i += 3
-	
+        plt.subplot(211)
+        plt.plot(input_1,output_1)
+        plt.title("original")
+        plt.subplot(212)
+        plt.plot(input_1,gauss_creator_simple(num)(params))
+        plt.title("fitted")
+        plt.show()
+        """	
 	gauss = gauss_creator_minimal(num, num_vars, amps, sigmas)
 	newparams = []
 	for mean in means:
@@ -373,3 +411,4 @@ if __name__ == "__main__":
   	print newparams
   	finalparams, covar = curve_fit(gauss, input_data, output_data, p0=newparams, maxfev=4000)
   	print finalparams
+        """
