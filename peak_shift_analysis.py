@@ -5,6 +5,7 @@ from scipy.optimize import curve_fit
 from scipy.ndimage.filters import gaussian_filter1d
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy as scp
 
 def gauss_creator_simple(num_of_gauss):
 	"""
@@ -245,17 +246,16 @@ def estimate_sigmas(arches):
 		sigmas.append(sigma)
 	return np.array(sigmas)
 
-def estimate_amplitudes(input_data, output_data, means):
-	amps = []
-	for mean in means:
-		min_dist, amp = 40, -1
-		for i in range(len(input_data)):
-			energy = input_data[i]
-			if abs(energy - mean) < min_dist:
-				min_dist = abs(energy - mean)
-				amp = output_data[i]
-		amps.append(amp)
-	return amps
+def estimate_amplitudes(input_data, output_data, means, sigmas):
+	num_gauss = len(means)
+        func = lambda X, avg, sigma : np.exp(-.5 * np.power((X-avg) / sigma, 2))
+        coef_table = func(input_data, means[0],sigmas[0])
+        amps = []
+        if num_gauss > 1:
+            for mean,sigma in zip(means[1:],sigmas[1:]):
+                    temp = func(input_data, mean,sigma)
+                    coef_table = np.column_stack((coef_table,temp))
+        return scp.linalg.lstsq(coef_table,output_data)[0] 
 
 def estimate_num_gauss(arches, tol, input_data, output_data):
 	"""
@@ -271,7 +271,7 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
 		gauss_func = gauss_creator_simple(n)
 		means = estimate_means(n_dominant)
 		sigmas = estimate_sigmas(n_dominant)
-		amps = estimate_amplitudes(input_data, output_data, means)
+		amps = estimate_amplitudes(input_data, output_data, means, sigmas)
 		initialparams = []
 		for i in range(n):
 			initialparams.append(amps[i])
