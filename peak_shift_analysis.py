@@ -244,8 +244,7 @@ def find_pairs(pairs, crossings, singles, input_data, convolved_1):
 				new_pairs.append([new_right, old_right])
 				inner = True
 				break
-		if inner == False:
-			new_pairs.append([copy[0], copy[1]])
+		if inne3ecf87e5e97dc2a7f3]])
 	else:
 		return False
 	return np.array(new_pairs), np.array(new_singles)
@@ -411,33 +410,18 @@ if __name__ == "__main__":
 	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, 1, .26, .25, 15.5, .50, 1)
 	output_1 = output_data[0:1000]
         """
-<<<<<<< HEAD
-        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[1], usecols=(0,1))
-        input_1 = loaded_values[:,0][0:500]
-        output_1 = loaded_values[:,1][0:500]
-        sigmas = np.arange(.01, 50, .1)
-=======
         loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[0], usecols=(0,1))
         input_1 = loaded_values[:,0][0:700]
         output_1 = loaded_values[:,1][0:700]
         sigmas = np.arange(1, 1000, 1)
->>>>>>> 5fd4cd1... fixed est_amps in peak_shift
 	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
 	zero_crossings = get_zero_crossings(input_1, convolved_2)
 	print [len(cross) for cross in zero_crossings]
 	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-<<<<<<< HEAD
 	graph(input_1, output_1, convolved_2, arc_data)
-	#graph(input_1, output_1, convolved_0, arc_data)
         arches = label_arches(zero_crossings, input_1, convolved_1)
 	print "Arches\n" + str(arches)
-=======
-	#graph()
-        plt.plot(arc_data[
-        arches = label_arches(zero_crossings)
-	#print "Arches\n" + str(arches)
->>>>>>> 5fd4cd1... fixed est_amps in peak_shift
 	
 	num, params = estimate_num_gauss(arches, .001, input_1, output_1)
 	
