@@ -170,29 +170,72 @@ def find_closest_crossing(val, crossings):
 			min_crossing = cross
 	return min_crossing
 
-def find_pairs(pairs, crossings):
+def find_pairs(pairs, crossings, singles, input_data, convolved_1):
 	"""
 	Matches pairs with crossings and takes the leftover crossings and makes them into pairs
 	INPUT: pairs has rows where each row has two elements, the left and right zero crossings that denote a gaussian. crossings is a 1d array of energy positions of zero crossings taken at a different kernel sigma than ones in pairs.
 	OUTPUT: Rows where each row is a pair of crossings that most closely matched the pair in pairs at the corresponding index. Returns False if something went wrong.
 	"""
 	#TODO: Fix problem when crossings is empty
+
+	#CASE 1: NOT ENOUGH CROSSINGS
 	if len(pairs) * 2 > len(crossings):
 		print "Insufficient crossings!"
-		return np.array(pairs)
+		return np.array(pairs), np.array(singles)
+	
+	#CASE 2: MATCH NEW CROSSINGS WITH PREVIOUS PAIRS
 	new_pairs = []
 	copy = list(np.copy(crossings))
-	for i in range(len(pairs)):
-		pair = pairs[i]
+	for pair in pairs:
 		left, right = pair[0], pair[1]
 		min_left = find_closest_crossing(left, copy)
 		copy.remove(min_left)
 		min_right = find_closest_crossing(right, copy)
 		copy.remove(min_right)
 		new_pairs.append([min_left, min_right])
-	if len(copy) == 2:
-		new_left, new_right = copy[0], copy[1]
-		inner = False
+
+	#CASE 3: MATCH NEW SINGLES WITH PREVIOUS SINGLES
+	new_singles = []
+	for single in singles:
+		single_match = find_closest_crossing(single, copy)
+		copy.remove(single_match)
+		new_singles.append(single_match)
+
+	#CASE 4: LEFTOVER CROSSINGS
+	leftovers = len(copy)
+	if leftovers == 0:
+		pass
+	elif leftovers == 1:
+		#Either completes a half gaussian (which one?) OR starts another one
+		cross = copy[0]
+		cross_index = np.where(cross, input_data)
+		first_deriv = convolved_1[cross_index]
+		if len(new_singles) == 0:
+			new_singles.append(cross)
+		else:
+			#Get all values in new_singles that are < or > and opposite sign to cross
+			if first_deriv < 0:
+				condition = copy < cross
+				left_vals = np.extract(condition, copy)
+				condition2 = convolved_1[np.where(input_data==left_vals)] > 0
+				left_pos_vals = np.extract(condition2, left_vals)
+				if len(left_pos_vals) == 0:
+					new_singles.append(cross)
+				else:
+					closest = find_closest_crossing(cross, left_pos_vals)
+					new_pairs.append([closest, cross]) #Then, split?
+			elif first_deriv > 0:
+				condition = copy > cross
+				right_vals = np.extract(condition, copy)
+				condition2 = convolved_1[np.where(input_data==left_vals)] < 0
+				right_neg_vals = np.extract(condition2, right_vals)
+				if len(right_neg_values) == 0:
+					new_singles.append(cross)
+				else:
+					closest = find_closest_crossing(cross, right_neg_vals)
+					new_pairs.append([cross, closest])
+	elif leftovers == 2:
+		new_left, new_right, inner = copy[0], copy[1], False
 		for i in range(len(new_pairs)):
 			old_pair = new_pairs[i]
 			old_left, old_right = old_pair[0], old_pair[1]
@@ -203,12 +246,11 @@ def find_pairs(pairs, crossings):
 				break
 		if inner == False:
 			new_pairs.append([copy[0], copy[1]])
-	elif len(copy) != 0:
-		print pairs, crossings
+	else:
 		return False
-	return np.array(new_pairs)
+	return np.array(new_pairs), np.array(new_singles)
 
-def label_arches(zero_crossings):
+def label_arches(zero_crossings, input_data, convolved_1):
 	"""
 	Pairs zero crossings by looking at decreasingly blurry data and labeling new zero crossings that appear as new Gaussians.
 	INPUT: Each row is a list of zero crossings in the second derivative that occured at sigmas[i]
@@ -216,9 +258,11 @@ def label_arches(zero_crossings):
 	"""
 	i = len(zero_crossings)-1
 	prev_pairs = []
+	singles = []
 	while i >= 0:
 		crossings = zero_crossings[i]
-		prev_pairs = find_pairs(prev_pairs, crossings)
+		convolved_1_i = convolved_1[i]
+		prev_pairs, singles = find_pairs(prev_pairs, crossings, singles, input_data, convolved_1_i)
 		if type(prev_pairs) == bool:
 			return False
 		i -= 1
@@ -315,12 +359,12 @@ def remove_odds(crossings):
 		i -= 1
 	return crossings[:cutoff]
 
-def graph():
+def graph(input_data, output_data, convolved_2, arc_data):
 	plt.figure(1)
 	plt.subplot(221)
         for i in range(len(convolved_2)):
-	        plt.plot(input_data[:, 0][0:1000], convolved_2[i], 'b', label='fit')
-        plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
+	        plt.plot(input_data, convolved_2[i], 'b', label='fit')
+        plt.plot(input_data, output_data, 'ro', label='original')
         plt.subplot(222)
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
@@ -367,19 +411,19 @@ if __name__ == "__main__":
 	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, 1, .26, .25, 15.5, .50, 1)
 	output_1 = output_data[0:1000]
         """
-        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[0], usecols=(0,1))
-        input_1 = loaded_values[:,0][0:700]
-        output_1 = loaded_values[:,1][0:700]
-        sigmas = np.arange(1, 1000, 1)
+        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[1], usecols=(0,1))
+        input_1 = loaded_values[:,0][0:500]
+        output_1 = loaded_values[:,1][0:500]
+        sigmas = np.arange(.01, 50, .1)
 	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
 	zero_crossings = get_zero_crossings(input_1, convolved_2)
 	print [len(cross) for cross in zero_crossings]
 	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	#graph()
-        plt.plot(arc_data[
-        arches = label_arches(zero_crossings)
-	#print "Arches\n" + str(arches)
+	graph(input_1, output_1, convolved_2, arc_data)
+	#graph(input_1, output_1, convolved_0, arc_data)
+        arches = label_arches(zero_crossings, input_1, convolved_1)
+	print "Arches\n" + str(arches)
 	
 	num, params = estimate_num_gauss(arches, .001, input_1, output_1)
 	
