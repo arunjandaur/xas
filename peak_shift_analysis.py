@@ -373,13 +373,8 @@ if __name__ == "__main__":
         sigmas = np.arange(1, 1000, 1)
 	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
 	zero_crossings = get_zero_crossings(input_1, convolved_2)
-	print [len(cross) for cross in zero_crossings]
-	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
-	#graph()
-        plt.plot(arc_data[
         arches = label_arches(zero_crossings)
-	#print "Arches\n" + str(arches)
 	
 	num, params = estimate_num_gauss(arches, .001, input_1, output_1)
 	
@@ -393,10 +388,10 @@ if __name__ == "__main__":
 		sigmas.append(sigma)
   		i += 3
         plt.subplot(211)
-        plt.plot(input_1,output_1)
+        plt.plot(input_1, output_1)
         plt.title("original")
         plt.subplot(212)
-        plt.plot(input_1,gauss_creator_simple(num)(params))
+        plt.plot(input_1, gauss_creator_simple(num)(params))
         plt.title("fitted")
         plt.show()
         """	
