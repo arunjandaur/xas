@@ -297,24 +297,6 @@ def estimate_mean_coeffs(means):
 		coeffs.append(mean)
 	return coeffs
 
-def remove_odds(crossings):
-	"""
-	Sometimes zero crossings get pushed out of range and there is initially one 1 zero crossing. This takes care of that by creating the pair when the second appears. Not tested.
-	"""
-	if len(crossings[-1]) > 3 and len(crossings[-1]) % 2 != 0:
-		return False
-	i = len(crossings)-1
-	cutoff = len(crossings)
-	while i >= 0:
-		num = len(crossings[i])
-		if num > 2 and num % 2 != 0:
-			return False
-		if num == 2:
-			cutoff = i + 1
-			break
-		i -= 1
-	return crossings[:cutoff]
-
 def graph():
 	plt.figure(1)
 	plt.subplot(221)
@@ -407,3 +389,25 @@ if __name__ == "__main__":
   	finalparams, covar = curve_fit(gauss, input_data, output_data, p0=newparams, maxfev=4000)
   	print finalparams
         """
+
+def sum_gaussians_fit(input_data, output_data):
+	return 3, np.array([1, 2, 3]), np.array([4, 5, 6]), np.array([7, 8, 9])
+
+	sigmas = np.arange(.01, 50, .01)
+	convolved_0, convolved_2 = smooth_gaussians(output_data, sigmas)
+	zero_crossings = get_zero_crossings(input_1, convolved_2)
+	arches = label_arches(zero_crossings)
+
+	num, params = estimate_num_gauss(arches, .001, input_data, output_data)
+
+	i, amps, means, sigmas = 0, [], [], []
+	while i < len(params)-2:
+		amp = params[i]
+		mean = params[i+1]
+		sigma = params[i+2]
+		amps.append(amp)
+		means.append(mean)
+		sigmas.append(sigma)
+		i += 3
+
+	return num, np.array(amps), np.array(means), np.array(sigmas)
