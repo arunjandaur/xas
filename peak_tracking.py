@@ -1,5 +1,5 @@
 #This file is for estimating the means in a sum of Gaussians as functions of certain variables. We assume the mean is a linear equation and we want the coefficients.
-
+from __future__ import division
 import os
 import re
 import matplotlib.pyplot as plt
@@ -53,10 +53,11 @@ def to_cluster_space(gauss_params):
 	gauss_params could be one of three: amps, means, or sigmas. For now, we will use this method to plot and cluster means vs snapshot numbers. Later we may want to track amplitudes and express those as lin. combs. of external variables (hence the generality). The row index of gauss_params indicates the snapshot number at which the data at that row is found.
 	"""
 	cluster_points = [] #Points that will be clustered later
+	num_snapshots = len(gauss_params)
 	for snap_num in range(len(gauss_params)):
 		row_of_gaussians = gauss_params[snap_num]
 		for gauss_param in row_of_gaussians:
-			cluster_points.append([snap_num, gauss_param])
+			cluster_points.append([gauss_param, snap_num / num_snapshots])
 	return np.array(cluster_points)
 
 def separate_peaks(cluster_points, num_clusters):
