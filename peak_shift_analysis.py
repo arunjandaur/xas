@@ -391,8 +391,7 @@ if __name__ == "__main__":
         """
 
 def sum_gaussians_fit(input_data, output_data):
-	return 3, np.array([1, 2, 3]), np.array([4, 5, 6]), np.array([7, 8, 9])
-
+	#return 3, np.array([1, 2, 3]), np.array([4, 5, 6]), np.array([7, 8, 9])
 	sigmas = np.arange(.01, 50, .01)
 	convolved_0, convolved_2 = smooth_gaussians(output_data, sigmas)
 	zero_crossings = get_zero_crossings(input_1, convolved_2)

@@ -60,16 +60,28 @@ def to_cluster_space(gauss_params):
 			cluster_points.append([gauss_param, snap_num / num_snapshots])
 	return np.array(cluster_points)
 
-def separate_peaks(cluster_points, num_clusters):
+def separate_peaks(cluster_points, num_clusters, dim=1):
 	"""
 	Probably will use GMM clustering
 	"""
+	if dim != 1 and dim != 2:
+                raise ValueError("dim can only be 1 or 2")
+
 	g = GMM(num_clusters, thresh=.0001, min_covar=.0001, n_iter=2000)
-	g.fit(cluster_points)
+	if dim == 1:
+		g.fit(cluster_points[:, 0])
+	else:
+		g.fit(cluster_points)
 	print g.means_, g.weights_
 
-def graph(cluster_points):
-	plt.plot(cluster_points[:, 0], cluster_points[:, 1], 'bo')
+def graph(cluster_points, dim=1):
+	if dim != 1 and dim != 2:
+                raise ValueError("dim can only be 1 or 2")
+	
+	if dim == 1:
+		plt.plot(cluster_points[:, 0], np.zeros(len(cluster_points)), 'bo')
+	else:
+		plt.plot(cluster_points[:, 0], cluster_points[:, 1], 'bo')
 	plt.show()
 
 def main():
