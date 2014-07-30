@@ -207,8 +207,12 @@ def find_pairs(pairs, zeros, singles, input_data, convolved_1):
         for single in singles:
                 #single_match = find_closest_crossing(single, copy)
                 #copy.remove(single_match)
-		
+	        if len(singles_left_copy) == 0:
+                    break
                 single_match = find_closest_crossing(single, singles_left_copy)
+                #print "singles_left_copy is {}".format(singles_left_copy)
+                #print "single_match is {}".format(single_match)
+                #print "singles is {}".format(singles)
                 singles_left_copy.remove(single_match)
 		new_singles.append(single_match)
 
@@ -218,16 +222,16 @@ def find_pairs(pairs, zeros, singles, input_data, convolved_1):
         while len(copy) > 0:
             zero = copy[0]
             zero_index = np.asscalar(np.argwhere(zero==input_data))
-            print "zero_index is {}".format(zero_index)
+            #print "zero_index is {}".format(zero_index)
             first_deriv = convolved_1[zero_index]
-            print "first_deriv is {}".format(first_deriv)
+            #print "first_deriv is {}".format(first_deriv)
             if first_deriv > 0:
                 #ugly. Im modifying list while looping through it. You disgust me, Lev.
                 for second_zero in copy[1:]:
                     zero_index_2 = np.asscalar(np.argwhere(second_zero==input_data))
-                    print "zero_index_2 is {}".format(zero_index_2)
+                    #print "zero_index_2 is {}".format(zero_index_2)
                     first_deriv_2 = convolved_1[zero_index_2]
-                    print "first_deriv_2 is {}".format(first_deriv_2)
+                    #print "first_deriv_2 is {}".format(first_deriv_2)
                     if first_deriv_2 < 0:
                         new_pairs.append([zero,second_zero])
                         copy.remove(second_zero)
@@ -246,8 +250,8 @@ def find_pairs(pairs, zeros, singles, input_data, convolved_1):
                     new_singles.append(zero)
             else:
                 raise ValueError("why is first derivate zero where there is a second derivative zero crossing. If you ever come accross this error, assume that your calculation of first and second derivatives have been erroneous or we have been working under the wrong assumptions where the first and second derivative zeros are")
-	print new_pairs
-        print new_singles
+	#print new_pairs
+        #print new_singles
         return np.array(new_pairs), np.array(new_singles)
 
 def label_arches(zero_crossings, input_data, convolved_1):
@@ -256,14 +260,23 @@ def label_arches(zero_crossings, input_data, convolved_1):
 	INPUT: Each row is a list of zero crossings in the second derivative that occured at sigmas[i]
 	OUTPUT: A 2d array where each row is a pair of crossings that represents a Gaussian. The first crossings to appear are placed towards the left side of the array. The 0th pair showed first, 1st appeared second, etc.
 	"""
-	prev_pairs = np.array([])
+        prev_pairs = np.array([])
 	singles = np.array([])
 	for i in xrange(len(zero_crossings)-1,-1,-1):
-		crossings = zero_crossings[i]
-		convolved_1_i = convolved_1[i]
-		prev_pairs, singles = find_pairs(prev_pairs, crossings, singles, input_data, convolved_1_i)
-        if len(prev_pairs) < 10 and len(single_pairs) != 0:
-            
+	    crossings = zero_crossings[i]
+            convolved_1_i = convolved_1[i]
+            prev_pairs, singles = find_pairs(prev_pairs, crossings, singles, input_data, convolved_1_i)
+        singles = list(singles)
+        while len(prev_pairs) < 10 and len(singles) > 1:
+            zero = singles[0]
+            for single in singles[1:]:
+                if single > zero:
+                    singles.remove(zero)
+                    singles.remove(single)
+                    prev_pairs = np.append(prev_pairs,[[zero,single]],0)
+                    break
+            else:
+                singles = list(np.roll(singles,-1))
         return prev_pairs
 
 def estimate_means(arches):
@@ -308,11 +321,11 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
 	INPUT: arches have the same format as estimate_means. tol is the error tolerance for when the algorithm should stop increasing the number of gaussians to fit.
 	OUTPUT: The number of gaussians and their fit parameters (amp, mean, sigma).
 	"""
-        n, m, error, params = 0, len(arches), 1000, []
-	while error > tol:
-                n += 1
-                if n > m:
-		    raise Exception("Could not find a good fit. Probably couldn't find enough gaussians")
+        m, error, params, holder = len(arches), float("inf"), [], []
+        for n in xrange(1,m+1):
+                print "num of gauss used is {}".format(n)
+                #if error < tol:
+                    #return i+1,holder[i][1], error
                 n_dominant = arches[0:n]
 		gauss_func = gauss_creator_simple(n)
 		means = estimate_means(n_dominant)
@@ -323,9 +336,53 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
 			initialparams.append(amps[i])
 			initialparams.append(means[i])
 			initialparams.append(sigmas[i])
-		params, covar = curve_fit(gauss_func, input_data, output_data, p0=initialparams, maxfev=4000)
-		error = np.sqrt(1/len(input_data) * np.sum(np.power(output_data - gauss_func(input_data, *params), 2)))
-	return n, params
+                try:
+                    params, covar = curve_fit(gauss_func, input_data, output_data, p0=initialparams, maxfev=100000)
+		    error = np.sqrt(1/len(input_data) * np.sum(np.power(output_data - gauss_func(input_data, *params), 2)))
+                except RuntimeError:
+                    params = initialparams
+                    error = float("inf")
+                
+                holder.append([error,params,initialparams])
+        
+        if True: 
+            for i in range(0,len(holder)):
+                error = holder[i][0]
+                print "error for size {0} is {1}".format(i+1,error)
+                plt.subplot(221)
+                plt.plot(input_data,output_data)
+                plt.title("original")
+                plt.subplot(223)
+                plt.plot(input_data,gauss_creator_simple(i+1)(input_data,*holder[i][1]))
+                plt.title("fitted with new params")
+                plt.subplot(224)
+                plt.plot(input_data,gauss_creator_simple(i+1)(input_data,*holder[i][2]))
+                plt.title("fitted with initial params")
+                plt.show()
+
+
+        while True:
+            print "tol is {}".format(tol)
+            for i in range(0,len(holder)):
+                error = holder[i][0]
+                print "error for size {0} is {1}".format(i+1,error)
+                if error < tol:
+                    return i+1,holder[i][1], error
+                if False:
+                    plt.subplot(221)
+                    plt.plot(input_data,output_data)
+                    plt.title("original")
+                    plt.subplot(223)
+                    plt.plot(input_data,gauss_creator_simple(i+1)(input_data,*holder[i][1]))
+                    plt.title("fitted with new params")
+                    plt.subplot(224)
+                    plt.plot(input_data,gauss_creator_simple(i+1)(input_data,*holder[i][2]))
+                    plt.title("fitted with initial params")
+                    plt.show()
+
+            tol = tol * 2
+            	
+        return n, params
 
 def estimate_mean_coeffs(means):
 	"""
@@ -356,6 +413,7 @@ def remove_odds(crossings):
 			break
 		i -= 1
 	return crossings[:cutoff]
+
 def graph_scale(x,blurred,first,second,sigmas):
         plt.figure()
         for i in range(len(sigmas)):
@@ -373,8 +431,8 @@ def graph(input_data, output_data, convolved_2, arc_data):
 	plt.figure(1)
 	plt.subplot(221)
         for i in range(len(convolved_2)):
-	        plt.plot(input_data, convolved_2[i], 'b', label='fit')
-        plt.plot(input_data, output_data, 'ro', label='original')
+	        plt.plot(input_data[:, 0][0:1000], convolved_2[i], 'b', label='fit')
+        plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
         plt.subplot(222)
         plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
         plt.show()
@@ -454,21 +512,19 @@ if __name__ == "__main_":
 	output_data = gauss_complex(input_data, .16, .25, 14.5, .50, 1, .26, .25, 15.5, .50, 1)
 	output_1 = output_data[0:1000]
         """
-        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[1], usecols=(0,1))
-        input_1 = loaded_values[:,0][0:500]
-        output_1 = loaded_values[:,1][0:500]
-        sigmas = np.arange(.01, 50, .1)
+        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[0], usecols=(0,1))
+        input_1 = loaded_values[:,0][0:700]
+        output_1 = loaded_values[:,1][0:700]
+        sigmas = np.arange(1, 1000, 1)
 	convolved_0, convolved_2 = smooth_gaussians(output_1, sigmas)
 	zero_crossings = get_zero_crossings(input_1, convolved_2)
-	print [len(cross) for cross in zero_crossings]
-	#zero_crossings = remove_odds(zero_crossings)
 	arc_data = to_arc_space(zero_crossings, sigmas)
 	graph(input_1, output_1, convolved_2, arc_data)
 	#graph(input_1, output_1, convolved_0, arc_data)
         arches = label_arches(zero_crossings, input_1, convolved_1)
 	print "Arches\n" + str(arches)
 
-	num, params = estimate_num_gauss(arches, .001, input_1, output_1)
+	num, params, error = estimate_num_gauss(arches, .0001, input_1, output_1)
 	
         i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
@@ -480,10 +536,10 @@ if __name__ == "__main_":
 		sigmas.append(sigma)
   		i += 3
         plt.subplot(211)
-        plt.plot(input_1,output_1)
+        plt.plot(input_1, output_1)
         plt.title("original")
         plt.subplot(212)
-        plt.plot(input_1,gauss_creator_simple(num)(params))
+        plt.plot(input_1, gauss_creator_simple(num)(params))
         plt.title("fitted")
         plt.show()
         """	
@@ -499,11 +555,12 @@ if __name__ == "__main_":
   	finalparams, covar = curve_fit(gauss, input_data, output_data, p0=newparams, maxfev=4000)
   	print finalparams
         """
+
 def example_2():
         input_data = np.linspace(0,30,1000)
         num_gauss = 4
 	gauss_simple = gauss_creator_simple(num_gauss)
-	output_data = gauss_simple(input_data, .16, 14.5, 0.25, .26, 15.5, .25, .16, 23, 0.25, .26, 25.5, .25)
+	output_data = gauss_simple(input_data, .16, 14.5, 0.45, .26, 15.5, .25, .16, 23, 0.20, .26, 25.5, .9)
         sigmas = np.arange(1, 200, 1)
 	convolved_1 = smooth_gaussians(output_data, sigmas, order=1)
         convolved_2 = smooth_gaussians(output_data, sigmas, order=2)
@@ -516,7 +573,7 @@ def example_2():
         arches = label_arches(zero_crossings, input_data, convolved_1)
 	#print "Arches\n" + str(arches)
 	
-	num, params = estimate_num_gauss(arches, .001, input_data, output_data)
+	num, params, error = estimate_num_gauss(arches, .0001, input_data, output_data)
         print num
         print params
         i, amps, means, sigmas = 0, [], [], []
@@ -537,13 +594,16 @@ def example_2():
         plt.subplot(223)
         plt.plot(arc_data[:,0],arc_data[:,1],"o")
         plt.title("scale space zeros")
+        plt.subplot(224)
+        plt.plot(input_data,output_data - gauss_creator_simple(num)(input_data,*params))
+        plt.title("residuals")
         plt.show()
 
 def example_1():
         input_data = np.linspace(0,30,1000)
         num_gauss = 2
 	gauss_simple = gauss_creator_simple(num_gauss)
-	output_data = gauss_simple(input_data, .16, 14.5, 0.06, .26, 15.5, .25)
+	output_data = gauss_simple(input_data, .16, 14.5, 0.25, .26, 15.5, .25)
         sigmas = np.arange(1, 30, 1)
 	convolved_0 = smooth_gaussians(output_data, sigmas, order=0)
         convolved_1 = smooth_gaussians(output_data, sigmas, order=1)
@@ -555,10 +615,10 @@ def example_1():
 	#graph()
         arches = label_arches(zero_crossings, input_data, convolved_1)
 	#print "Arches\n" + str(arches)
-        graph_scale(input_data,convolved_0,convolved_1,convolved_2,sigmas)
+        #graph_scale(input_data,convolved_0,convolved_1,convolved_2,sigmas)
         plt.plot(arc_data[:,0],arc_data[:,1],"o")
         plt.show()
-        num, params = estimate_num_gauss(arches, .001, input_data, output_data)
+        num, params, error = estimate_num_gauss(arches, .0001, input_data, output_data)
         
         i, amps, means, sigmas = 0, [], [], []
   	while i < len(params)-2:
@@ -569,12 +629,18 @@ def example_1():
   		means.append(mean)
 		sigmas.append(sigma)
   		i += 3
-        plt.subplot(211)
+        plt.subplot(221)
         plt.plot(input_data,output_data)
         plt.title("original")
-        plt.subplot(212)
+        plt.subplot(222)
         plt.plot(input_data,gauss_creator_simple(num)(input_data,*params))
         plt.title("fitted")
+        plt.subplot(223)
+        plt.plot(arc_data[:,0],arc_data[:,1],"o")
+        plt.title("scale space zeros")
+        plt.subplot(224)
+        plt.plot(input_data,output_data - gauss_creator_simple(num)(input_data,*params))
+        plt.title("residuals")
         plt.show()
 
 def example_3():
@@ -594,7 +660,7 @@ def example_3():
         arches = label_arches(zero_crossings, input_data, convolved_1)
 	#print "Arches\n" + str(arches)
 	
-	num, params = estimate_num_gauss(arches, .001, input_data, output_data)
+	num, params, error = estimate_num_gauss(arches, .0001, input_data, output_data)
         print num
         print params
         i, amps, means, sigmas = 0, [], [], []
@@ -615,9 +681,76 @@ def example_3():
         plt.subplot(223)
         plt.plot(arc_data[:,0],arc_data[:,1],"o")
         plt.title("scale space zeros")
+        plt.subplot(224)
+        plt.plot(input_data,output_data - gauss_creator_simple(num)(input_data,*params))
+        plt.title("residuals")
+        plt.show()
+
+def example_4():
+        loaded_values = np.loadtxt("./xas/" + os.listdir("./xas/")[23], usecols=(0,1))
+        input_1 = loaded_values[:,0][0:700]
+        output_1 = loaded_values[:,1][0:700]
+        
+        sigmas = np.arange(1, 1000, 1)
+	convolved_1 = smooth_gaussians(output_1, sigmas, order=1)
+        convolved_2 = smooth_gaussians(output_1, sigmas, order=2)
+	zero_crossings = get_zero_crossings(input_1, convolved_2)
+	#print [len(cross) for cross in zero_crossings]
+	#zero_crossings = remove_odds(zero_crossings)
+	arc_data = to_arc_space(zero_crossings, sigmas)
+	#graph()
+
+        arches = label_arches(zero_crossings, input_1, convolved_1)
+	#print "Arches\n" + str(arches)
+	
+	num, params, error = estimate_num_gauss(arches, .0001, input_1, output_1)
+        
+        print num
+        print params
+        i, amps, means, sigmas = 0, [], [], []
+  	while i < len(params)-2:
+  		amp = params[i]
+  		mean = params[i+1]
+  		sigma = params[i+2]
+  		amps.append(amp)
+  		means.append(mean)
+		sigmas.append(sigma)
+  		i += 3
+        plt.subplot(221)
+        plt.plot(input_1,output_1)
+        plt.title("original")
+        plt.subplot(222)
+        plt.plot(input_1,gauss_creator_simple(num)(input_1,*params))
+        plt.title("fitted")
+        plt.subplot(223)
+        plt.plot(arc_data[:,0],arc_data[:,1],"o")
+        plt.title("scale space zeros")
+        plt.subplot(224)
+        plt.plot(input_1,output_1 - gauss_creator_simple(num)(input_1,*params))
+        plt.title("residuals")
         plt.show()
 
 if __name__ == "__main__":
-        example_1()
+        example_4()
 
+def sum_gaussians_fit(input_data, output_data):
+	return 3, np.array([1, 2, 3]), np.array([4, 5, 6]), np.array([7, 8, 9])
 
+	sigmas = np.arange(.01, 50, .01)
+	convolved_0, convolved_2 = smooth_gaussians(output_data, sigmas)
+	zero_crossings = get_zero_crossings(input_1, convolved_2)
+	arches = label_arches(zero_crossings)
+
+	num, params, error = estimate_num_gauss(arches, .0001, input_data, output_data)
+
+	i, amps, means, sigmas = 0, [], [], []
+	while i < len(params)-2:
+		amp = params[i]
+		mean = params[i+1]
+		sigma = params[i+2]
+		amps.append(amp)
+		means.append(mean)
+		sigmas.append(sigma)
+		i += 3
+
+	return num, np.array(amps), np.array(means), np.array(sigmas)
