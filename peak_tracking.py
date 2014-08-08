@@ -131,8 +131,6 @@ def sample(keys, means, sigmas):
 			left = keys[0]
 			points = get_values(keys, left, mean)
 			peaks.append(points)
-			
-			
 		mean1 = means[i]
 		sigma1 = sigmas[i]
 		mean2 = means[i+1]
@@ -178,7 +176,7 @@ def localswap(means):
 
 def jumble(means):
 	means2 = np.copy(means)
-	for i in range(100000):#len(means2)):
+	for i in range(1000000):#len(means2)):
 		means2 = localswap(means2)
 	return means2
 
@@ -188,11 +186,10 @@ def temperature(T0, iter_num):
 def prob(curr_err, next_err, temperature):
 	if next_err < curr_err:
 		return 1
-	#print temperature
 	return 1 / np.exp((next_err - curr_err) / temperature)
 
 def SA(peaks, x):
-	iters, T0 = 10000, 1000
+	iters, T0 = 100000, 10000
 	best_sol = peaks
 	best_err, best_params = linreg(best_sol, x)
 	current_sol, current_err, current_params = peaks, best_err, best_params
@@ -200,11 +197,12 @@ def SA(peaks, x):
 		next_sol = localswap(current_sol)
 		next_err, next_params = linreg(next_sol, x)
 		temp = temperature(T0, i)
+		print next_err
 		if prob(current_err, next_err, temp) > random.random():
 			current_sol = next_sol
 			current_err = next_err
 			current_params = next_params
-			print current_err
+			#print current_err
 		if next_err < best_err:
 			best_sol = next_sol
 			best_err = next_err
@@ -212,20 +210,24 @@ def SA(peaks, x):
 	return best_sol, best_err, best_params
 
 def SAtest():
-	x = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	a1 = 15
-	b1 = -20
-	a2 = -15
-	b2 = 5
-	means = np.hstack((a1*x + b1, a2*x + b2))
-	ones = np.reshape(np.ones(len(x)), (len(x), 1))
-	x = np.hstack((x, ones))
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
+	x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
+	a1, b1, c1, d1 = 15, 5, 3, -20
+	a2, b2, c2, d2 = -15, 2, 5, 5
+	a3, b3, c3, d3 = -5, -4, 1, 2
+	means = np.hstack((a1*x1 + b1*x2 + c1*x3 + d1, a2*x1 + b2*x2 + c2*x3 + d2, a3*x1 + b3*x2 + c3*x3 + d3))
+	means += (random.random()-1) * .4 * means
+	#plt.plot(x, means[:, 0], 'bo')
+	#plt.plot(x, means[:, 1], 'ro')
+	#plt.plot(x, means[:, 2], 'go')
+	#plt.show()
+	
+	ones = np.reshape(np.ones(len(x1)), (len(x1), 1))
+	x = np.hstack((x1, x2, x3, ones))
 	means2 = jumble(means)
 	final, error, params = SA(means2, x)
 	print final
 	print error
 	print params
-	#means2 = localswap(means)
-	#print linreg(means, x)
-	#pre_config = precluster(means)
-	#post_config, error, params = SA(pre_config, x)
+	print linreg(means, x)
