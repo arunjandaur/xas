@@ -74,33 +74,38 @@ def main():
 	separate_peaks(cluster_points, num)
 	graph(cluster_points)
 
-def main2():
-	x = np.random.normal(loc=.75, scale=.2, size=1000)
-	a1 = 15
-	b1 = -20
-	a2 = -15
-	b2 = 5
-	means = np.vstack((a1*x + b1, a2*x + b2))
-	width = .025
-	widths = [width*(i+1) for i in range(9)]
 
-	for bin_width in widths:
-		hist_means, hist_freq = get_binned_hist(means, max([max(means_i) for means_i in abs(means)]), bin_width)
-		hist_label = "Bin width = " + str(bin_width)
-		plt.plot(hist_means, hist_freq, 'b', label=hist_label)
-		plt.legend()
-		plt.show()
+#EVERYTHING RELATED TO SIMULATED ANNEALING FOLLOWS
 
-	plt.plot(x, means[0], 'bo')
-	plt.plot(x, means[1], 'go')
-	plt.show()
 
 def linreg(Y, X):
+	"""
+	Expressed Y as a lin comb of X
+	INPUT:
+		Y -- each column is a different peak
+		X -- each column is a different variable that may contribute to a mean/peak position
+	OUTPUT:
+		error -- RMS of residuals of the multiple linear regression
+		coeffs -- The lin comb coefficients for Y = func(X)
+	"""
+	assert Y.ndim==2, "Y's dimension must be 2"
+	assert X.ndim==2, "X's dimension must be 2"
+	assert Y.shape[0]==X.shape[0], "X and Y must have the same number of rows"
+
 	coeffs, residuals, rank, singular_vals = np.linalg.lstsq(X, Y)
 	error = np.sqrt(np.sum(np.power(residuals, 2)) / len(residuals))
 	return error, coeffs
 
 def localswap(means):
+	"""
+	Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
+	INPUT:
+		means -- Each column is a different peak/mean. Each row is a sample/instance.
+	OUTPUT:
+		means_cpy -- A swap or shift has been performed on means and returned as means_cpy
+	"""
+	assert means.ndim==2, "means must have a dimension of 2"
+
 	means_cpy = np.copy(means)
 	col_a, col_b = np.random.choice([i for i in range(len(means[0]))], 2, replace=False)
 	row = random.randint(0, len(means)-1)
@@ -109,20 +114,58 @@ def localswap(means):
 	return means_cpy
 
 def jumble(means):
-	means2 = np.copy(means)
-	for i in range(1000000):#len(means2)):
-		means2 = localswap(means2)
-	return means2
+	"""
+	Removes the identity of peaks (FOR TESTING ONLY)
+	INPUT:
+		means -- Each column is a different peak and each row is an instance/sample.
+	OUTPUT:
+		1 column vector of means
+	"""
+	assert means.ndim==2, "Dimension of means must be 2"
+
+	len_means = sum([len(row) for row in means])
+	return np.reshape(means, (len_means, 1)) #Does not edit means
 
 def temperature(T0, iter_num):
+	"""
+	Returns temperature based on the iteration number
+	INPUT:
+		T0 -- initial temperature of system
+		iter_num -- iteration number of Simulated Annealing algorithm
+	OUTPUT:
+		temperature
+	"""
 	return T0 * (.95 ** iter_num)
 
 def prob(curr_err, next_err, temperature):
+	"""
+	Returns acceptance probability. 1 if error decreases, less if next error is more
+	INPUT:
+		curr_err -- The current state's error in the Simulated Annealing
+		next-err -- The next potential state's error
+		temperature -- temperature of the Simulated Annealing
+	OUTPUT:
+		acceptance probability
+	"""
 	if next_err < curr_err:
 		return 1
 	return 1 / np.exp((next_err - curr_err) / temperature)
 
 def SA(peaks, x):
+	"""
+	Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
+	INPUT:
+		peaks -- Each column is a different peak
+		x -- Each column is a different variables
+	OUTPUT:
+		best_sol -- The optimal peak labeling. Each column is a different peak.
+		best_err -- The optimal error
+		best_params -- The optimal linear regression coefficients for expressing means as a function of x
+	"""
+	assert peaks.ndim==2, "Dimension of peaks must be 2"
+	assert peaks.shape[0]==x.shape[0] "Number of rows of x and peaks must match"
+	assert x.ndim==2, "x should have a dimension of 2"
+	
 	iters, T0 = 100000, 10000
 	best_sol = peaks
 	best_err, best_params = linreg(best_sol, x)
@@ -131,17 +174,17 @@ def SA(peaks, x):
 		next_sol = localswap(current_sol)
 		next_err, next_params = linreg(next_sol, x)
 		temp = temperature(T0, i)
-		print next_err
 		if prob(current_err, next_err, temp) > random.random():
 			current_sol = next_sol
 			current_err = next_err
 			current_params = next_params
-			#print current_err
 		if next_err < best_err:
 			best_sol = next_sol
 			best_err = next_err
 			best_params = next_params
 	return best_sol, best_err, best_params
+
+#TESTING METHODS FOLLOW
 
 def SAtest():
 	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
@@ -165,3 +208,10 @@ def SAtest():
 	print error
 	print params
 	print linreg(means, x)
+
+def t1():
+	#2 separate lines
+	pass
+
+def t2():
+	pass
