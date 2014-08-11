@@ -23,17 +23,16 @@ def get_xas_data(spectra_files):
 	Parses a list of spectra files
 	"""
 	xas_data = [0 for _ in range(len(spectra_files))]
-        for spectrum in spectra_files:
-                if "Spectrum-Ave-" not in spectrum:
-                        intensities = np.loadtxt(DIR + spectrum, usecols=(1,), dtype=float)
-                        snap_num = get_snap_num(spectrum)
-                        xas_data[snap_num] = intensities
-        if len(xas_data) > 0 and xas_data[-1] == 0:
-                xas_data = xas_data[:-1]
-        
+	for spectrum in spectra_files:
+		if "Spectrum-Ave-" not in spectrum:
+			intensities = np.loadtxt(DIR + spectrum, usecols=(1,), dtype=float)
+			snap_num = get_snap_num(spectrum)
+			xas_data[snap_num] = intensities
+	if len(xas_data) > 0 and xas_data[-1] == 0:
+			xas_data = xas_data[:-1]
+
 	energies = get_energies(spectra_files[0])
-        xas_data = np.array(xas_data)
-	
+	xas_data = np.array(xas_data)	
 	return energies, xas_data
 
 def get_gauss_params(energies, spectra):
@@ -50,24 +49,12 @@ def get_gauss_params(energies, spectra):
 			max_num = num
 	return max_num, np.array(amps), np.array(means), np.array(sigmas)
 
-def to_cluster_space(gauss_params):
-	"""
-	gauss_params could be one of three: amps, means, or sigmas. For now, we will use this method to plot and cluster means vs snapshot numbers. Later we may want to track amplitudes and express those as lin. combs. of external variables (hence the generality). The row index of gauss_params indicates the snapshot number at which the data at that row is found.
-	"""
-	cluster_points = [] #Points that will be clustered later
-	num_snapshots = len(gauss_params)
-	for snap_num in range(len(gauss_params)):
-		row_of_gaussians = gauss_params[snap_num]
-		for gauss_param in row_of_gaussians:
-			cluster_points.append([gauss_param, snap_num / num_snapshots])
-	return np.array(cluster_points)
-
 def separate_peaks(cluster_points, num_clusters, dim=1):
 	"""
 	Probably will use GMM clustering
 	"""
 	if dim != 1 and dim != 2:
-                raise ValueError("dim can only be 1 or 2")
+		raise ValueError("dim can only be 1 or 2")
 
 	g = GMM(num_clusters, thresh=.0001, min_covar=.0001, n_iter=2000)
 	if dim == 1:
@@ -75,16 +62,6 @@ def separate_peaks(cluster_points, num_clusters, dim=1):
 	else:
 		g.fit(cluster_points)
 	print g.means_, g.weights_
-
-def graph(cluster_points, dim=1):
-	if dim != 1 and dim != 2:
-                raise ValueError("dim can only be 1 or 2")
-	
-	if dim == 1:
-		plt.plot(cluster_points[:, 0], np.zeros(len(cluster_points)), 'bo')
-	else:
-		plt.plot(cluster_points[:, 0], cluster_points[:, 1], 'bo')
-	plt.show()
 
 def main():
 	"""
@@ -96,49 +73,6 @@ def main():
 	cluster_points = to_cluster_space(means)
 	separate_peaks(cluster_points, num)
 	graph(cluster_points)
-
-def get_hist(means):
-	hist = {}
-	for means_i in means:
-		for mean in means_i:
-			if mean not in hist:
-				hist[mean] = 1
-			else:
-				hist[mean] += 1
-	return hist.keys(), hist.values()
-
-def get_binned_hist(means, end, bin_width):
-	num_bins = int(math.floor(abs(end) / bin_width)) + 1
-	hist = [0 for _ in range(num_bins)]
-	for means_i in means:
-		for mean in means_i:
-			index = int(math.floor(abs(mean) / bin_width))
-			hist[index] += 1
-	return np.array([i*bin_width for i in range(num_bins)]), np.array(hist)
-
-def get_hist_peaks(keys, values):
-	num, amps, means, sigmas = get_gauss_params(keys, values)
-	return num, amps, means, sigmas
-
-def get_values(keys, left, right):
-	pass
-
-def sample(keys, means, sigmas):
-	peaks = []
-	for i in range(len(means)):
-		if i == 1:
-			mean = means[i]
-			left = keys[0]
-			points = get_values(keys, left, mean)
-			peaks.append(points)
-		mean1 = means[i]
-		sigma1 = sigmas[i]
-		mean2 = means[i+1]
-		sigma2 = sigmas[i+1]
-		left1 = mean1 - 2.5 * sigma1
-		right1 = mean1 + 2.5 * sigma1
-		left2 = mean2 - 2.5 * sigma2
-		right2 = mean2 + 2.5 * sigma2
 
 def main2():
 	x = np.random.normal(loc=.75, scale=.2, size=1000)
