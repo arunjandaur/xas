@@ -137,6 +137,29 @@ def temperature(T0, iter_num):
 	"""
 	return T0 * (.95 ** iter_num)
 
+tabu = {}
+def prob_tabu(curr_err, next_err, temperature, next_state):
+	"""
+	Returns acceptance probability. 1 if error decreases, less if next error is more
+	INPUT:
+		curr_err -- The current state's error in the Simulated Annealing
+		next-err -- The next potential state's error
+		temperature -- temperature of the Simulated Annealing
+	OUTPUT:
+	acceptance probability
+	"""
+	next_hash = hash(str(next_state))
+	if next_hash in tabu and next_state in tabu[next_hash]:
+		return 0
+	elif next_hash in tabu:
+		tabu[next_hash].append(0, next_state)
+	else:
+		tabu[next_hash] = [next_state]
+	
+	if next_err < curr_err:
+		return 1
+	return 1 / np.exp((next_err - curr_err) / temperature)
+
 def prob(curr_err, next_err, temperature):
 	"""
 	Returns acceptance probability. 1 if error decreases, less if next error is more
