@@ -36,17 +36,17 @@ def remove_intens_dict(intensities):
 	"""
 	new_intens = []
 	new_energies = []
-        for i in range(len(intensities)):
+	for i in range(len(intensities)):
 		row = intensities[i]
-                energies = row[0].keys()
-                energies = sorted([float(energy) for energy in energies])
-                new_row = []
-                for energy in energies:
-                        inten = row[0][str(energy)]
-                        new_row.append(inten)
-                new_intens.append(new_row)
+		energies = row[0].keys()
+		energies = sorted([float(energy) for energy in energies])
+		new_row = []
+		for energy in energies:
+			inten = row[0][str(energy)]
+			new_row.append(inten)
+		new_intens.append(new_row)
 		new_energies.append(energies)
-        intensities = np.array(new_intens)
+	intensities = np.array(new_intens)
 	energies = np.array(new_energies)
 	return (energies, intensities)
 
@@ -138,13 +138,13 @@ def lin_reg(coords, intensities):
 	
 def PCA():
 	col1 = np.array([[1.0, 2, 3, 4, 5, 6, 7, 8, 9]]).T
-        col2 = np.array([[2.0, 4, 6, 8, 10, 12, 14, 16, 18]]).T
-        matr12 = np.hstack((col1, col2))
-        matr_arr = [matr12]
-        pca_node = PCANode()
-        d_arr = []
+	col2 = np.array([[2.0, 4, 6, 8, 10, 12, 14, 16, 18]]).T
+	matr12 = np.hstack((col1, col2))
+	matr_arr = [matr12]
+	pca_node = PCANode()
+	d_arr = []
 
-        for arr in matr_arr:
-                result = pca_node.execute(arr)
-                d_arr.append(pca_node.d)
-                print pca_node.d
+	for arr in matr_arr:
+		result = pca_node.execute(arr)
+		d_arr.append(pca_node.d)
+		print pca_node.d
