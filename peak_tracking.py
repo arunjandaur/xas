@@ -90,18 +90,17 @@ def linreg(data):
     
     sum_res_sqr = 0
     num_points = 0
-    params = np.array([],ndmin =2) 
+    params = np.array([],ndmin = 2).reshape(len(data[0,0][0]),0) 
     for pair in data:
         #Do regression
         X = pair[0]
         Y = pair[1]
         coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
-        #print coeffs 
         
         #Makes coeffs 2d for concatenation
         if coeffs.ndim == 1:
             coeffs.shape += (1,)
-        print coeffs 
+        #print coeffs 
         
         #Update Values
         sum_res_sqr += res
@@ -202,40 +201,7 @@ def prob(curr_err, next_err, temperature):
 		return 1
 	return 1 / np.exp((next_err - curr_err) / temperature)
 
-def SA(peaks, x):
-    """
-    Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
-    INPUT:
-        peaks -- Each column is a different peak
-        x -- Each column is a different variables
-    OUTPUT:
-        best_sol -- The optimal peak labeling. Each column is a different peak.
-        best_err -- The optimal error
-        best_params -- The optimal linear regression coefficients for expressing means as a function of x
-    """
-    assert peaks.ndim==2, "Dimension of peaks must be 2"
-    assert peaks.shape[0]==x.shape[0], "Number of rows of x and peaks must match"
-    assert x.ndim==2, "x should have a dimension of 2"
-    
-    iters, T0 = 100000, 10000
-    best_sol = peaks
-    best_err, best_params = linreg(best_sol, x)
-    current_sol, current_err, current_params = peaks, best_err, best_params
-    for i in range(1, iters+1):
-        next_sol = localswap(current_sol)
-        next_err, next_params = linreg(next_sol, x)
-        temp = temperature(T0, i)
-        if prob(current_err, next_err, temp) > random.random():
-            current_sol = next_sol
-            current_err = next_err
-            current_params = next_params
-        if next_err < best_err:
-            best_sol = next_sol
-            best_err = next_err
-            best_params = next_params
-    return best_sol, best_err, best_params
-
-def SA_2(x_data, y_data):
+def SA(x_data, y_data):
     """
     Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
     INPUT:
@@ -274,11 +240,11 @@ def SA_2(x_data, y_data):
     
     iters, T0 = 100000, 10000
     best_sol = paired_data
-    best_err, best_params = linreg(best_sol, x)
-    current_sol, current_err, current_params = peaks, best_err, best_params
+    best_err, best_params = linreg(best_sol)
+    current_sol, current_err, current_params = best_sol, best_err, best_params
     for i in range(1, iters+1):
         next_sol = localswap(current_sol)
-        next_err, next_params = linreg(next_sol, x)
+        next_err, next_params = linreg(next_sol)
         temp = temperature(T0, i)
         if prob(current_err, next_err, temp) > random.random():
             current_sol = next_sol
@@ -293,115 +259,117 @@ def SA_2(x_data, y_data):
 #TESTING METHODS FOLLOW
 
 def noise(means):
-	return (random.random() - 1) * .1 * means
+    return (random.random() - 1) * .1 * means
 
 def graph(means, x):
-	for col in range(len(means[0])):
-		plt.plot(x, means[:, col], 'ro')
-	plt.show()
+    for col in range(len(means[0])):
+            plt.plot(x, means[:, col], 'ro')
+    plt.show()
 
 def test(means, *x_s):
-	x1 = x_s[0]
-	ones = np.reshape(np.ones(len(x1)), (len(x1), 1))
-	x = np.hstack((np.hstack(x_s), ones))
-	means += noise(means)
-	means2 = jumble(means)
-	final, error, params = SA(means2, x)
-	return final, error, params
+    x1 = x_s[0]
+    ones = np.reshape(np.ones(len(x1)), (len(x1), 1))
+    x = np.hstack((np.hstack(x_s), ones))
+    means += noise(means)
+    final, error, params = SA(x, means)
+    return final, error, params
 
 def t0():
-	#2 separate lines, 1 variable
-	x1 = np.random.normal(loc=.75, scale=.2, size=100)
-	a1, b1 = 15, -20
-	a2, b2 = -15, 5
-	mean1 = a1*x1 + b1
-	mean2 = a2*x1 + b2
-	mean2_2 = []
-	x1_2 = []
-	for i in range(len(x1)):
-		x1_i = x1[i]
-		if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
-			x1_2.append(x1_i)
-			mean2_2.append(mean2[i])
-			
-	mean1 = np.reshape(mean1, (len(mean1), 1))
-	mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
-	x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
-	#x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
-	plt.plot(x1, mean1, 'go')
-	plt.plot(x1_2, mean2, 'bo')
-	plt.show()
+    #2 separate lines, 1 variable
+    x1 = np.random.normal(loc=.75, scale=.2, size=100)
+    a1, b1 = 15, -20
+    a2, b2 = -15, 5
+    mean1 = a1*x1 + b1
+    mean2 = a2*x1 + b2
+    mean2_2 = []
+    x1_2 = []
+    for i in range(len(x1)):
+            x1_i = x1[i]
+            if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
+                    x1_2.append(x1_i)
+                    mean2_2.append(mean2[i])
+                    
+    mean1 = np.reshape(mean1, (len(mean1), 1))
+    mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
+    x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
+    #x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
+    plt.plot(x1, mean1, 'go')
+    plt.plot(x1_2, mean2, 'bo')
+    plt.show()
 
 def t1():
-	#2 separate lines, 1 variable
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	a1, b1 = 1, 5
-	a2, b2 = 1, -5
-	means = np.hstack((a1*x1 + b1, a2*x1 + b2))
-	#graph(means, x1)
-	print test(means, x1)
+    #2 separate lines, 1 variable
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    a1, b1 = 1, 5
+    a2, b2 = 1, -5
+    means = np.hstack((a1*x1 + b1, a2*x1 + b2))
+    #graph(means, x1)
+    print test(means, x1)
 
 def t2():
-	#2 intersecting lines, 1 variable
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	a1, b1 = 15, -20
-	a2, b2 = -15, 5
-	means = np.hstack((a1*x1 + b1, a2*x1 + b2))
-	#graph(means, x1)
-	print test(means, x1)
+    #2 intersecting lines, 1 variable
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    a1, b1 = 15, -20
+    a2, b2 = -15, 5
+    means = np.hstack((a1*x1 + b1, a2*x1 + b2))
+    #graph(means, x1)
+    print test(means, x1)
 
 def t3():
-	#2 intersecting, 1 separate lines; 1 variable
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	a1, b1 = 15, -20
-	a2, b2 = -15, 5
-	a3, b3 = 3, 5
-	means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
-	#graph(means, x1)
-	print test(means, x1)
-	
+    #2 intersecting, 1 separate lines; 1 variable
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    a1, b1 = 15, -20
+    a2, b2 = -15, 5
+    a3, b3 = 3, 5
+    means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
+    #graph(means, x1)
+    print test(means, x1)
+    
 def t4():
-	#3 intersecting lines, 1 variable
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	a1, b1 = 15, -20
-	a2, b2 = -15, 5
-	a3, b3 = -4, -2
-	means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
-	#graph(means, x1)
-	print test(means, x1)
+    #3 intersecting lines, 1 variable
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    a1, b1 = 15, -20
+    a2, b2 = -15, 5
+    a3, b3 = -4, -2
+    means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
+    #graph(means, x1)
+    print test(means, x1)
 
 def t5():
-	#3 intersecting lines (5D), 5 variables
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
-	x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
-	x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
-	x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
-	
-	a1, b1, c1, d1, e1, f1 =  15,  5, 5,   8.5, 30, -20
-	a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,    1,   5
-	a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,   10,  -2
-	
-	mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
-	mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
-	mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
-	means = np.hstack((mean1, mean2, mean3))
-	print test(means, x1, x2, x3, x4, x5)
+    #3 intersecting lines (5D), 5 variables
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
+    x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
+    x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
+    x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
+    
+    a1, b1, c1, d1, e1, f1 =  15,  5, 5,   8.5, 30, -20
+    a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,    1,   5
+    a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,   10,  -2
+    
+    mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
+    mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
+    mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
+    means = np.hstack((mean1, mean2, mean3))
+    print test(means, x1, x2, x3, x4, x5)
 
 def t6():
-	#3 intersecting lines (1D), 5 variables
-	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-	x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
-	x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
-	x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
-	x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
-	
-	a1, b1, c1, d1, e1, f1 =  15, 1, 1, 1, 1, -20
-	a2, b2, c2, d2, e2, f2 = -15, 1, 1, 1, 1, 5
-	a3, b3, c3, d3, e3, f3 =  -4, 1, 1, 1, 1, -2
-	
-	mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
-	mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
-	mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
-	means = np.hstack((mean1, mean2, mean3))
-	print test(means, x1, x2, x3, x4, x5)
+    #3 intersecting lines (1D), 5 variables
+    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+    x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
+    x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
+    x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
+    x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
+    
+    a1, b1, c1, d1, e1, f1 =  15, 1, 1, 1, 1, -20
+    a2, b2, c2, d2, e2, f2 = -15, 1, 1, 1, 1, 5
+    a3, b3, c3, d3, e3, f3 =  -4, 1, 1, 1, 1, -2
+    
+    mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
+    mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
+    mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
+    means = np.hstack((mean1, mean2, mean3))
+    print test(means, x1, x2, x3, x4, x5)
+
+if __name__ == "__main__":
+    t1()
