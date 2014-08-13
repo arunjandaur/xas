@@ -225,6 +225,29 @@ def test(means, *x_s):
 	final, error, params = SA(means2, x)
 	return final, error, params
 
+def t0():
+	#2 separate lines, 1 variable
+	x1 = np.random.normal(loc=.75, scale=.2, size=100)
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	mean1 = a1*x1 + b1
+	mean2 = a2*x1 + b2
+	mean2_2 = []
+	x1_2 = []
+	for i in range(len(x1)):
+		x1_i = x1[i]
+		if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
+			x1_2.append(x1_i)
+			mean2_2.append(mean2[i])
+			
+	mean1 = np.reshape(mean1, (len(mean1), 1))
+	mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
+	x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
+	#x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
+	plt.plot(x1, mean1, 'go')
+	plt.plot(x1_2, mean2, 'bo')
+	plt.show()
+
 def t1():
 	#2 separate lines, 1 variable
 	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
