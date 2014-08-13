@@ -77,41 +77,69 @@ def main():
 
 #EVERYTHING RELATED TO SIMULATED ANNEALING FOLLOWS
 
+def linreg(data):
+    """
+    Expressed Y as a lin comb of X
+    INPUT:
+        data -- clusters of data
+    OUTPUT:
+        error -- RMS of residuals of the multiple linear regression
+        coeffs -- The lin comb coefficients for Y = func(X)
+    """
+    assert data.ndim==2, "data's dimension must be 2"
+    
+    sum_res_sqr = 0
+    num_points = 0
+    params = np.array([],ndmin =2) 
+    for pair in data:
+        #Do regression
+        X = pair[0]
+        Y = pair[1]
+        coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
+        #print coeffs 
+        
+        #Makes coeffs 2d for concatenation
+        if coeffs.ndim == 1:
+            coeffs.shape += (1,)
+        print coeffs 
+        
+        #Update Values
+        sum_res_sqr += res
+        num_points += len(Y)
+        params = np.hstack((params, coeffs))
+    
+    #print params
+    error = np.sqrt( sum_res_sqr/ num_points )
+    return error, params
 
-def linreg(Y, X):
-	"""
-	Expressed Y as a lin comb of X
-	INPUT:
-		Y -- each column is a different peak
-		X -- each column is a different variable that may contribute to a mean/peak position
-	OUTPUT:
-		error -- RMS of residuals of the multiple linear regression
-		coeffs -- The lin comb coefficients for Y = func(X)
-	"""
-	assert Y.ndim==2, "Y's dimension must be 2"
-	assert X.ndim==2, "X's dimension must be 2"
-	assert Y.shape[0]==X.shape[0], "X and Y must have the same number of rows"
+def localswap(data, num_2_swap = 1):
+    """
+    Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
+    INPUT:
+        data -- clusters of data
+        num_2_wap -- number of data points to swap or shift
+    OUTPUT:
+        data_change -- A swap or shift has been performed on data and returned
+    """
+    assert data.ndim==2, "data must have a dimension of 2"
+    assert num_2_swap > 0, "num_2_swap must be positive"
 
-	coeffs, residuals, rank, singular_vals = np.linalg.lstsq(X, Y)
-	error = np.sqrt(np.sum(np.power(residuals, 2)) / len(residuals))
-	return error, coeffs
+    data_change = np.copy(data)
+    for _ in range(num_2_swap):
+        clus_a_i, clus_b_i = np.random.choice(range(len(data)), 2, replace=False)
+        #taken from clus_a -> clus_b
 
-def localswap(means):
-	"""
-	Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
-	INPUT:
-		means -- Each column is a different peak/mean. Each row is a sample/instance.
-	OUTPUT:
-		means_cpy -- A swap or shift has been performed on means and returned as means_cpy
-	"""
-	assert means.ndim==2, "means must have a dimension of 2"
+        point = np.random.randint(len(data[clus_a_i,1]))
+        clus_a = data[clus_a_i]
+        clus_b = data[clus_b_i]
+       
+        data_change[clus_b_i,0] = np.append(clus_b[0], clus_a[0][[point]], axis=0)  
+        data_change[clus_b_i,1] = np.append(clus_b[1], clus_a[1][point])
+        data_change[clus_a_i,0] = np.delete(clus_a[0], point, axis=0)  
+        data_change[clus_a_i,1] = np.delete(clus_a[1], point, axis=0)
+        
 
-	means_cpy = np.copy(means)
-	col_a, col_b = np.random.choice([i for i in range(len(means[0]))], 2, replace=False)
-	row = random.randint(0, len(means)-1)
-	means_cpy[row][col_a] = means[row][col_b]
-	means_cpy[row][col_b] = means[row][col_a]
-	return means_cpy
+    return data_change
 
 def jumble(means):
 	"""
@@ -152,39 +180,95 @@ def prob(curr_err, next_err, temperature):
 	return 1 / np.exp((next_err - curr_err) / temperature)
 
 def SA(peaks, x):
-	"""
-	Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
-	INPUT:
-		peaks -- Each column is a different peak
-		x -- Each column is a different variables
-	OUTPUT:
-		best_sol -- The optimal peak labeling. Each column is a different peak.
-		best_err -- The optimal error
-		best_params -- The optimal linear regression coefficients for expressing means as a function of x
-	"""
-	assert peaks.ndim==2, "Dimension of peaks must be 2"
-	assert peaks.shape[0]==x.shape[0], "Number of rows of x and peaks must match"
-	assert x.ndim==2, "x should have a dimension of 2"
-	
-	iters, T0 = 100000, 10000
-	best_sol = peaks
-	best_err, best_params = linreg(best_sol, x)
-	current_sol, current_err, current_params = peaks, best_err, best_params
-	for i in range(1, iters+1):
-		next_sol = localswap(current_sol)
-		next_err, next_params = linreg(next_sol, x)
-		temp = temperature(T0, i)
-		if prob(current_err, next_err, temp) > random.random():
-			current_sol = next_sol
-			current_err = next_err
-			current_params = next_params
-		if next_err < best_err:
-			best_sol = next_sol
-			best_err = next_err
-			best_params = next_params
-	return best_sol, best_err, best_params
+    """
+    Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
+    INPUT:
+        peaks -- Each column is a different peak
+        x -- Each column is a different variables
+    OUTPUT:
+        best_sol -- The optimal peak labeling. Each column is a different peak.
+        best_err -- The optimal error
+        best_params -- The optimal linear regression coefficients for expressing means as a function of x
+    """
+    assert peaks.ndim==2, "Dimension of peaks must be 2"
+    assert peaks.shape[0]==x.shape[0], "Number of rows of x and peaks must match"
+    assert x.ndim==2, "x should have a dimension of 2"
+    
+    iters, T0 = 100000, 10000
+    best_sol = peaks
+    best_err, best_params = linreg(best_sol, x)
+    current_sol, current_err, current_params = peaks, best_err, best_params
+    for i in range(1, iters+1):
+        next_sol = localswap(current_sol)
+        next_err, next_params = linreg(next_sol, x)
+        temp = temperature(T0, i)
+        if prob(current_err, next_err, temp) > random.random():
+            current_sol = next_sol
+            current_err = next_err
+            current_params = next_params
+        if next_err < best_err:
+            best_sol = next_sol
+            best_err = next_err
+            best_params = next_params
+    return best_sol, best_err, best_params
+
+def SA_2(x_data, y_data):
+    """
+    Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
+    INPUT:
+        x_data -- Independent Data, columns are variables. Each row is a snapshot.
+        y_data -- Dependent Data, jagged matrix. Each row is a snapshot 
+    OUTPUT:
+        best_sol -- The optimal peak labeling. 
+        best_err -- The optimal error
+        best_params -- The optimal linear regression coefficients for expressing means as a function of x
+    """
+    assert x_data.ndim==2, "Dimension of x_data must be 2"
+    assert x_data.shape[0]==y_data.shape[0], "Number of rows of x_data and y_data should be the same"
+    
+    #Flattens both input arrays
+    #Done to remove jaggedness of y_data
+    new_x_array = []
+    new_y_array = []
+    counter = 0
+    for i in xrange(len(x_data)):
+        for y in y_data[i]:
+            counter += 1
+            new_y_array.append(y)
+            new_x_array.append(x_data[i])
+   
+    #Approximate the number of groups
+    num_cluster = int(np.ceil(counter/len(y_data)))
+
+    paired_data = np.zeros((num_cluster,2),dtype = (list,list))
+    step = int(np.floor(len(new_y_array)/num_cluster))
+    for i in range(num_cluster):
+        paired_data[i,0] = np.array(new_x_array[i*step:(i+1)*step])
+        paired_data[i,1] = np.array(new_y_array[i*step:(i+1)*step])
+    if step < len(new_y_array)/num_cluster:
+        paired_data[num_cluster-1,0].append(new_x_array[num_cluster*step:])
+        paired_data[num_cluster-1,1].append(new_y_array[num_cluster*step:])
+    
+    iters, T0 = 100000, 10000
+    best_sol = paired_data
+    best_err, best_params = linreg(best_sol, x)
+    current_sol, current_err, current_params = peaks, best_err, best_params
+    for i in range(1, iters+1):
+        next_sol = localswap(current_sol)
+        next_err, next_params = linreg(next_sol, x)
+        temp = temperature(T0, i)
+        if prob(current_err, next_err, temp) > random.random():
+            current_sol = next_sol
+            current_err = next_err
+            current_params = next_params
+        if next_err < best_err:
+            best_sol = next_sol
+            best_err = next_err
+            best_params = next_params
+    return best_sol, best_err, best_params
 
 #TESTING METHODS FOLLOW
+
 def noise(means):
 	return (random.random() - 1) * .1 * means
 
