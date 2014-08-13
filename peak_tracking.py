@@ -165,6 +165,29 @@ def temperature(T0, iter_num):
 	"""
 	return T0 * (.95 ** iter_num)
 
+tabu = {}
+def prob_tabu(curr_err, next_err, temperature, next_state):
+	"""
+	Returns acceptance probability. 1 if error decreases, less if next error is more
+	INPUT:
+		curr_err -- The current state's error in the Simulated Annealing
+		next-err -- The next potential state's error
+		temperature -- temperature of the Simulated Annealing
+	OUTPUT:
+	acceptance probability
+	"""
+	next_hash = hash(str(next_state))
+	if next_hash in tabu and next_state in tabu[next_hash]:
+		return 0
+	elif next_hash in tabu:
+		tabu[next_hash].append(0, next_state)
+	else:
+		tabu[next_hash] = [next_state]
+	
+	if next_err < curr_err:
+		return 1
+	return 1 / np.exp((next_err - curr_err) / temperature)
+
 def prob(curr_err, next_err, temperature):
 	"""
 	Returns acceptance probability. 1 if error decreases, less if next error is more
@@ -285,6 +308,29 @@ def test(means, *x_s):
 	means2 = jumble(means)
 	final, error, params = SA(means2, x)
 	return final, error, params
+
+def t0():
+	#2 separate lines, 1 variable
+	x1 = np.random.normal(loc=.75, scale=.2, size=100)
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	mean1 = a1*x1 + b1
+	mean2 = a2*x1 + b2
+	mean2_2 = []
+	x1_2 = []
+	for i in range(len(x1)):
+		x1_i = x1[i]
+		if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
+			x1_2.append(x1_i)
+			mean2_2.append(mean2[i])
+			
+	mean1 = np.reshape(mean1, (len(mean1), 1))
+	mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
+	x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
+	#x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
+	plt.plot(x1, mean1, 'go')
+	plt.plot(x1_2, mean2, 'bo')
+	plt.show()
 
 def t1():
 	#2 separate lines, 1 variable
