@@ -78,67 +78,67 @@ def main():
 #EVERYTHING RELATED TO SIMULATED ANNEALING FOLLOWS
 
 def linreg(data):
-    """
-    Expressed Y as a lin comb of X
-    INPUT:
-        data -- clusters of data
-    OUTPUT:
-        error -- RMS of residuals of the multiple linear regression
-        coeffs -- The lin comb coefficients for Y = func(X)
-    """
-    assert data.ndim==2, "data's dimension must be 2"
-    
-    sum_res_sqr = 0
-    num_points = 0
-    params = np.array([],ndmin = 2).reshape(len(data[0,0][0]),0) 
-    for pair in data:
-        #Do regression
-        X = pair[0]
-        Y = pair[1]
-        coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
-        
-        #Makes coeffs 2d for concatenation
-        if coeffs.ndim == 1:
-            coeffs.shape += (1,)
-        #print coeffs 
-        
-        #Update Values
-        sum_res_sqr += res
-        num_points += len(Y)
-        params = np.hstack((params, coeffs))
-    
-    #print params
-    error = np.sqrt( sum_res_sqr/ num_points )
-    return error, params
+	"""
+	Expressed Y as a lin comb of X
+	INPUT:
+		data -- clusters of data
+	OUTPUT:
+		error -- RMS of residuals of the multiple linear regression
+		coeffs -- The lin comb coefficients for Y = func(X)
+	"""
+	assert data.ndim==2, "data's dimension must be 2"
+	
+	sum_res_sqr = 0
+	num_points = 0
+	params = np.array([],ndmin = 2).reshape(len(data[0,0][0]),0) 
+	for pair in data:
+		#Do regression
+		X = pair[0]
+		Y = pair[1]
+		coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
+		
+		#Makes coeffs 2d for concatenation
+		if coeffs.ndim == 1:
+			coeffs.shape += (1,)
+		#print coeffs 
+		
+		#Update Values
+		sum_res_sqr += res
+		num_points += len(Y)
+		params = np.hstack((params, coeffs))
+	
+	#print params
+	error = np.sqrt( sum_res_sqr/ num_points )
+	return error, params
 
 def localswap(data, num_2_swap = 1):
-    """
-    Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
-    INPUT:
-        data -- clusters of data
-        num_2_wap -- number of data points to swap or shift
-    OUTPUT:
-        data_change -- A swap or shift has been performed on data and returned
-    """
-    assert data.ndim==2, "data must have a dimension of 2"
-    assert num_2_swap > 0, "num_2_swap must be positive"
+	"""
+	Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
+	INPUT:
+		data -- clusters of data
+		num_2_wap -- number of data points to swap or shift
+	OUTPUT:
+		data_change -- A swap or shift has been performed on data and returned
+	"""
+	assert data.ndim==2, "data must have a dimension of 2"
+	assert num_2_swap > 0, "num_2_swap must be positive"
 
-    data_change = np.copy(data)
-    for _ in range(num_2_swap):
-        clus_a_i, clus_b_i = np.random.choice(range(len(data)), 2, replace=False)
-        #taken from clus_a -> clus_b
+	data_change = np.copy(data)
+	for _ in range(num_2_swap):
+		clus_a_i, clus_b_i = np.random.choice(range(len(data)), 2, replace=False)
+		#taken from clus_a -> clus_b
 
-        point = np.random.randint(len(data[clus_a_i,1]))
-        clus_a = data[clus_a_i]
-        clus_b = data[clus_b_i]
-       
-        data_change[clus_b_i,0] = np.append(clus_b[0], clus_a[0][[point]], axis=0)  
-        data_change[clus_b_i,1] = np.append(clus_b[1], clus_a[1][point])
-        data_change[clus_a_i,0] = np.delete(clus_a[0], point, axis=0)  
-        data_change[clus_a_i,1] = np.delete(clus_a[1], point, axis=0)
-        
+		point = np.random.randint(len(data[clus_a_i,1]))
+		clus_a = data[clus_a_i]
+		clus_b = data[clus_b_i]
+	   
+		data_change[clus_b_i,0] = np.append(clus_b[0], clus_a[0][[point]], axis=0)	
+		data_change[clus_b_i,1] = np.append(clus_b[1], clus_a[1][point])
+		data_change[clus_a_i,0] = np.delete(clus_a[0], point, axis=0)  
+		data_change[clus_a_i,1] = np.delete(clus_a[1], point, axis=0)
+		
 
-    return data_change
+	return data_change
 
 def jumble(means):
 	"""
@@ -202,174 +202,174 @@ def prob(curr_err, next_err, temperature):
 	return 1 / np.exp((next_err - curr_err) / temperature)
 
 def SA(x_data, y_data):
-    """
-    Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
-    INPUT:
-        x_data -- Independent Data, columns are variables. Each row is a snapshot.
-        y_data -- Dependent Data, jagged matrix. Each row is a snapshot 
-    OUTPUT:
-        best_sol -- The optimal peak labeling. 
-        best_err -- The optimal error
-        best_params -- The optimal linear regression coefficients for expressing means as a function of x
-    """
-    assert x_data.ndim==2, "Dimension of x_data must be 2"
-    assert x_data.shape[0]==y_data.shape[0], "Number of rows of x_data and y_data should be the same"
-    
-    #Flattens both input arrays
-    #Done to remove jaggedness of y_data
-    new_x_array = []
-    new_y_array = []
-    counter = 0
-    for i in xrange(len(x_data)):
-        for y in y_data[i]:
-            counter += 1
-            new_y_array.append(y)
-            new_x_array.append(x_data[i])
+	"""
+	Simulated Annealing: Used to find the labeling of peaks that minimizes the linear regression error when peaks are expressed as linear combinations of certain variables.
+	INPUT:
+		x_data -- Independent Data, columns are variables. Each row is a snapshot.
+		y_data -- Dependent Data, jagged matrix. Each row is a snapshot 
+	OUTPUT:
+		best_sol -- The optimal peak labeling. 
+		best_err -- The optimal error
+		best_params -- The optimal linear regression coefficients for expressing means as a function of x
+	"""
+	assert x_data.ndim==2, "Dimension of x_data must be 2"
+	assert x_data.shape[0]==y_data.shape[0], "Number of rows of x_data and y_data should be the same"
+	
+	#Flattens both input arrays
+	#Done to remove jaggedness of y_data
+	new_x_array = []
+	new_y_array = []
+	counter = 0
+	for i in xrange(len(x_data)):
+		for y in y_data[i]:
+			counter += 1
+			new_y_array.append(y)
+			new_x_array.append(x_data[i])
    
-    #Approximate the number of groups
-    num_cluster = int(np.ceil(counter/len(y_data)))
+	#Approximate the number of groups
+	num_cluster = int(np.ceil(counter/len(y_data)))
 
-    paired_data = np.zeros((num_cluster,2),dtype = (list,list))
-    step = int(np.floor(len(new_y_array)/num_cluster))
-    for i in range(num_cluster):
-        paired_data[i,0] = np.array(new_x_array[i*step:(i+1)*step])
-        paired_data[i,1] = np.array(new_y_array[i*step:(i+1)*step])
-    if step < len(new_y_array)/num_cluster:
-        paired_data[num_cluster-1,0].append(new_x_array[num_cluster*step:])
-        paired_data[num_cluster-1,1].append(new_y_array[num_cluster*step:])
-    
-    iters, T0 = 100000, 10000
-    best_sol = paired_data
-    best_err, best_params = linreg(best_sol)
-    current_sol, current_err, current_params = best_sol, best_err, best_params
-    for i in range(1, iters+1):
-        next_sol = localswap(current_sol)
-        next_err, next_params = linreg(next_sol)
-        temp = temperature(T0, i)
-        if prob(current_err, next_err, temp) > random.random():
-            current_sol = next_sol
-            current_err = next_err
-            current_params = next_params
-        if next_err < best_err:
-            best_sol = next_sol
-            best_err = next_err
-            best_params = next_params
-    return best_sol, best_err, best_params
+	paired_data = np.zeros((num_cluster,2),dtype = (list,list))
+	step = int(np.floor(len(new_y_array)/num_cluster))
+	for i in range(num_cluster):
+		paired_data[i,0] = np.array(new_x_array[i*step:(i+1)*step])
+		paired_data[i,1] = np.array(new_y_array[i*step:(i+1)*step])
+	if step < len(new_y_array)/num_cluster:
+		paired_data[num_cluster-1,0].append(new_x_array[num_cluster*step:])
+		paired_data[num_cluster-1,1].append(new_y_array[num_cluster*step:])
+	
+	iters, T0 = 100000, 10000
+	best_sol = paired_data
+	best_err, best_params = linreg(best_sol)
+	current_sol, current_err, current_params = best_sol, best_err, best_params
+	for i in range(1, iters+1):
+		next_sol = localswap(current_sol)
+		next_err, next_params = linreg(next_sol)
+		temp = temperature(T0, i)
+		if prob(current_err, next_err, temp) > random.random():
+			current_sol = next_sol
+			current_err = next_err
+			current_params = next_params
+		if next_err < best_err:
+			best_sol = next_sol
+			best_err = next_err
+			best_params = next_params
+	return best_sol, best_err, best_params
 
 #TESTING METHODS FOLLOW
 
 def noise(means):
-    return (random.random() - 1) * .1 * means
+	return (random.random() - 1) * .1 * means
 
 def graph(means, x):
-    for col in range(len(means[0])):
-            plt.plot(x, means[:, col], 'ro')
-    plt.show()
+	for col in range(len(means[0])):
+		plt.plot(x, means[:, col], 'ro')
+	plt.show()
 
 def test(means, *x_s):
-    x1 = x_s[0]
-    ones = np.reshape(np.ones(len(x1)), (len(x1), 1))
-    x = np.hstack((np.hstack(x_s), ones))
-    means += noise(means)
-    final, error, params = SA(x, means)
-    return final, error, params
+	x1 = x_s[0]
+	ones = np.reshape(np.ones(len(x1)), (len(x1), 1))
+	x = np.hstack((np.hstack(x_s), ones))
+	means += noise(means)
+	final, error, params = SA(x, means)
+	return final, error, params
 
 def t0():
-    #2 separate lines, 1 variable
-    x1 = np.random.normal(loc=.75, scale=.2, size=100)
-    a1, b1 = 15, -20
-    a2, b2 = -15, 5
-    mean1 = a1*x1 + b1
-    mean2 = a2*x1 + b2
-    mean2_2 = []
-    x1_2 = []
-    for i in range(len(x1)):
-            x1_i = x1[i]
-            if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
-                    x1_2.append(x1_i)
-                    mean2_2.append(mean2[i])
-                    
-    mean1 = np.reshape(mean1, (len(mean1), 1))
-    mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
-    x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
-    #x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
-    plt.plot(x1, mean1, 'go')
-    plt.plot(x1_2, mean2, 'bo')
-    plt.show()
+	#2 separate lines, 1 variable
+	x1 = np.random.normal(loc=.75, scale=.2, size=100)
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	mean1 = a1*x1 + b1
+	mean2 = a2*x1 + b2
+	mean2_2 = []
+	x1_2 = []
+	for i in range(len(x1)):
+		x1_i = x1[i]
+		if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
+			x1_2.append(x1_i)
+			mean2_2.append(mean2[i])
+					
+	mean1 = np.reshape(mean1, (len(mean1), 1))
+	mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
+	x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
+	#x1 corresponds to mean1 and x1_2 corresponds to the x's that correspond to mean2
+	plt.plot(x1, mean1, 'go')
+	plt.plot(x1_2, mean2, 'bo')
+	plt.show()
 
 def t1():
-    #2 separate lines, 1 variable
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    a1, b1 = 1, 5
-    a2, b2 = 1, -5
-    means = np.hstack((a1*x1 + b1, a2*x1 + b2))
-    #graph(means, x1)
-    print test(means, x1)
+	#2 separate lines, 1 variable
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	a1, b1 = 1, 5
+	a2, b2 = 1, -5
+	means = np.hstack((a1*x1 + b1, a2*x1 + b2))
+	#graph(means, x1)
+	print test(means, x1)
 
 def t2():
-    #2 intersecting lines, 1 variable
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    a1, b1 = 15, -20
-    a2, b2 = -15, 5
-    means = np.hstack((a1*x1 + b1, a2*x1 + b2))
-    #graph(means, x1)
-    print test(means, x1)
+	#2 intersecting lines, 1 variable
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	means = np.hstack((a1*x1 + b1, a2*x1 + b2))
+	#graph(means, x1)
+	print test(means, x1)
 
 def t3():
-    #2 intersecting, 1 separate lines; 1 variable
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    a1, b1 = 15, -20
-    a2, b2 = -15, 5
-    a3, b3 = 3, 5
-    means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
-    #graph(means, x1)
-    print test(means, x1)
-    
+	#2 intersecting, 1 separate lines; 1 variable
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	a3, b3 = 3, 5
+	means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
+	#graph(means, x1)
+	print test(means, x1)
+	
 def t4():
-    #3 intersecting lines, 1 variable
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    a1, b1 = 15, -20
-    a2, b2 = -15, 5
-    a3, b3 = -4, -2
-    means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
-    #graph(means, x1)
-    print test(means, x1)
+	#3 intersecting lines, 1 variable
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	a1, b1 = 15, -20
+	a2, b2 = -15, 5
+	a3, b3 = -4, -2
+	means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
+	#graph(means, x1)
+	print test(means, x1)
 
 def t5():
-    #3 intersecting lines (5D), 5 variables
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
-    x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
-    x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
-    x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
-    
-    a1, b1, c1, d1, e1, f1 =  15,  5, 5,   8.5, 30, -20
-    a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,    1,   5
-    a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,   10,  -2
-    
-    mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
-    mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
-    mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
-    means = np.hstack((mean1, mean2, mean3))
-    print test(means, x1, x2, x3, x4, x5)
+	#3 intersecting lines (5D), 5 variables
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
+	x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
+	x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
+	x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
+	
+	a1, b1, c1, d1, e1, f1 =  15,  5, 5,   8.5, 30, -20
+	a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,	 1,   5
+	a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,	10,  -2
+	
+	mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
+	mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
+	mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
+	means = np.hstack((mean1, mean2, mean3))
+	print test(means, x1, x2, x3, x4, x5)
 
 def t6():
-    #3 intersecting lines (1D), 5 variables
-    x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
-    x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
-    x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
-    x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
-    x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
-    
-    a1, b1, c1, d1, e1, f1 =  15, 1, 1, 1, 1, -20
-    a2, b2, c2, d2, e2, f2 = -15, 1, 1, 1, 1, 5
-    a3, b3, c3, d3, e3, f3 =  -4, 1, 1, 1, 1, -2
-    
-    mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
-    mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
-    mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
-    means = np.hstack((mean1, mean2, mean3))
-    print test(means, x1, x2, x3, x4, x5)
+	#3 intersecting lines (1D), 5 variables
+	x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
+	x2 = np.reshape(np.random.normal(loc=1.5, scale=.4, size=1000), (1000, 1))
+	x3 = np.reshape(np.random.normal(loc=5, scale=1, size=1000), (1000, 1))
+	x4 = np.reshape(np.random.normal(loc=3.5, scale=.5, size=1000), (1000, 1))
+	x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
+	
+	a1, b1, c1, d1, e1, f1 =  15, 1, 1, 1, 1, -20
+	a2, b2, c2, d2, e2, f2 = -15, 1, 1, 1, 1, 5
+	a3, b3, c3, d3, e3, f3 =  -4, 1, 1, 1, 1, -2
+	
+	mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
+	mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2
+	mean3 = a3*x1 + b3*x2 + c3*x3 + d3*x4 + e3*x5 + f3
+	means = np.hstack((mean1, mean2, mean3))
+	print test(means, x1, x2, x3, x4, x5)
 
 if __name__ == "__main__":
-    t1()
+	t1()
