@@ -8,10 +8,6 @@ from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
-from parse_intensities import parse_average
-from factor_practice import *
-import analysis
-import energy_analysis as EA
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
@@ -41,21 +37,6 @@ def expand(matr):
 	sina = np.sin(a)
 	matr = np.transpose(np.vstack((d1, d2, a)))
 	return matr
-
-def analyze_energy(intensities):
-	intensities = np.vstack((parse_average(), intensities))
-	energies, intensities = analysis.remove_intens_dict(intensities)
-	extrema = EA.get_extrema(energies, intensities)
-	peaks = EA.extrema_to_peaks(extrema[0], extrema[1], extrema[2], extrema[3])
-
-	avg_peaks = peaks[0]
-	atoms_peaks = peaks[1:]
-	ret_vals = []
-	for atom_peaks in atoms_peaks:
-		cost, instructions = EA.peak_tracking(avg_peaks, atom_peaks)
-		instructions.insert(0, str(cost))
-		ret_vals.append(instructions)
-	return np.array(ret_vals)
 
 if __name__ == '__main__':
 	"""
@@ -125,19 +106,4 @@ if __name__ == '__main__':
 	total = np.hstack((C_O_data, O_C_O_data))
 	total = expand(total)
 	C_intens = master['C'][1]
-
-	results = analyze_energy(C_intens)
-	for i in range(len(results)):
-		result = results[i]
-		print "Snapshot #{0} (ATOM) vs. Average (AVG)".format(i)
-		print "Cost: {0}".format(float(result[0]))
-		print "Instructions: "
-		for instruction in result[1:]:
-			print "\t{0}".format(instruction)
-		print ""
-
-	#pls(analysis.normalize(total), C_intens)
-	#practice(analysis.normalize(total))
-	#X_T, beta = analysis.lin_reg(total, C_intens)
-	#print beta
-	#print umm(X_T, beta)
+	print len(C_intens)

@@ -7,7 +7,7 @@ import numpy as np
 import math
 import random
 
-from peak_shift_analysis import sum_gaussians_fit
+from sum_gauss_fit import sum_gaussians_fit
 from sklearn.mixture import GMM
 
 DIR = "./xas/"
