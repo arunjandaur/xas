@@ -58,7 +58,7 @@ class LatticeTransformNode(mdp.Node):
 		"""
 		Vice versa of lattice_to_xyz
 		"""
- 		#Inner product of cartesian row vectors and XYZ to lattice transformation matrix
+		#Inner product of cartesian row vectors and XYZ to lattice transformation matrix
 		return dot(cartesian_vectors, self.xyz_2_lat_mat)
 	
 	def shift_periodicity(self, lattice_vectors, dx):

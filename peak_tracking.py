@@ -78,67 +78,67 @@ def main():
 #EVERYTHING RELATED TO SIMULATED ANNEALING FOLLOWS
 
 def linreg(data):
-    """
-    Expressed Y as a lin comb of X
-    INPUT:
-        data -- clusters of data
-    OUTPUT:
-        error -- RMS of residuals of the multiple linear regression
-        coeffs -- The lin comb coefficients for Y = func(X)
-    """
-    assert data.ndim==2, "data's dimension must be 2"
-    
-    sum_res_sqr = 0
-    num_points = 0
-    params = np.array([],ndmin = 2).reshape(len(data[0,0][0]),0) 
-    for pair in data:
-        #Do regression
-        X = pair[0]
-        Y = pair[1]
-        coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
-        
-        #Makes coeffs 2d for concatenation
-        if coeffs.ndim == 1:
-            coeffs.shape += (1,)
-        #print coeffs 
-        
-        #Update Values
-        sum_res_sqr += res
-        num_points += len(Y)
-        params = np.hstack((params, coeffs))
-    
-    #print params
-    error = np.sqrt( sum_res_sqr/ num_points )
-    return error, params
+	"""
+	Expressed Y as a lin comb of X
+	INPUT:
+		data -- clusters of data
+	OUTPUT:
+		error -- RMS of residuals of the multiple linear regression
+		coeffs -- The lin comb coefficients for Y = func(X)
+	"""
+	assert data.ndim==2, "data's dimension must be 2"
+	
+	sum_res_sqr = 0
+	num_points = 0
+	params = np.array([],ndmin = 2).reshape(len(data[0,0][0]),0) 
+	for pair in data:
+		#Do regression
+		X = pair[0]
+		Y = pair[1]
+		coeffs, res, rank, singular_vals = np.linalg.lstsq(X, Y)
+		
+		#Makes coeffs 2d for concatenation
+		if coeffs.ndim == 1:
+			coeffs.shape += (1,)
+		#print coeffs 
+		
+		#Update Values
+		sum_res_sqr += res
+		num_points += len(Y)
+		params = np.hstack((params, coeffs))
+	
+	#print params
+	error = np.sqrt( sum_res_sqr/ num_points )
+	return error, params
 
 def localswap(data, num_2_swap = 1):
-    """
-    Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
-    INPUT:
-        data -- clusters of data
-        num_2_wap -- number of data points to swap or shift
-    OUTPUT:
-        data_change -- A swap or shift has been performed on data and returned
-    """
-    assert data.ndim==2, "data must have a dimension of 2"
-    assert num_2_swap > 0, "num_2_swap must be positive"
+	"""
+	Picks a random row and swaps two random items OR picks an item from a row and moves it to another column
+	INPUT:
+		data -- clusters of data
+		num_2_wap -- number of data points to swap or shift
+	OUTPUT:
+		data_change -- A swap or shift has been performed on data and returned
+	"""
+	assert data.ndim==2, "data must have a dimension of 2"
+	assert num_2_swap > 0, "num_2_swap must be positive"
 
-    data_change = np.copy(data)
-    for _ in range(num_2_swap):
-        clus_a_i, clus_b_i = np.random.choice(range(len(data)), 2, replace=False)
-        #taken from clus_a -> clus_b
+	data_change = np.copy(data)
+	for _ in range(num_2_swap):
+		clus_a_i, clus_b_i = np.random.choice(range(len(data)), 2, replace=False)
+		#taken from clus_a -> clus_b
 
-        point = np.random.randint(len(data[clus_a_i,1]))
-        clus_a = data[clus_a_i]
-        clus_b = data[clus_b_i]
-       
-        data_change[clus_b_i,0] = np.append(clus_b[0], clus_a[0][[point]], axis=0)  
-        data_change[clus_b_i,1] = np.append(clus_b[1], clus_a[1][point])
-        data_change[clus_a_i,0] = np.delete(clus_a[0], point, axis=0)  
-        data_change[clus_a_i,1] = np.delete(clus_a[1], point, axis=0)
-        
+		point = np.random.randint(len(data[clus_a_i,1]))
+		clus_a = data[clus_a_i]
+		clus_b = data[clus_b_i]
+	   
+		data_change[clus_b_i,0] = np.append(clus_b[0], clus_a[0][[point]], axis=0)	
+		data_change[clus_b_i,1] = np.append(clus_b[1], clus_a[1][point])
+		data_change[clus_a_i,0] = np.delete(clus_a[0], point, axis=0)  
+		data_change[clus_a_i,1] = np.delete(clus_a[1], point, axis=0)
+		
 
-    return data_change
+	return data_change
 
 def jumble(means):
 	"""
@@ -225,7 +225,7 @@ def SA(x_data, y_data):
             counter += 1
             new_y_array.append(y)
             new_x_array.append(x_data[i])
-   
+
     #Approximate the number of groups
     num_cluster = int(np.ceil(counter/len(y_data)))
 
@@ -237,7 +237,7 @@ def SA(x_data, y_data):
     if step < len(new_y_array)/num_cluster:
         paired_data[num_cluster-1,0].append(new_x_array[num_cluster*step:])
         paired_data[num_cluster-1,1].append(new_y_array[num_cluster*step:])
-    
+
     iters, T0 = 100000, 10000
     best_sol = paired_data
     best_err, best_params = linreg(best_sol)
@@ -263,7 +263,7 @@ def noise(means):
 
 def graph(means, x):
     for col in range(len(means[0])):
-            plt.plot(x, means[:, col], 'ro')
+        plt.plot(x, means[:, col], 'ro')
     plt.show()
 
 def test(means, *x_s):
@@ -284,11 +284,11 @@ def t0():
     mean2_2 = []
     x1_2 = []
     for i in range(len(x1)):
-            x1_i = x1[i]
-            if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
-                    x1_2.append(x1_i)
-                    mean2_2.append(mean2[i])
-                    
+        x1_i = x1[i]
+        if not (x1_i <= (.8333 + .05) and x1_i >= (.8333 - .05)) or random.random() > .65:
+            x1_2.append(x1_i)
+            mean2_2.append(mean2[i])
+                            
     mean1 = np.reshape(mean1, (len(mean1), 1))
     mean2 = np.reshape(np.array(mean2_2), (len(mean2_2), 1))
     x1_2 = np.reshape(np.array(x1_2), (len(x1_2), 1))
@@ -324,7 +324,7 @@ def t3():
     means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
     #graph(means, x1)
     print test(means, x1)
-    
+	
 def t4():
     #3 intersecting lines, 1 variable
     x1 = np.reshape(np.random.normal(loc=.75, scale=.2, size=1000), (1000, 1))
@@ -346,8 +346,8 @@ def t5():
     x5 = np.reshape(np.random.normal(loc=1, scale=.25, size=1000), (1000, 1))
     
     a1, b1, c1, d1, e1, f1 =  15,  5, 5,   8.5, 30, -20
-    a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,    1,   5
-    a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,   10,  -2
+    a2, b2, c2, d2, e2, f2 = -15, -7, 0.5, 1,	 1,   5
+    a3, b3, c3, d3, e3, f3 =  -4,  0, 1,   1,	10,  -2
     
     mean1 = a1*x1 + b1*x2 + c1*x3 + d1*x4 + e1*x5 + f1
     mean2 = a2*x1 + b2*x2 + c2*x3 + d2*x4 + e2*x5 + f2

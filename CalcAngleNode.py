@@ -10,19 +10,19 @@ class CalcAngleNode(mdp.Node):
 		return False
 
 	def _dot(self, coord1, coord2):
-	        return coord1[0][0] * coord2[0][0] + coord1[0][1] * coord2[0][1] + coord1[0][2] * coord2[0][2]
+		return coord1[0][0] * coord2[0][0] + coord1[0][1] * coord2[0][1] + coord1[0][2] * coord2[0][2]
 
 	def _sub(self, coord1, coord2):
-	        x = coord1[0][0] - coord2[0][0]
-	        y = coord1[0][1] - coord2[0][1]
-	        z = coord1[0][2] - coord2[0][2]
-	        return np.array([[x, y, z]])
+		x = coord1[0][0] - coord2[0][0]
+		y = coord1[0][1] - coord2[0][1]
+		z = coord1[0][2] - coord2[0][2]
+		return np.array([[x, y, z]])
 
 	def _mag(self, coord):
 		return sqrt(coord[0][0] ** 2 + coord[0][1] ** 2 + coord[0][2] ** 2)
 
 	def _computeAngle(self, coord1, coord2, coord3):
-	        #Returns angle in radians
+		#Returns angle in radians
 		center = coord1
 		a = coord2
 		b = coord3
@@ -41,8 +41,8 @@ class CalcAngleNode(mdp.Node):
 			atom1 = atomLabels[i][0]
 			centeredCoords = latticeNode(np.array([coord1]), np.vstack((coordsArray[0:i], coordsArray[i+1:]))) #Center coordinates around coord1. Returns 2-elem tuple.
 			tempAtomLabels = np.vstack((atomLabels[0:i], atomLabels[i+1:]))
-                        center_coord = centeredCoords[0][0] #The center coordinate. First index returns 2d array. 2nd index gets first (only) row.
-                        centeredCoordsArray = centeredCoords[1] #Coordinates surrounding center_coord. Index gets tuple's 2nd elem: 2d array of coords
+			center_coord = centeredCoords[0][0] #The center coordinate. First index returns 2d array. 2nd index gets first (only) row.
+			centeredCoordsArray = centeredCoords[1] #Coordinates surrounding center_coord. Index gets tuple's 2nd elem: 2d array of coords
 
 			for j in range(len(centeredCoordsArray)-1):
 				coord2 = centeredCoordsArray[j]

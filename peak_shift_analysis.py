@@ -581,33 +581,33 @@ def sum_gaussians_fit(input_data, output_data):
 
     error = float("inf") 
     debug = True #For Debugging
-    while tol < error:
-        #Disregard Females, Acquire Data
-        sigmas_list, convolved_0, convolved_1,convolved_2, zero_crossings = to_scale_space(input_data,output_data, start_sigma = 1, sigma_step = 0.1)
-        
-        ###Debugging purposes
-        if debug:
-            arc_data = to_arc_space(zero_crossings, sigmas_list)
-        else:
-            debug = False
-        ###
+    #while tol < error:
+    #Disregard Females, Acquire Data
+    sigmas_list, convolved_0, convolved_1,convolved_2, zero_crossings = to_scale_space(input_data,output_data, start_sigma = 1, sigma_step = 0.1)
+    
+    ###Debugging purposes
+    if debug:
+        arc_data = to_arc_space(zero_crossings, sigmas_list)
+    else:
+        debug = False
+    ###
 
-        #Get arches from Zero Crossings
-        arches = label_arches(zero_crossings, input_data, convolved_1)
-       
-        #Apply fitting
-        temp_num, new_params, error = estimate_num_gauss(arches, tol, input_data, output_data)
-        
-        #Update params and num
-        params.extend(new_params)
-        num += temp_num
-        
-        #Calculate residuals and total error
-        gauss_func = gauss_creator_simple(num)
-        output_data = orig_output_data - gauss_func(input_data,*params)
-        error = np.sqrt(1/len(output_data) * np.sum(output_data**2))
-        output_data = output_data.clip(0)
-        
+    #Get arches from Zero Crossings
+    arches = label_arches(zero_crossings, input_data, convolved_1)
+   
+    #Apply fitting
+    temp_num, new_params, error = estimate_num_gauss(arches, tol, input_data, output_data)
+    
+    #Update params and num
+    params.extend(new_params)
+    num += temp_num
+    
+    #Calculate residuals and total error
+    gauss_func = gauss_creator_simple(num)
+    output_data = orig_output_data - gauss_func(input_data,*params)
+    error = np.sqrt(1/len(output_data) * np.sum(output_data**2))
+    output_data = output_data.clip(0)
+    
     #Moving params to output format
     i, amps, means, sigmas = 0, [], [], []
     while i < len(params)-2:
