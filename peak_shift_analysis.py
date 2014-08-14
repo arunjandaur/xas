@@ -11,148 +11,148 @@ import os
 import lmfit 
 
 def gauss_creator_simple(num_of_gauss):
-        """
-        Higher order function that returns a gaussian curve function 
-        with the number of gaussians specified
-        The variable inputs will be of the form
-        x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
-        """
-        if num_of_gauss <= 0:
-                raise Exception("gauss_creator needs a nonzero positive input")
-    
-        def make_func(func):
-                return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
-   
-        func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
-        for _ in range(num_of_gauss-1):
-                func = make_func(func)
-        return func
+    """
+    Higher order function that returns a gaussian curve function 
+    with the number of gaussians specified
+    The variable inputs will be of the form
+    x_position, amplitude1, mean1, sigma1, amplitude2, mean2, sigma2, etc...
+    """
+    if num_of_gauss <= 0:
+        raise Exception("gauss_creator needs a nonzero positive input")
+
+    def make_func(func):
+        return lambda E, A, avg, sigma, *args: func(E, *args) + A * np.exp(-.5 * np.power((E-avg)/sigma, 2))
+
+    func = lambda E, A, avg, sigma : A * np.exp(-.5 * np.power((E-avg) / sigma, 2))
+    for _ in range(num_of_gauss-1):
+        func = make_func(func)
+    return func
 
 def gauss_creator_complex(num_of_gauss, num_of_variables):
-        """
-        Higher order function that returns a gaussian curve function 
-        with the number of gaussians specified
-        where the mean is a function of the variables given
-        (num of variables does not include the constant offset,
-        so if it is set to 0 then there are not extra variables and the mean
-        is constant)
-        The variable inputs will be of the form
-        x_position, amplitude1, sigma1, a1, b1...amplitude2, sigma2, a2, b2, etc
-        """
-        if num_of_gauss <= 0:
-                raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
-        if num_of_variables <= 0:
-                raise ValueError("gauss_creator_complex needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
+    """
+    Higher order function that returns a gaussian curve function 
+    with the number of gaussians specified
+    where the mean is a function of the variables given
+    (num of variables does not include the constant offset,
+    so if it is set to 0 then there are not extra variables and the mean
+    is constant)
+    The variable inputs will be of the form
+    x_position, amplitude1, sigma1, a1, b1...amplitude2, sigma2, a2, b2, etc
+    """
+    if num_of_gauss <= 0:
+        raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
+    if num_of_variables <= 0:
+        raise ValueError("gauss_creator_complex needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
 
-        param_num = num_of_variables + 1
+    param_num = num_of_variables + 1
 
-        def mean_func(x, *params):
-                if len(params) != param_num:
-                        if len(params) > param_num:
-                                raise ValueError("too many params for mean function, can only take {}".format(param_num))
-                        else:
-                                raise ValueError("too few params for mean function, can only take {}".format(param_num))
+    def mean_func(x, *params):
+        if len(params) != param_num:
+            if len(params) > param_num:
+                raise ValueError("too many params for mean function, can only take {}".format(param_num))
+            else:
+                raise ValueError("too few params for mean function, can only take {}".format(param_num))
 
-                if x.shape[1] != num_of_variables:
-                        raise ValueError("input array does not have enough variables") 
-                copy_con = np.insert(x, 0,1, axis=1)
-                return copy_con.dot(params)
+        if x.shape[1] != num_of_variables:
+                raise ValueError("input array does not have enough variables") 
+        copy_con = np.insert(x, 0,1, axis=1)
+        return copy_con.dot(params)
 
-        def make_func(func):
-                return lambda E, A, sigma, *args: func(E, *(args[param_num:])) + A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num])))/sigma, 2))
+    def make_func(func):
+        return lambda E, A, sigma, *args: func(E, *(args[param_num:])) + A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num])))/sigma, 2))
 
-        func = lambda E, A, sigma, *args : A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num]))) / sigma, 2))
+    func = lambda E, A, sigma, *args : A * np.exp(-.5 * np.power((E[:,0]-mean_func(E[:,1:],*(args[:param_num]))) / sigma, 2))
 
-        for _ in range(num_of_gauss-1):
-                func = make_func(func)
-        return func
+    for _ in range(num_of_gauss-1):
+        func = make_func(func)
+    return func
 
 def gauss_creator_minimal(num_gauss, num_vars, amps, sigmas):
-        """
-        Returns a gaussian function that takes in only the mean coefficients, since the amplitudes and sigmas have already been estimated using estimate_num_gauss.
-        """
-        if num_gauss <= 0:
-                raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
-        if num_vars <= 0:
-                raise ValueError("gauss_creator_minimal needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
+    """
+    Returns a gaussian function that takes in only the mean coefficients, since the amplitudes and sigmas have already been estimated using estimate_num_gauss.
+    """
+    if num_gauss <= 0:
+            raise ValueError("gauss_creator needs a nonzero positive num of gaussians")
+    if num_vars <= 0:
+            raise ValueError("gauss_creator_minimal needs a nonzero positive num of extra variables, if you want it to be a constant value, use gauss_simple")
 
-        param_num = num_vars + 1
-        def mean_func(x, *params):
-                if len(params) != param_num:
-                        if len(params) > param_num:
-                                raise ValueError("too many params for mean function, can only take {}".format(param_num))
-                        else:
-                                raise ValueError("too few params for mean function, can only take {}".format(param_num))
+    param_num = num_vars + 1
+    def mean_func(x, *params):
+        if len(params) != param_num:
+            if len(params) > param_num:
+                raise ValueError("too many params for mean function, can only take {}".format(param_num))
+            else:
+                raise ValueError("too few params for mean function, can only take {}".format(param_num))
 
-                copy = x.copy()
-                if x.shape[1] != num_vars:
-                        raise ValueError("input array does not have enough variables")
-                copy_con = np.insert(x, 0, 1, axis=1) #Inserts a column of 1's so that we can have [1's] * CONST + [coeffs] * X (vars)
-                return copy_con.dot(params)
+        copy = x.copy()
+        if x.shape[1] != num_vars:
+            raise ValueError("input array does not have enough variables")
+        copy_con = np.insert(x, 0, 1, axis=1) #Inserts a column of 1's so that we can have [1's] * CONST + [coeffs] * X (vars)
+        return copy_con.dot(params)
 
-        def make_func(func, A, sigma):
-                return lambda X, *args: func(X, *(args[param_num:])) + A * np.exp(-.5 * np.power((X[:, 0]-mean_func(X[:, 1:], *(args[:param_num]))) / sigma, 2))
+    def make_func(func, A, sigma):
+        return lambda X, *args: func(X, *(args[param_num:])) + A * np.exp(-.5 * np.power((X[:, 0]-mean_func(X[:, 1:], *(args[:param_num]))) / sigma, 2))
 
-        A = amps[0]
-        sigma = sigmas[0]
-        func = lambda X, *args : A * np.exp(-.5 * np.power((X[:, 0] - mean_func(X[:, 1:], *(args[:param_num]))) / sigma, 2))
+    A = amps[0]
+    sigma = sigmas[0]
+    func = lambda X, *args : A * np.exp(-.5 * np.power((X[:, 0] - mean_func(X[:, 1:], *(args[:param_num]))) / sigma, 2))
 
-        for i in range(num_gauss-1):
-                func = make_func(func, amps[i+1], sigmas[i+1])
-        return func
+    for i in range(num_gauss-1):
+        func = make_func(func, amps[i+1], sigmas[i+1])
+    return func
 
 def smooth_gaussians(data,sigmas, order=0):
-        """
-        Convolve data with 1d gaussian kernels of size sigma for all sigma in sigmas
-        INPUT: data are sigmas are 1d arrays
-        OUTPUT: Outputs convolution of the 0th and 2nd order.
-        """
-        #TODO: Indexing error checking
-        convolved = np.empty(data.shape)
-        gaussian_filter1d(data, sigma=sigmas[0], order=order, output=convolved, mode='reflect')
-        retval = convolved.copy()
-        for sig in sigmas[1:]:
-                gaussian_filter1d(data, sigma=sig, order=order, output=convolved, mode='reflect')
-                retval = np.vstack((retval, convolved))
-        return retval
+    """
+    Convolve data with 1d gaussian kernels of size sigma for all sigma in sigmas
+    INPUT: data are sigmas are 1d arrays
+    OUTPUT: Outputs convolution of the 0th and 2nd order.
+    """
+    #TODO: Indexing error checking
+    convolved = np.empty(data.shape)
+    gaussian_filter1d(data, sigma=sigmas[0], order=order, output=convolved, mode='reflect')
+    retval = convolved.copy()
+    for sig in sigmas[1:]:
+        gaussian_filter1d(data, sigma=sig, order=order, output=convolved, mode='reflect')
+        retval = np.vstack((retval, convolved))
+    return retval
 
 
 def get_zero_crossings(input_data, output_data):
-        """
-        Finds the points at which positive becomes negative, vice versa, or positive/negative becomes 0. If positive becomes negative or vice versa then the left value is selected. Even though that is not the zero crossing it will be close enough, given that the data was sufficiently sampled.
-        OUTPUT: The energies at which the zero crossings approximately occurs. Accuracy is based on sampling rate. The zero crossing will be at most 1 delta x off, where delta x is the sampling width.
-        """
-        zero_crossings = []
-        if len(output_data.shape) == 1:
-            left = output_data[0:output_data.shape[0]-2]
-            right = output_data[1:output_data.shape[0]-1]
-            right2 = output_data[2:output_data.shape[0]]
+    """
+    Finds the points at which positive becomes negative, vice versa, or positive/negative becomes 0. If positive becomes negative or vice versa then the left value is selected. Even though that is not the zero crossing it will be close enough, given that the data was sufficiently sampled.
+    OUTPUT: The energies at which the zero crossings approximately occurs. Accuracy is based on sampling rate. The zero crossing will be at most 1 delta x off, where delta x is the sampling width.
+    """
+    zero_crossings = []
+    if len(output_data.shape) == 1:
+        left = output_data[0:output_data.shape[0]-2]
+        right = output_data[1:output_data.shape[0]-1]
+        right2 = output_data[2:output_data.shape[0]]
 
-            for j in range(len(left)):
-                    left_val = left[j]
-                    right_val = right[j]
-                    right2_val = right2[j]
-                    if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
-                            zero_crossings.append(input_data[j+1])
-                    elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
-                            zero_crossings.append(input_data[j])
-        else:
-            left = output_data[:, 0:output_data.shape[1]-2]
-            right = output_data[:, 1:output_data.shape[1]-1]
-            right2 = output_data[:, 2:output_data.shape[1]]
+        for j in range(len(left)):
+            left_val = left[j]
+            right_val = right[j]
+            right2_val = right2[j]
+            if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
+                zero_crossings.append(input_data[j+1])
+            elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
+                zero_crossings.append(input_data[j])
+    else:
+        left = output_data[:, 0:output_data.shape[1]-2]
+        right = output_data[:, 1:output_data.shape[1]-1]
+        right2 = output_data[:, 2:output_data.shape[1]]
 
-            for i in range(len(left)):
-                    row_zeros = []
-                    for j in range(len(left[0])):
-                            left_val = left[i][j]
-                            right_val = right[i][j]
-                            right2_val = right2[i][j]
-                            if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
-                                    row_zeros.append(input_data[j+1])
-                            elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
-                                    row_zeros.append(input_data[j])
-                    zero_crossings.append(row_zeros)
-        return np.array(zero_crossings)
+        for i in range(len(left)):
+            row_zeros = []
+            for j in range(len(left[0])):
+                left_val = left[i][j]
+                right_val = right[i][j]
+                right2_val = right2[i][j]
+                if right_val == 0 and ((left_val < 0 and right2_val > 0) or (left_val > 0 and right_val < 0)):
+                    row_zeros.append(input_data[j+1])
+                elif (left_val < 0 and right_val > 0) or (left_val > 0 and right_val < 0):
+                    row_zeros.append(input_data[j])
+            zero_crossings.append(row_zeros)
+    return np.array(zero_crossings)
 
 def to_scale_space(x,y, start_sigma = 1, sigma_step = 1):
     """
