@@ -235,109 +235,109 @@ def to_scale_space(x,y, start_sigma = 1, sigma_step = 1):
     return np.array(sigmas), convolved_0, convolved_1, convolved_2, np.array(zeros)
 
 def to_arc_space(zeros, sigmas):
-        """
-        Only useful for plotting purposes. This converts rows of zeroes, where the ith row has the crossing locations when convolved with a 1d gaussian kernel with sigma = sigmas[i].
-        OUTPUT: Rows which contain 2 values each: The location and sigma at which the crossing appears. Each row is a separate crossing.
-        """
-        arc_data = []
-        for i in range(len(sigmas)):    
-            sigma = sigmas[i]
-            for zero in zeros[i]:
-                arc_data.append([zero, sigma])
-        return np.array(arc_data)
+    """
+    Only useful for plotting purposes. This converts rows of zeroes, where the ith row has the crossing locations when convolved with a 1d gaussian kernel with sigma = sigmas[i].
+    OUTPUT: Rows which contain 2 values each: The location and sigma at which the crossing appears. Each row is a separate crossing.
+    """
+    arc_data = []
+    for i in range(len(sigmas)):    
+        sigma = sigmas[i]
+        for zero in zeros[i]:
+            arc_data.append([zero, sigma])
+    return np.array(arc_data)
 
 def find_closest_crossing(val, zeros):
-        """
-        Takes an energy value and finds the closest zero_crossing in zeros to val (distance metric is just horizontal distance).
-        INPUT: val is a float.
-        OUTPUT: crossings is a 1d array of energy values of crossings at a particular sigma.
-        """
-        min_dist, min_zero = float("inf"), 0
-        for zero in zeros:
-                if abs(zero - val) < min_dist:
-                        min_dist = abs(zero - val)
-                        min_zero = zero
-        return min_zero
+    """
+    Takes an energy value and finds the closest zero_crossing in zeros to val (distance metric is just horizontal distance).
+    INPUT: val is a float.
+    OUTPUT: crossings is a 1d array of energy values of crossings at a particular sigma.
+    """
+    min_dist, min_zero = float("inf"), 0
+    for zero in zeros:
+        if abs(zero - val) < min_dist:
+            min_dist = abs(zero - val)
+            min_zero = zero
+    return min_zero
 
 def find_pairs(pairs, zeros, singles, input_data, convolved_1):
-        """
-        Matches pairs with zeros and takes the leftover zeros and makes them into pairs
-        INPUT: pairs has rows where each row has two elements, the left and right zero zeros that denote a gaussian. zeros is a 1d array of energy positions of zero zeros taken at a different gaussian sigma than ones in pairs.
-        OUTPUT: Rows where each row is a pair of zeros that most closely matched the pair in pairs at the corresponding index. Returns False if something went wrong.
-        """
-        #TODO: Fix problem when zeros is empty
+    """
+    Matches pairs with zeros and takes the leftover zeros and makes them into pairs
+    INPUT: pairs has rows where each row has two elements, the left and right zero zeros that denote a gaussian. zeros is a 1d array of energy positions of zero zeros taken at a different gaussian sigma than ones in pairs.
+    OUTPUT: Rows where each row is a pair of zeros that most closely matched the pair in pairs at the corresponding index. Returns False if something went wrong.
+    """
+    #TODO: Fix problem when zeros is empty
 
-        #CASE 1: NOT ENOUGH CROSSINGS
-        if len(pairs) * 2 > len(zeros):
-                print "Insufficient zeros!"
-                return np.array(pairs), np.array(singles)
-        
-        #CASE 2: MATCH NEW CROSSINGS WITH PREVIOUS PAIRS
-        new_pairs = []
-        copy = list(np.copy(zeros))
-        for pair in pairs:
-                left, right = pair[0], pair[1]
-                min_left = find_closest_crossing(left, copy)
-                copy.remove(min_left)
-                min_right = find_closest_crossing(right, copy)
-                copy.remove(min_right)
-                new_pairs.append([min_left, min_right])
-        
-        if len(new_pairs) >= 10:
-            return np.array(new_pairs), np.array(singles)
+    #CASE 1: NOT ENOUGH CROSSINGS
+    if len(pairs) * 2 > len(zeros):
+        print "Insufficient zeros!"
+        return np.array(pairs), np.array(singles)
+    
+    #CASE 2: MATCH NEW CROSSINGS WITH PREVIOUS PAIRS
+    new_pairs = []
+    copy = list(np.copy(zeros))
+    for pair in pairs:
+        left, right = pair[0], pair[1]
+        min_left = find_closest_crossing(left, copy)
+        copy.remove(min_left)
+        min_right = find_closest_crossing(right, copy)
+        copy.remove(min_right)
+        new_pairs.append([min_left, min_right])
+    
+    if len(new_pairs) >= 10:
+        return np.array(new_pairs), np.array(singles)
 
-        #CASE 3: MATCH NEW SINGLES WITH PREVIOUS SINGLES
-        new_singles = []
-        singles_left_copy = list(copy)
-        for single in singles:
-                #single_match = find_closest_crossing(single, copy)
-                #copy.remove(single_match)
-                if len(singles_left_copy) == 0:
+    #CASE 3: MATCH NEW SINGLES WITH PREVIOUS SINGLES
+    new_singles = []
+    singles_left_copy = list(copy)
+    for single in singles:
+        #single_match = find_closest_crossing(single, copy)
+        #copy.remove(single_match)
+        if len(singles_left_copy) == 0:
+            break
+        single_match = find_closest_crossing(single, singles_left_copy)
+        #print "singles_left_copy is {}".format(singles_left_copy)
+        #print "single_match is {}".format(single_match)
+        #print "singles is {}".format(singles)
+        singles_left_copy.remove(single_match)
+        new_singles.append(single_match)
+
+    #CASE 4: LEFTOVER CROSSINGS
+    leftovers = len(copy)
+    #cross_index = np.scalar(np.argwhere(cross==input_data))
+    while len(copy) > 0:
+        zero = copy[0]
+        zero_index = np.asscalar(np.argwhere(zero==input_data))
+        #print "zero_index is {}".format(zero_index)
+        first_deriv = convolved_1[zero_index]
+        #print "first_deriv is {}".format(first_deriv)
+        if first_deriv > 0:
+            #ugly. Im modifying list while looping through it. You disgust me, Lev.
+            for second_zero in copy[1:]:
+                zero_index_2 = np.asscalar(np.argwhere(second_zero==input_data))
+                #print "zero_index_2 is {}".format(zero_index_2)
+                first_deriv_2 = convolved_1[zero_index_2]
+                #print "first_deriv_2 is {}".format(first_deriv_2)
+                if first_deriv_2 < 0:
+                    new_pairs.append([zero,second_zero])
+                    copy.remove(second_zero)
+                    if zero in new_singles:
+                        new_singles.remove(zero)
+                    if second_zero in new_singles:
+                        new_singles.remove(second_zero)
                     break
-                single_match = find_closest_crossing(single, singles_left_copy)
-                #print "singles_left_copy is {}".format(singles_left_copy)
-                #print "single_match is {}".format(single_match)
-                #print "singles is {}".format(singles)
-                singles_left_copy.remove(single_match)
-                new_singles.append(single_match)
-
-        #CASE 4: LEFTOVER CROSSINGS
-        leftovers = len(copy)
-        #cross_index = np.scalar(np.argwhere(cross==input_data))
-        while len(copy) > 0:
-            zero = copy[0]
-            zero_index = np.asscalar(np.argwhere(zero==input_data))
-            #print "zero_index is {}".format(zero_index)
-            first_deriv = convolved_1[zero_index]
-            #print "first_deriv is {}".format(first_deriv)
-            if first_deriv > 0:
-                #ugly. Im modifying list while looping through it. You disgust me, Lev.
-                for second_zero in copy[1:]:
-                    zero_index_2 = np.asscalar(np.argwhere(second_zero==input_data))
-                    #print "zero_index_2 is {}".format(zero_index_2)
-                    first_deriv_2 = convolved_1[zero_index_2]
-                    #print "first_deriv_2 is {}".format(first_deriv_2)
-                    if first_deriv_2 < 0:
-                        new_pairs.append([zero,second_zero])
-                        copy.remove(second_zero)
-                        if zero in new_singles:
-                            new_singles.remove(zero)
-                        if second_zero in new_singles:
-                            new_singles.remove(second_zero)
-                        break
-                else:
-                    if not zero in new_singles:
-                        new_singles.append(zero)
-                del copy[0]
-            elif first_deriv < 0:
-                del copy[0]
+            else:
                 if not zero in new_singles:
                     new_singles.append(zero)
-            else:
-                raise ValueError("why is first derivate zero where there is a second derivative zero crossing. If you ever come accross this error, assume that your calculation of first and second derivatives have been erroneous or we have been working under the wrong assumptions where the first and second derivative zeros are")
-        #print new_pairs
-        #print new_singles
-        return np.array(new_pairs), np.array(new_singles)
+            del copy[0]
+        elif first_deriv < 0:
+            del copy[0]
+            if not zero in new_singles:
+                new_singles.append(zero)
+        else:
+            raise ValueError("why is first derivate zero where there is a second derivative zero crossing. If you ever come accross this error, assume that your calculation of first and second derivatives have been erroneous or we have been working under the wrong assumptions where the first and second derivative zeros are")
+    #print new_pairs
+    #print new_singles
+    return np.array(new_pairs), np.array(new_singles)
 
 def label_arches(zero_crossings, input_data, convolved_1):
     """
@@ -522,39 +522,39 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
     return n, params
 
 def estimate_mean_coeffs(means):
-        """
-        Estimates the coefficients for sigma(X) = a + bx1 + cx2 + ...
-        INPUT: 1d array of means where means at smaller indices appear first (at higher sigmas)
-        OUPUT: List of coefficients in the order a, b, c, etc
-        """
-        coeffs = []
-        for mean in means:
-                coeffs.append(0)
-                coeffs.append(mean)
-        return coeffs
+    """
+    Estimates the coefficients for sigma(X) = a + bx1 + cx2 + ...
+    INPUT: 1d array of means where means at smaller indices appear first (at higher sigmas)
+    OUPUT: List of coefficients in the order a, b, c, etc
+    """
+    coeffs = []
+    for mean in means:
+        coeffs.append(0)
+        coeffs.append(mean)
+    return coeffs
 
 def graph_scale(x,blurred,first,second,sigmas):
-        plt.figure()
-        for i in range(len(sigmas)):
-            if i % 8 == 0:
-                plt.legend(bbox_to_anchor = (1,0),loc="lower left")
-                plt.show()
-            plt.subplot(2,4,(i%8)+1)
-            plt.plot(x,blurred[i],"r", label = "blurred")
-            plt.plot(x,first[i],"b", label = "first")
-            plt.plot( x, second[i], "g", label = "second")
-            plt.title("sigma = {}".format(sigmas[i]))
-        plt.show()
+    plt.figure()
+    for i in range(len(sigmas)):
+        if i % 8 == 0:
+            plt.legend(bbox_to_anchor = (1,0),loc="lower left")
+            plt.show()
+        plt.subplot(2,4,(i%8)+1)
+        plt.plot(x,blurred[i],"r", label = "blurred")
+        plt.plot(x,first[i],"b", label = "first")
+        plt.plot( x, second[i], "g", label = "second")
+        plt.title("sigma = {}".format(sigmas[i]))
+    plt.show()
 
 def graph(input_data, output_data, convolved_2, arc_data):
-        plt.figure(1)
-        plt.subplot(221)
-        for i in range(len(convolved_2)):
-                plt.plot(input_data[:, 0][0:1000], convolved_2[i], 'b', label='fit')
-        plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
-        plt.subplot(222)
-        plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
-        plt.show()
+    plt.figure(1)
+    plt.subplot(221)
+    for i in range(len(convolved_2)):
+        plt.plot(input_data[:, 0][0:1000], convolved_2[i], 'b', label='fit')
+    plt.plot(input_data[:, 0][0:1000], output_data[0:1000], 'ro', label='original')
+    plt.subplot(222)
+    plt.plot(arc_data[:, 0], arc_data[:, 1], 'go', label='arc data')
+    plt.show()
 
 def sum_gaussians_fit(input_data, output_data):
     """

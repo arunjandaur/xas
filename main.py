@@ -96,4 +96,3 @@ def extractData():
 
 if __name__ == "__main__":
     dists, angles, intens = extractData()
-    
