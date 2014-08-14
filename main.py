@@ -2,12 +2,11 @@ import sys
 import numpy as np
 import mdp
 import os
-from mdp.nodes import PCANode
 
 from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
-from parse_intensities import parse_intensities
+from parse_intens import parse_intens
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
@@ -38,7 +37,7 @@ def expand(matr):
 	matr = np.transpose(np.vstack((d1, d2, a)))
 	return matr
 
-if __name__ == '__main__':
+def extractData():
 	"""
 	General description:
 		Loops through all snapshots (various xyz files)
@@ -46,64 +45,55 @@ if __name__ == '__main__':
 	"""
 	#Begin initialization
 	atomLabels = np.empty((0, 1))
-	intensities = np.empty((0, 1))
+	intens = np.empty((0, 1))
 
 	snapshots = os.listdir(SNAPSHOTS_FOLDER_NAME)
 	firstSnap = snapshots[0]
 	firstSnapCoords = np.loadtxt(SNAPSHOTS_FOLDER_NAME + '/' + firstSnap, skiprows=2, usecols=(1, 2, 3))
 
-	distanceArray = np.empty((0, len(firstSnapCoords))) 
-	calcDistanceNodeInst = CalcDistanceNode()
+	distArr = np.empty((0, len(firstSnapCoords))) 
+	distNode = CalcDistanceNode()
 
 	angleMaster = None
-	calcAngleNodeInst = CalcAngleNode()
+	angleNode = CalcAngleNode()
 	#End initialization
 
 	for snap in snapshots:
-		snap_path = SNAPSHOTS_FOLDER_NAME + '/' + snap #Construct filepath
-		currentSnapCoords = np.loadtxt(snap_path, skiprows=2, usecols=(1, 2, 3)) #Parse xyz coordinates
-		currentSnapDistanceArray = calcDistanceNodeInst(currentSnapCoords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma) #Generate distance matrix
-		distanceArray = np.vstack((distanceArray, currentSnapDistanceArray)) #Accumulate into main distance matrix
+		snap_path = SNAPSHOTS_FOLDER_NAME + '/' + snap
+		currSnapCoords = np.loadtxt(snap_path, skiprows=2, usecols=(1, 2, 3)) #Parse xyz coordinates
 		
-		currentSnapAtomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
-		currentSnapAtomLabels = np.reshape(currentSnapAtomLabels, (len(currentSnapAtomLabels), 1))
-		atomLabels = np.vstack((atomLabels, currentSnapAtomLabels))
+		#Labels
+		currSnapAtomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
+		currSnapAtomLabels = np.reshape(currSnapAtomLabels, (len(currSnapAtomLabels), 1))
+		atomLabels = np.vstack((atomLabels, currSnapAtomLabels))
+		#Labels
+		
+		#Distances
+		currSnapDistArr = distNode(currSnapCoords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma) #Generate distance matrix
+		distArr = np.vstack((distArr, currSnapDistArr)) #Accumulate into main distance matrix
+		#Distances
 
 		#Angles
-		currentSnapAngleMaster = calcAngleNodeInst(currentSnapCoords, currentSnapAtomLabels, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
-		angleMaster = merge(angleMaster, currentSnapAngleMaster)
+		currSnapAngleMaster = angleNode(currSnapCoords, currSnapAtomLabels, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+		angleMaster = merge(angleMaster, currSnapAngleMaster)
 		#Angles
-
-		currentSnapIntensities = np.empty((0, 1))
-		for atomNum in range(len(currentSnapAtomLabels)): #Loop through each atom in the snapshot and parse the intensities associated with that atom. It uses the functionality from parse_intensities.py
-			atomName = currentSnapAtomLabels[atomNum][0]
-			atomIntensities = parse_intensities(atomName, atomNum+1, snap)
-			currentSnapIntensities = np.vstack((currentSnapIntensities, atomIntensities)) #Accumulate intensities of all atoms in this snap
-			
-		intensities = np.vstack((intensities, currentSnapIntensities)) #Accumulate the intensities of all snaps
-
-	permuteNode = PermutationNode() #Now split the distances into a nested dictionary where atoms are the keys and the values associated with the inner atoms keys contain the distance matrix between the outer atom key and the inner atom key. The other value associated with the outer atom (along with the inner dictionary described above) is the instensity matrix. The inner dictionary and intensity matrix are bundled in an array
-	permutedDistanceArray = permuteNode(distanceArray, atomLabels, intensities)
-
-	#Now write each distance matrix corresponding to a different atom-atom pair to its own file for later use. TODO: pickle the matrix
-	master = permutedDistanceArray
-	if not os.path.exists(OUTPUT_FOLDER):
-		os.makedirs(OUTPUT_FOLDER)
-	for atom in master:
-		for atom2 in master[atom][0]:
-			distArray = master[atom][0][atom2]
-			intenArray = master[atom][1]
-			distFileName = OUTPUT_FOLDER + '/' + atom + "-" + atom2 + '.txt'
-			intenFileName = OUTPUT_FOLDER + '/' + atom + "-" + atom2 + "_xas" + '.txt'
-
-			distFile = open(distFileName, 'w')
-			distFile.write(str(distArray))
-			intenFile = open(intenFileName, 'w')
-			intenFile.write(str(intenArray))
+		
+		#Intensities
+		currSnapIntens = np.empty((0, 1))
+		for atomNum in range(len(currSnapAtomLabels)): #Loop through each atom in the snapshot and parse the intens associated with that atom
+			atomName = currSnapAtomLabels[atomNum][0]
+			atomIntens = parse_intens(atomName, atomNum+1, snap)
+			currSnapIntens = np.vstack((currSnapIntens, atomIntens)) #Accumulate intens of all atoms in this snap
+		intens = np.vstack((intens, currSnapIntens)) #Accumulate the intens of all snaps
+		#Intensities
 	
-	C_O_data = master['C'][0]['O']
-	O_C_O_data = angleMaster['C']['O']['O']
-	total = np.hstack((C_O_data, O_C_O_data))
-	total = expand(total)
-	C_intens = master['C'][1]
-	print len(C_intens)
+	#Distances
+	permuteNode = PermutationNode() #Now split the distances into a nested dictionary where atoms are the keys and the values associated with the inner atoms keys contain the distance matrix between the outer atom key and the inner atom key. The other value associated with the outer atom (along with the inner dictionary described above) is the instensity matrix. The inner dictionary and intensity matrix are bundled in an array
+	distanceMaster = permuteNode(distArr, atomLabels, intens)
+	#Distances
+
+	return distanceMaster, angleMaster, intens
+
+if __name__ == "__main__":
+	dists, angles, intens = extractData()
+	
