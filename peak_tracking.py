@@ -259,7 +259,7 @@ def SA(x_data, y_data):
 #TESTING METHODS FOLLOW
 
 def noise(means):
-    return (random.random() - 1) * .1 * means
+    return np.random.normal(size= means.shape, scale =1) 
 
 def graph(means, x):
     for col in range(len(means[0])):
@@ -333,7 +333,9 @@ def t4():
     a3, b3 = -4, -2
     means = np.hstack((a1*x1 + b1, a2*x1 + b2, a3*x1 + b3))
     #graph(means, x1)
-    print test(means, x1)
+    a = test(means, x1)
+    print a[1]
+    print a[2]
 
 def t5():
     #3 intersecting lines (5D), 5 variables
@@ -372,4 +374,4 @@ def t6():
     print test(means, x1, x2, x3, x4, x5)
 
 if __name__ == "__main__":
-    t1()
+    t4()
