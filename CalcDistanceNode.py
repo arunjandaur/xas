@@ -14,24 +14,24 @@ class CalcDistanceNode(mdp.Node):
     def is_trainable(self):
         return False
 
-    def _execute(self, coordsArray, lattice_a, lattice_b, lattice_c, alpha, beta, gamma):
+    def _execute(self, coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma):
         """
         Input:
-            coordsArray: A 2D array where each row is an array of 3 elements: x, y, and z
+            coords: A 2D array where each row is an array of 3 elements: x, y, and z
             lattice_a,b,c: lattice vectors
             alpha, beta, gamma: lattice angles
         Output:
             A distance array where each (i, j)th element is the distance between atom i and atom j. Note, these coordinates belong to periodic molcules, so we must obey lattice algebra. When computing the distance between any atom i to all other atoms {J}, we must apply the periodicity node (lattice transformation) so that all coordinates are shifted such that atom i is in the middle of the lattice space. Then we can compute all the distances between i and J. Repeat for all i.
         """
-        numRows = coordsArray.shape[0]
-        numCols = coordsArray.shape[0]
+        numRows = coords.shape[0]
+        numCols = coords.shape[0]
         distanceArray = zeros(shape=(numRows, numCols))
         latticeNode = LatticeTransformNode(lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
 
         i = 0
-        for atomCoord1 in coordsArray:
+        for atomCoord1 in coords:
             j = 0
-            centeredCoords = latticeNode(array([atomCoord1]), coordsArray) #Center the coordinates around atomCoord1
+            centeredCoords = latticeNode(array([atomCoord1]), coords) #Center the coordinates around atomCoord1
             center_coord = centeredCoords[0] #The centered coordinate
             centeredCoordsArray = centeredCoords[1] #The coordinates surrounding center_coord
             x1 = center_coord[0][0] #Get x, y, and z

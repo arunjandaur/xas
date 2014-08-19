@@ -1,12 +1,12 @@
-import sys
 import numpy as np
-import mdp
 import os
 
 from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
-from parse_intens import parse_intens
+from parse_intensities import parse_intensities
+from peak_shift_analysis import sum_gaussians_fit
+from peak_tracking import SA
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
@@ -16,6 +16,113 @@ lattice_c = 32 #8.99341
 alpha = 90.0
 beta = 90.0
 gamma = 90.0
+
+def parseXYZ_Intens(snap, excited_atom):
+    intens = np.empty((0, 1000), dtype=('f8, f8'))
+    
+    #Atom Labels
+    snap_path = SNAPSHOTS_FOLDER_NAME + '/' + snap
+    atomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
+    atomLabels = np.reshape(atomLabels, (len(atomLabels), 1))
+    
+    #Coords
+    coords = np.loadtxt(snap_path, skiprows=2, usecols=(1, 2, 3))
+    
+    #Intensities
+    for atomNum in range(len(atomLabels)): #For each atom, parse its intens
+        atomName = atomLabels[atomNum][0]
+        if atomName == excited_atom:
+            atomIntens = parse_intensities(atomName, atomNum+1, snap)
+            intens = np.vstack((intens, atomIntens)) #Accumulate intens of all atoms in this snap
+    
+    return atomLabels, coords, intens
+
+def extractData(coords, atomLabels, excited_atom, radius=100):
+    inputData = []
+    distNode = CalcDistanceNode()
+    dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
+    atomSet.sort()
+
+    for i in range(len(atomLabels)):
+        currAtom = atomLabels[i]
+        currCoord = coords[i]
+        if currAtom == excited_atom:
+            input_row_data = []
+            done = []
+            for label in atomSet:
+                for label2 in atomSet:
+                    if (label2 + label) not in done or label2 == label:
+                        tempDists = []
+                        for j in range(len(coords)):
+                            atom1 = atomLabels[j]
+                            atom1Coord = coords[j]
+                            for k in range(len(coords)):
+                                atom2 = atomLabels[k]
+                                atom2Coord = coords[k]
+                                if k != j and atom1 == label and atom2 == label2:
+                                    curr_atom1_dist = dists[i][j]
+                                    curr_atom2_dist = dists[i][k]
+                                    if curr_atom1_dist < radius and curr_atom2_dist < radius:
+                                        atom1_2_dist = dists[j][k]
+                                        if dists[k][j] not in tempDists:
+                                            tempDists.append(atom1_2_dist)
+                        tempDists.sort()
+                        input_row_data.extend(tempDists)
+                        done.append(label + label2)
+            inputData.append(input_row_data)
+    return np.array(inputData)
+
+def preparePeakData(inputData, intensities):
+    peakData = []
+    for i in range(len(intensities)):
+        num_i, amps_i, means_i, sigmas_i = sum_gaussians_fit(energies, intensities[i])
+        for peak in means_i:
+            peakData.append(np.hstack((inputData[i], mean)))
+    peakData = np.array(peakData)
+    return peakData[:, :-1], np.array([peakData[:, -1]]).T
+
+def cluster(inputData, peaks):
+
+def linearity(cluster):
+
+
+if __name__ == "__main__":
+    excited_atom = "C"
+    radius = 15 #Angstroms
+    snapshots = os.listdir(SNAPSHOTS_FOLDER_NAME)
+
+    atomLabels, coords, intens = parseXYZ_Intens(snapshots[0], excited_atom)
+    inputData = extractData(coords, atomLabels, excited_atom, radius)
+    for snap in snapshots[1:]:
+        currAtomLabels, currCoords, currIntens = parseXYZ_Intens(snap, excited_atom)
+        currInputData = extractData(currCoords, currAtomLabels, excited_atom, radius)
+        inputData = np.vstack((inputData, currInputData))
+        intens = np.vstack((intens, currIntens))
+    #print inputData
+
+    energies = []
+    intensities = []
+    for E_I in intens[0]:
+        energies.append(E_I[0])
+        intensities.append(E_I[1])
+    energies = np.array(energies)
+    intensities = np.array(intensities)
+    for row in intens[1:]:
+        rowIntens = []
+        for E_I in row:
+            rowIntens.append(E_I[1])
+        intensities = np.vstack((intensities, np.array(rowIntens)))
+
+    inputData, peaks = preparePeakData(inputData, intensities)
+    clusters = cluster(inputData, peaks)
+    for cluster in clusters:
+        if abs(linearity(cluster)) > .8:
+            linreg
+        else:
+            SA(cluster)
+
+##########
 
 def merge(master, incoming):
     if master == None:
@@ -80,19 +187,18 @@ def extractData():
         
         #Intensities
         currSnapIntens = np.empty((0, 1))
-        for atomNum in range(len(currSnapAtomLabels)): #Loop through each atom in the snapshot and parse the intens associated with that atom
+        for atomNum in range(len(currSnapAtomLabels)): #For each atom, parse its intens
             atomName = currSnapAtomLabels[atomNum][0]
-            atomIntens = parse_intens(atomName, atomNum+1, snap)
+            atomIntens = parse_intensities(atomName, atomNum+1, snap)
             currSnapIntens = np.vstack((currSnapIntens, atomIntens)) #Accumulate intens of all atoms in this snap
         intens = np.vstack((intens, currSnapIntens)) #Accumulate the intens of all snaps
         #Intensities
     
     #Distances
-    permuteNode = PermutationNode() #Now split the distances into a nested dictionary where atoms are the keys and the values associated with the inner atoms keys contain the distance matrix between the outer atom key and the inner atom key. The other value associated with the outer atom (along with the inner dictionary described above) is the instensity matrix. The inner dictionary and intensity matrix are bundled in an array
+    permuteNode = PermutationNode()
+    #Nested dict; Outer keys: atoms, Outer values: (dicts, atom intens)
+    #Inner keys: atoms, Inner values: Distance matrix between inner and outer key
     distanceMaster = permuteNode(distArr, atomLabels, intens)
     #Distances
 
     return distanceMaster, angleMaster, intens
-
-if __name__ == "__main__":
-    dists, angles, intens = extractData()
