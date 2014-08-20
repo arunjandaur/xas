@@ -6,7 +6,9 @@ from CalcAngleNode import CalcAngleNode
 from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
 from peak_shift_analysis import sum_gaussians_fit
-from peak_tracking import SA
+from peak_tracking import SA, linreg
+from scipy.stats import pearsonr
+from sklearn.mixture import DPGMM
 
 SNAPSHOTS_FOLDER_NAME = "snapshots"
 OUTPUT_FOLDER = "dist_and_intens"
@@ -38,12 +40,12 @@ def parseXYZ_Intens(snap, excited_atom):
     return atomLabels, coords, intens
 
 def extractData(coords, atomLabels, excited_atom, radius=100):
-    inputData = []
-    distNode = CalcDistanceNode()
-    dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
     atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
     atomSet.sort()
 
+    distNode = CalcDistanceNode()
+    dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    inputData = []
     for i in range(len(atomLabels)):
         currAtom = atomLabels[i]
         currCoord = coords[i]
@@ -71,7 +73,43 @@ def extractData(coords, atomLabels, excited_atom, radius=100):
                         input_row_data.extend(tempDists)
                         done.append(label + label2)
             inputData.append(input_row_data)
-    return np.array(inputData)
+    
+    angleNode = CalcAngleNode()
+    angles = angleNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    angleData = []
+    for n in range(len(atomLabels)):
+        currAtom = atomLabels[n]
+        currCoord = coords[n]
+        if currAtom == excited_atom:
+            input_row_data = []
+            done = []
+            for label in atomSet:
+                for label2 in atomSet:
+                    for label3 in atomSet:
+                        tempAngles = []
+                        for i in range(len(coords))):
+                            if atomLabels[i] == label:
+                                for j in range(len(coords)):
+                                    if atomLabels[j] == label2:
+                                        for k in range(len(coords)):
+                                            if atomLabels[k] == label3:
+                                                if i != j and j != k and i != k:
+                                                    curr_atom1_dist = dists[n][i]
+                                                    curr_atom2_dist = dists[n][j]
+                                                    curr_atom3_dist = dists[n][k]
+                                                    if max(curr_atom1_dist, curr_atom2_dist, curr_atom3_dist) < radius:
+                                                        if angles[i][k][j] != np.inf:
+                                                            tempAngles.append(angles[i][j][k])
+                                                            angles[i][j][k] = np.inf
+                        tempAngles.sort()
+                        input_row_data.extend(tempAngles)
+            angleData.append(input_row_data)
+
+    inputData = np.hstack((np.array(inputData), np.array(angleData)))
+    return inputData
+
+def splitPeakData(peakData):
+    return peakData[:, :-1], np.array([peakData[:, -1]]).T
 
 def preparePeakData(inputData, intensities):
     peakData = []
@@ -80,12 +118,16 @@ def preparePeakData(inputData, intensities):
         for peak in means_i:
             peakData.append(np.hstack((inputData[i], mean)))
     peakData = np.array(peakData)
-    return peakData[:, :-1], np.array([peakData[:, -1]]).T
+    return splitPeakData(peakData)
 
 def cluster(inputData, peaks):
+    dpgmm = DPGMM(10, n_iter=1000)
+    dpgmm.fit(np.hstack((inputData, peaks)))
+    print dpgmm.weights_
+    print dpgmm.means_
 
-def linearity(cluster):
-
+def linearity(inputData, peaks):
+    pearsonr(inputData, peaks)
 
 if __name__ == "__main__":
     excited_atom = "C"
@@ -116,11 +158,14 @@ if __name__ == "__main__":
 
     inputData, peaks = preparePeakData(inputData, intensities)
     clusters = cluster(inputData, peaks)
+
     for cluster in clusters:
-        if abs(linearity(cluster)) > .8:
-            linreg
+        inputData = cluster[0]
+        peaks = cluster[1]
+        if abs(linearity(inputData, peaks)) > .8:
+            error, params = linreg(cluster)
         else:
-            SA(cluster)
+            config, error, params = SA(inputData, peaks)
 
 ##########
 
