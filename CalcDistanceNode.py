@@ -14,7 +14,7 @@ class CalcDistanceNode(mdp.Node):
     def is_trainable(self):
         return False
 
-    def _execute(self, coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma):
+    def _execute(self, coords, *args):
         """
         Input:
             coords: A 2D array where each row is an array of 3 elements: x, y, and z
@@ -25,24 +25,33 @@ class CalcDistanceNode(mdp.Node):
         """
         numRows = coords.shape[0]
         numCols = coords.shape[0]
-        distanceArray = zeros(shape=(numRows, numCols))
-        latticeNode = LatticeTransformNode(lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+        dists = zeros(shape=(numRows, numCols))
 
-        i = 0
-        for atomCoord1 in coords:
-            j = 0
-            centeredCoords = latticeNode(array([atomCoord1]), coords) #Center the coordinates around atomCoord1
-            center_coord = centeredCoords[0] #The centered coordinate
-            centeredCoordsArray = centeredCoords[1] #The coordinates surrounding center_coord
-            x1 = center_coord[0][0] #Get x, y, and z
-            y1 = center_coord[0][1]
-            z1 = center_coord[0][2]
-            for atomCoord2 in centeredCoordsArray: #for each element j in J, compute dist(i, j)
-                x2 = atomCoord2[0]#Get x, y, and z
-                y2 = atomCoord2[1]
-                z2 = atomCoord2[2]
-                distanceArray[i][j] = coordsToDistance(x1, y1, z1, x2, y2, z2)
-                j = j + 1
-            i = i + 1
+        if len(args) != 0:
+            lattice_a, lattice_b, lattice_c, alpha, beta, gamma = args
+            latticeNode = LatticeTransformNode(lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+            i = 0
+            for atomCoord1 in coords:
+                j = 0
+                centeredCoords = latticeNode(array([atomCoord1]), coords) #Center the coordinates around atomCoord1
+                center_coord = centeredCoords[0] #The centered coordinate
+                centeredCoordsArray = centeredCoords[1] #The coordinates surrounding center_coord
+                x1 = center_coord[0][0] #Get x, y, and z
+                y1 = center_coord[0][1]
+                z1 = center_coord[0][2]
+                for atomCoord2 in centeredCoordsArray: #for each element j in J, compute dist(i, j)
+                    x2 = atomCoord2[0]#Get x, y, and z
+                    y2 = atomCoord2[1]
+                    z2 = atomCoord2[2]
+                    dists[i][j] = coordsToDistance(x1, y1, z1, x2, y2, z2)
+                    j = j + 1
+                i = i + 1
 
-        return distanceArray
+            return dists
+
+        for i in range(len(coords)):
+            x1, y1, z1 = coords[i]
+            for j in range(len(coords)):
+                x2, y2, z2 = coords[j]
+                dists[i][j] = coordsToDistance(x1, y1, z1, x2, y2, z2)
+        return dists

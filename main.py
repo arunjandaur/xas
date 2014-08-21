@@ -39,12 +39,15 @@ def parseXYZ_Intens(snap, excited_atom):
     
     return atomLabels, coords, intens
 
-def extractData(coords, atomLabels, excited_atom, radius=100):
+def extractData(coords, atomLabels, excited_atom, periodic, radius=100):
     atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
     atomSet.sort()
 
     distNode = CalcDistanceNode()
-    dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    if periodic == True:
+        dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    else:
+        dists = distNode(coords)
     inputData = []
     for i in range(len(atomLabels)):
         currAtom = atomLabels[i]
@@ -75,7 +78,10 @@ def extractData(coords, atomLabels, excited_atom, radius=100):
             inputData.append(input_row_data)
     
     angleNode = CalcAngleNode()
-    angles = angleNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    if periodic == True:
+        angles = angleNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    else:
+        angles = angleNode(coords)
     angleData = []
     for n in range(len(atomLabels)):
         currAtom = atomLabels[n]
@@ -87,7 +93,7 @@ def extractData(coords, atomLabels, excited_atom, radius=100):
                 for label2 in atomSet:
                     for label3 in atomSet:
                         tempAngles = []
-                        for i in range(len(coords))):
+                        for i in range(len(coords)):
                             if atomLabels[i] == label:
                                 for j in range(len(coords)):
                                     if atomLabels[j] == label2:
@@ -138,10 +144,10 @@ if __name__ == "__main__":
     inputData = extractData(coords, atomLabels, excited_atom, radius)
     for snap in snapshots[1:]:
         currAtomLabels, currCoords, currIntens = parseXYZ_Intens(snap, excited_atom)
-        currInputData = extractData(currCoords, currAtomLabels, excited_atom, radius)
+        currInputData = extractData(currCoords, currAtomLabels, excited_atom, False, radius)
         inputData = np.vstack((inputData, currInputData))
         intens = np.vstack((intens, currIntens))
-    #print inputData
+    print inputData
 
     energies = []
     intensities = []
