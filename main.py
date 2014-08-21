@@ -1,29 +1,20 @@
 import numpy as np
 import os
+import sys
 
 from CalcDistanceNode import CalcDistanceNode
 from CalcAngleNode import CalcAngleNode
-from PermutationNode import PermutationNode
 from parse_intensities import parse_intensities
 from peak_shift_analysis import sum_gaussians_fit
 from peak_tracking import SA, linreg
 from scipy.stats import pearsonr
 from sklearn.mixture import DPGMM
 
-SNAPSHOTS_FOLDER_NAME = "snapshots"
-OUTPUT_FOLDER = "dist_and_intens"
-lattice_a = 32 #8.99341
-lattice_b = 32 #8.99341
-lattice_c = 32 #8.99341
-alpha = 90.0
-beta = 90.0
-gamma = 90.0
-
-def parseXYZ_Intens(snap, excited_atom):
+def parseXYZ_Intens(snap, excited_atom, snapshots_folder, xas_folder):
     intens = np.empty((0, 1000), dtype=('f8, f8'))
     
     #Atom Labels
-    snap_path = SNAPSHOTS_FOLDER_NAME + '/' + snap
+    snap_path = snapshots_folder + '/' + snap
     atomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
     atomLabels = np.reshape(atomLabels, (len(atomLabels), 1))
     
@@ -34,12 +25,12 @@ def parseXYZ_Intens(snap, excited_atom):
     for atomNum in range(len(atomLabels)): #For each atom, parse its intens
         atomName = atomLabels[atomNum][0]
         if atomName == excited_atom:
-            atomIntens = parse_intensities(atomName, atomNum+1, snap)
+            atomIntens = parse_intensities(atomName, atomNum+1, snap, xas_folder)
             intens = np.vstack((intens, atomIntens)) #Accumulate intens of all atoms in this snap
     
     return atomLabels, coords, intens
 
-def extractData(coords, atomLabels, excited_atom, periodic, radius=100):
+def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args):
     atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
     atomSet.sort()
 
@@ -136,15 +127,26 @@ def linearity(inputData, peaks):
     pearsonr(inputData, peaks)
 
 if __name__ == "__main__":
-    excited_atom = "C"
-    radius = 15 #Angstroms
-    snapshots = os.listdir(SNAPSHOTS_FOLDER_NAME)
+    args = sys.argv
+    excited_atom, snapshots_folder, xas_folder, radius, periodic = args[1:6]
+    snapshots = os.listdir(snapshots_folder)
+    if periodic == "true":
+        unit_cell, lattice_a, lattice_b, lattice_c, alpha, beta, gamma = [float(arg) for arg in args[6:]]
+        periodic = True
+    else:
+        periodic = False
 
-    atomLabels, coords, intens = parseXYZ_Intens(snapshots[0], excited_atom)
-    inputData = extractData(coords, atomLabels, excited_atom, radius)
+    atomLabels, coords, intens = parseXYZ_Intens(snapshots[0], excited_atom, snapshots_folder, xas_folder)
+    if periodic == False:
+        inputData = extractData(coords, atomLabels, excited_atom, radius)
+    else:
+        inputData = extractData(coords, atomLabels, excited_atom, radius, periodic, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
     for snap in snapshots[1:]:
-        currAtomLabels, currCoords, currIntens = parseXYZ_Intens(snap, excited_atom)
-        currInputData = extractData(currCoords, currAtomLabels, excited_atom, False, radius)
+        currAtomLabels, currCoords, currIntens = parseXYZ_Intens(snap, excited_atom, snapshots_folder, xas_folder)
+        if periodic == False:
+            currInputData = extractData(currCoords, currAtomLabels, excited_atom, radius)
+        else:
+            currInputData = extractData(currCoords, currAtomLabels, excited_atom, radius, periodic, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
         inputData = np.vstack((inputData, currInputData))
         intens = np.vstack((intens, currIntens))
     print inputData

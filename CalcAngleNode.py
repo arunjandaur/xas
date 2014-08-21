@@ -24,7 +24,6 @@ class CalcAngleNode(mdp.Node):
     def _computeAngle(self, center, a, b):
         #Returns angle in radians
         if (center == a).all() or (center == b).all() or (a == b).all():
-            print 'hi'
             return np.inf
 
         sub_a_center = self._sub(a, center)
