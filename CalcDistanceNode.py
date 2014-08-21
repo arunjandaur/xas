@@ -1,5 +1,5 @@
 import mdp
-from numpy import *
+import numpy as np
 from math import sqrt
 from LatticeTransformNode import *
 
@@ -27,14 +27,14 @@ class CalcDistanceNode(mdp.Node):
         """
         numRows = coords.shape[0]
         numCols = coords.shape[0]
-        dists = zeros(shape=(numRows, numCols))
+        dists = np.zeros(shape=(numRows, numCols))
 
         if len(args) != 0:
             lattice_a, lattice_b, lattice_c, alpha, beta, gamma = args
             latticeNode = LatticeTransformNode(lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
 
             for i in range(len(coords)):
-                center, neighbors = latticeNode(np.array([coords[i]]), np.vstack((coords[0:i], coords[i+1])))
+                center, neighbors = latticeNode(np.array([coords[i]]), np.vstack((coords[0:i], coords[i+1:])))
                 coords2 = np.vstack((neighbors[0:i], center, neighbors[i:]))
                 for j in range(len(coords2)):
                     dists[i][j] = _coordsToDistance(center[0], coords[j])
