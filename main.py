@@ -175,16 +175,6 @@ if __name__ == "__main__":
 
 ##########
 
-def merge(master, incoming):
-    if master == None:
-        master = incoming
-    else:
-        for key1 in master:
-            for key2 in master[key1]:
-                for key3 in master[key1][key2]:
-                    master[key1][key2][key3] = np.vstack((master[key1][key2][key3], incoming[key1][key2][key3]))
-    return master
-
 def expand(matr):
     matr = np.transpose(matr)
     d1 = matr[0]
@@ -194,62 +184,3 @@ def expand(matr):
     sina = np.sin(a)
     matr = np.transpose(np.vstack((d1, d2, a)))
     return matr
-
-def extractData():
-    """
-    General description:
-        Loops through all snapshots (various xyz files)
-        Loads the coordinates and generates a distance matrix by using the CalcDistanceNode (lattice algebra is taken care of inside CalcDistanceNode. It uses LatticeTransformNode)
-    """
-    #Begin initialization
-    atomLabels = np.empty((0, 1))
-    intens = np.empty((0, 1))
-
-    snapshots = os.listdir(SNAPSHOTS_FOLDER_NAME)
-    firstSnap = snapshots[0]
-    firstSnapCoords = np.loadtxt(SNAPSHOTS_FOLDER_NAME + '/' + firstSnap, skiprows=2, usecols=(1, 2, 3))
-
-    distArr = np.empty((0, len(firstSnapCoords))) 
-    distNode = CalcDistanceNode()
-
-    angleMaster = None
-    angleNode = CalcAngleNode()
-    #End initialization
-
-    for snap in snapshots:
-        snap_path = SNAPSHOTS_FOLDER_NAME + '/' + snap
-        currSnapCoords = np.loadtxt(snap_path, skiprows=2, usecols=(1, 2, 3)) #Parse xyz coordinates
-        
-        #Labels
-        currSnapAtomLabels = np.loadtxt(snap_path, dtype=str, skiprows=2, usecols=(0,)) #Parse atoms labels and stack them
-        currSnapAtomLabels = np.reshape(currSnapAtomLabels, (len(currSnapAtomLabels), 1))
-        atomLabels = np.vstack((atomLabels, currSnapAtomLabels))
-        #Labels
-        
-        #Distances
-        currSnapDistArr = distNode(currSnapCoords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma) #Generate distance matrix
-        distArr = np.vstack((distArr, currSnapDistArr)) #Accumulate into main distance matrix
-        #Distances
-
-        #Angles
-        currSnapAngleMaster = angleNode(currSnapCoords, currSnapAtomLabels, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
-        angleMaster = merge(angleMaster, currSnapAngleMaster)
-        #Angles
-        
-        #Intensities
-        currSnapIntens = np.empty((0, 1))
-        for atomNum in range(len(currSnapAtomLabels)): #For each atom, parse its intens
-            atomName = currSnapAtomLabels[atomNum][0]
-            atomIntens = parse_intensities(atomName, atomNum+1, snap)
-            currSnapIntens = np.vstack((currSnapIntens, atomIntens)) #Accumulate intens of all atoms in this snap
-        intens = np.vstack((intens, currSnapIntens)) #Accumulate the intens of all snaps
-        #Intensities
-    
-    #Distances
-    permuteNode = PermutationNode()
-    #Nested dict; Outer keys: atoms, Outer values: (dicts, atom intens)
-    #Inner keys: atoms, Inner values: Distance matrix between inner and outer key
-    distanceMaster = permuteNode(distArr, atomLabels, intens)
-    #Distances
-
-    return distanceMaster, angleMaster, intens
