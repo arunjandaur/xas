@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import os
 import sys
 
@@ -30,16 +31,8 @@ def parseXYZ_Intens(snap, excited_atom, snapshots_folder, xas_folder):
     
     return atomLabels, coords, intens
 
-def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args):
-    atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
-    atomSet.sort()
-
-    distNode = CalcDistanceNode()
-    if periodic == True:
-        dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
-    else:
-        dists = distNode(coords)
-    inputData = []
+def genDistRelations(coords, dists, atomLabels, atomSet, excited_atom, radius):
+    distInputData = []
     for i in range(len(atomLabels)):
         currAtom = atomLabels[i]
         currCoord = coords[i]
@@ -66,14 +59,11 @@ def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args)
                         tempDists.sort()
                         input_row_data.extend(tempDists)
                         done.append(label + label2)
-            inputData.append(input_row_data)
-    
-    angleNode = CalcAngleNode()
-    if periodic == True:
-        angles = angleNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
-    else:
-        angles = angleNode(coords)
-    angleData = []
+            distInputData.append(input_row_data)
+    return np.array(distInputData)
+
+def genAngleRelations(coords, dists, angles, atomLabels, atomSet, excited_atom, radius):
+    angleInputData = []
     for n in range(len(atomLabels)):
         currAtom = atomLabels[n]
         currCoord = coords[n]
@@ -100,22 +90,40 @@ def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args)
                                                             angles[i][j][k] = np.inf
                         tempAngles.sort()
                         input_row_data.extend(tempAngles)
-            angleData.append(input_row_data)
+            angleInputData.append(input_row_data)
+    return np.array(angleInputData)
 
-    inputData = np.hstack((np.array(inputData), np.array(angleData)))
-    return inputData
+def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args):
+    atomSet = list(set(np.reshape(atomLabels, (len(atomLabels),)).tolist()))
+    atomSet.sort()
+
+    distNode = CalcDistanceNode()
+    angleNode = CalcAngleNode()
+    if periodic == True:
+        dists = distNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+        angles = angleNode(coords, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
+    else:
+        dists = distNode(coords)
+        angles = angleNode(coords)
+
+    distInputData = genDistRelations(coords, dists, atomLabels, atomSet, excited_atom, radius)
+    angleInputData = genAngleRelations(coords, dists, angles, atomLabels, atomSet, excited_atom, radius)
+    return np.hstack((distInputData, angleInputData))
 
 def splitPeakData(peakData):
     return peakData[:, :-1], np.array([peakData[:, -1]]).T
 
 def preparePeakData(inputData, intensities):
     peakData = []
+    num_peaks = []
     for i in range(len(intensities)):
         num_i, amps_i, means_i, sigmas_i = sum_gaussians_fit(energies, intensities[i])
+        num_peaks.append(len(means_i))
         for peak in means_i:
             peakData.append(np.hstack((inputData[i], mean)))
     peakData = np.array(peakData)
-    return splitPeakData(peakData)
+    inputData, peaks = splitPeakData(peakData)
+    return inputData, peaks, math.ceil(sum(num_peaks) / len(num_peaks))
 
 def cluster(inputData, peaks):
     dpgmm = DPGMM(10, n_iter=1000)
@@ -164,7 +172,7 @@ if __name__ == "__main__":
             rowIntens.append(E_I[1])
         intensities = np.vstack((intensities, np.array(rowIntens)))
 
-    inputData, peaks = preparePeakData(inputData, intensities)
+    inputData, peaks, avg_num_peaks = preparePeakData(inputData, intensities)
     clusters = cluster(inputData, peaks)
 
     for cluster in clusters:
