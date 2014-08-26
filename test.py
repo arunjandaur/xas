@@ -3,33 +3,21 @@ import matplotlib.pyplot as plt
 
 from sklearn.mixture import DPGMM
 from sklearn.cluster import DBSCAN
-
-if __name__ == "__main_":
-    np.set_printoptions(threshold=np.nan)
-    X = np.array([np.random.normal(loc=3, scale=.15, size=1000)]).T
-    X2 = np.array([np.random.normal(loc=6, scale=.5, size=1000)]).T
-    data = np.vstack((np.hstack((X, X2, 2*X)), np.hstack((X, X2, 4*X))))
-    num = 300
-    db = DBSCAN(eps=.5, min_samples=num)
-    db.fit(data)
-    plt.plot(data[:, 0], data[:, 1], 'bo')
-    plt.show()
-
-    print db.components_
-    print db.labels_
+from main import *
 
 if __name__ == "__main__":
     np.set_printoptions(threshold=np.nan)
-    X = np.array([np.random.normal(loc=3, scale=.15, size=1000)]).T
-    X2 = np.array([np.random.normal(loc=6, scale=.5, size=1000)]).T
-    data = np.vstack((np.hstack((X, X2, 2*X)), np.hstack((X, X2, 4*X))))
-    num = 300
+    X = np.array([np.random.normal(loc=3, scale=.15, size=300)]).T
+    X2 = np.array([np.random.normal(loc=4, scale=.25, size=300)]).T
+    data = np.vstack((np.hstack((X, X2, 1.5*X)), np.hstack((X, X2, 2.5*X))))
 
-    for i in range(1, 15):
-        db = DBSCAN(eps=.1*i, min_samples=num)
-        db.fit(data)
-        print db.labels_
-        raw_input("Press enter when ready")
+    inputData, peaks = splitPeakData(data)
+
+    cluster(inputData, peaks)
+
+    #db = DBSCAN(eps=1, min_samples=5)
+    #db.fit(data)
+    #print db.labels_
 
     #plt.plot(data[:, 0], data[:, 1], 'bo')
     #plt.show()

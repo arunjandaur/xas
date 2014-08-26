@@ -10,7 +10,11 @@ from peak_shift_analysis import sum_gaussians_fit
 from peak_tracking import SA, linreg
 from scipy.stats import pearsonr
 from sklearn.mixture import DPGMM
+from sklearn.cluster import DBSCAN, KMeans
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
 
+# DATA PARSING, CALCULATION, PREPARATION
 def parseXYZ_Intens(snap, excited_atom, snapshots_folder, xas_folder):
     intens = np.empty((0, 1000), dtype=('f8, f8'))
     
@@ -124,12 +128,78 @@ def preparePeakData(inputData, intensities):
     peakData = np.array(peakData)
     inputData, peaks = splitPeakData(peakData)
     return inputData, peaks, math.ceil(sum(num_peaks) / len(num_peaks))
+# DATA PARSING, CALCULATION, PREPARATION
+
+
+# CLUSTERING
+def diff(data):
+    data2 = []
+    for i in range(len(data)-1):
+        data2.append(data[i+1] - data[i])
+    return data2
+
+def find_elbow(inputData, peaks, min_cluster_size=1):
+    eps0, step, iters = .001, .001, 250
+    eps = eps0
+    x = []
+    y = []
+    data = np.hstack((inputData, peaks))
+    neg_ones = -1 * np.ones(len(data))
+    zeros = 0 * neg_ones
+    for i in range(1, iters):
+        db = DBSCAN(eps=eps, min_samples=min_cluster_size)
+        db.fit(data)
+        labels = db.labels_
+        if (labels == neg_ones).all():
+            eps += step
+            continue
+        if (labels == zeros).all():
+            eps += step
+            break
+        else:
+            quality = silhouette_score(data, labels, metric='euclidean')
+            x.append(eps)
+            y.append(quality)
+            eps += step
+    plt.plot(x, y, 'go')
+    plt.show()
+    y3 = diff(diff(diff(y)))
+    max_index, max_val = 0, -np.inf
+    for i in range(len(y3)):
+        if y3[i] > max_val:
+            max_index, max_val = i + 2, y3[i] #Plus 2 is because 3rd difference loses 2 values along the way
+    print max_index
+    print x
+    return x[max_index]
+
+def separate_points(data, labels):
+    clusters = {}
+    for i in range(len(labels)):
+        label = labels[i]
+        if label > -1:
+            if label in clusters:
+                clusters[label] = np.vstack((clusters[label], data[i]))
+            else:
+                clusters[label] = np.array([data[i]])
+    clusters = clusters.values()
+    return [splitPeakData(cluster) for cluster in clusters]
 
 def cluster(inputData, peaks):
-    dpgmm = DPGMM(10, n_iter=1000)
-    dpgmm.fit(np.hstack((inputData, peaks)))
-    print dpgmm.weights_
-    print dpgmm.means_
+    """
+    min_cluster_size = 5
+    eps = find_elbow(inputData, peaks, min_cluster_size)
+    db = DBSCAN(eps=eps, min_samples=min_cluster_size)
+    db.fit(np.hstack((inputData, peaks)))
+    labels = db.labels_
+    print labels
+    """
+    num_clusters = find_elbow(inputData, peaks)
+    kmeans = KMeans(n_clusters=n_clusters)
+    kmeans.fit(np.hstack((inputData, peaks)))
+    labels = kmeans.labels_
+    return separate_points(np.hstack((inputData, peaks)), labels)
+# CLUSTERING
+
 
 def linearity(inputData, peaks):
     pearsonr(inputData, peaks)
@@ -174,7 +244,7 @@ if __name__ == "__main__":
 
     inputData, peaks, avg_num_peaks = preparePeakData(inputData, intensities)
     clusters = cluster(inputData, peaks)
-
+    """
     for cluster in clusters:
         inputData = cluster[0]
         peaks = cluster[1]
@@ -182,7 +252,7 @@ if __name__ == "__main__":
             error, params = linreg(cluster)
         else:
             config, error, params = SA(inputData, peaks)
-
+    """
 ##########
 
 def expand(matr):
