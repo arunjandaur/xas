@@ -141,18 +141,24 @@ def diff(data):
 def find_elbow(inputData, peaks):
     iters, x, y = 10, [], []
     data = np.hstack((inputData, peaks))
+    baseline = 0
     for i in range(1, iters+1):
         kmeans = KMeans(n_clusters=i, n_init=100, max_iter=2000, n_jobs=1)
         kmeans.fit(data)
+        if i == 1:
+            baseline = kmeans.inertia_
         x.append(i)
-        y.append(kmeans.inertia_)
+        y.append(baseline-kmeans.inertia_)
     plt.plot(x, y, 'go')
     plt.show()
     y2 = diff(diff(y))
+    y3 = diff(y2)
+    print y2
+    print y3
     max_index, max_val = 0, -np.inf
-    for i in range(len(y2)):
-        if y2[i] > max_val:
-            max_index, max_val = i + 1, y2[i] #Plus 1 is because 2nd difference loses values along the way
+    for i in range(len(y3)):
+        if y3[i] > max_val:
+            max_index, max_val = i + 2, y3[i] #Plus 2 is because 3rd difference loses values along the way
     print max_index
     return x[max_index]
 
@@ -181,6 +187,7 @@ def cluster(inputData, peaks):
     kmeans = KMeans(n_clusters=num_clusters)
     kmeans.fit(np.hstack((inputData, peaks)))
     labels = kmeans.labels_
+    print labels
     return separate_points(np.hstack((inputData, peaks)), labels)
 # CLUSTERING
 
