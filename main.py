@@ -138,38 +138,22 @@ def diff(data):
         data2.append(data[i+1] - data[i])
     return data2
 
-def find_elbow(inputData, peaks, min_cluster_size=1):
-    eps0, step, iters = .001, .001, 250
-    eps = eps0
-    x = []
-    y = []
+def find_elbow(inputData, peaks):
+    iters, x, y = 10, [], []
     data = np.hstack((inputData, peaks))
-    neg_ones = -1 * np.ones(len(data))
-    zeros = 0 * neg_ones
-    for i in range(1, iters):
-        db = DBSCAN(eps=eps, min_samples=min_cluster_size)
-        db.fit(data)
-        labels = db.labels_
-        if (labels == neg_ones).all():
-            eps += step
-            continue
-        if (labels == zeros).all():
-            eps += step
-            break
-        else:
-            quality = silhouette_score(data, labels, metric='euclidean')
-            x.append(eps)
-            y.append(quality)
-            eps += step
+    for i in range(1, iters+1):
+        kmeans = KMeans(n_clusters=i, n_init=100, max_iter=2000, n_jobs=1)
+        kmeans.fit(data)
+        x.append(i)
+        y.append(kmeans.inertia_)
     plt.plot(x, y, 'go')
     plt.show()
-    y3 = diff(diff(diff(y)))
+    y2 = diff(diff(y))
     max_index, max_val = 0, -np.inf
-    for i in range(len(y3)):
-        if y3[i] > max_val:
-            max_index, max_val = i + 2, y3[i] #Plus 2 is because 3rd difference loses 2 values along the way
+    for i in range(len(y2)):
+        if y2[i] > max_val:
+            max_index, max_val = i + 1, y2[i] #Plus 1 is because 2nd difference loses values along the way
     print max_index
-    print x
     return x[max_index]
 
 def separate_points(data, labels):
@@ -194,7 +178,7 @@ def cluster(inputData, peaks):
     print labels
     """
     num_clusters = find_elbow(inputData, peaks)
-    kmeans = KMeans(n_clusters=n_clusters)
+    kmeans = KMeans(n_clusters=num_clusters)
     kmeans.fit(np.hstack((inputData, peaks)))
     labels = kmeans.labels_
     return separate_points(np.hstack((inputData, peaks)), labels)
