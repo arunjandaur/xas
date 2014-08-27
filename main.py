@@ -184,20 +184,19 @@ def cluster(inputData, peaks):
 
 
 def linearity(inputData, peaks):
-    c = []
-    R = []
+    c, R = [], []
     for i in range(len(inputData[0])):
         x_i = inputData[:, i]
-        c.append(pearsonr(x_i, peaks[:, 0]))
+        c.append(pearsonr(x_i, peaks[:, 0])[0])
         R_i = []
         for j in range(len(inputData[0])):
             x_j = inputData[:, j]
-            R_i.append(pearsonr(x_i, x_j))
+            R_i.append(pearsonr(x_i, x_j)[0])
         R.append(R_i)
     c = np.array(c)
     R = np.array(R)
     c_T = np.array([c]).T
-    return np.sqrt(np.dot(np.dot(c, R), c_T))
+    return np.sqrt(np.dot(np.dot(c, R), c_T))[0]
 
 if __name__ == "__main__":
     args = sys.argv

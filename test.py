@@ -15,7 +15,7 @@ if __name__ == "__main__":
     clusters = cluster(inputData, peaks)
 
     for cluster in clusters:
-        print cluster
+        #print cluster
         print linearity(cluster[0], cluster[1])
 
 if __name__ == "__main_":
