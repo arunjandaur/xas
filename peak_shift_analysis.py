@@ -438,7 +438,7 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
         amps = estimate_amplitudes(input_data, output_data, means, sigmas) #+ np.random.uniform(0,0.05,size=n)
         
         #For Debugging
-        if True:
+        if False:
             print "\nNum of gauss used is {}".format(n)
             print "Amps are {}".format(amps)
             print "Means are {}".format(means)
@@ -482,7 +482,8 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
         #Holds error, final_params, and initialparams for later use
         holder.append([error,final_params,initialparams])
     
-    if True: 
+    #Debugging Purposes
+    if False: 
         for i in range(0,len(holder)):
             error = holder[i][0]
             print "error for size {0} is {1}".format(i+1,error)
@@ -505,6 +506,8 @@ def estimate_num_gauss(arches, tol, input_data, output_data):
             #print "error for size {0} is {1}".format(i+1,error)
             if error < tol:
                 return i+1,holder[i][1], error
+            
+            #Debugging Purposes
             if False:
                 plt.subplot(221)
                 plt.plot(input_data,output_data)
@@ -558,6 +561,7 @@ def graph(input_data, output_data, convolved_2, arc_data):
 
 def sum_gaussians_fit(input_data, output_data):
     """
+    ----MAIN FUNCTION TO CALL---
     Takes input and output data and tries to fit a sum of gaussians to it.
     Input_data and Output_data should both be 1d arrays
     Output will the number of gaussians with a list of amplitudes, means, and standard deviations 
@@ -577,21 +581,10 @@ def sum_gaussians_fit(input_data, output_data):
     #Calculate Tolerance
     filtered = signal.medfilt(output_data,11)
     tol = np.sqrt(1/len(filtered) * np.sum(np.power(output_data - filtered, 2)))
-    print "tol is {}".format(tol)
-
-    error = float("inf") 
-    debug = True #For Debugging
-    #while tol < error:
+    
     #Disregard Females, Acquire Data
     sigmas_list, convolved_0, convolved_1,convolved_2, zero_crossings = to_scale_space(input_data,output_data, start_sigma = 1, sigma_step = 0.1)
     
-    ###Debugging purposes
-    if debug:
-        arc_data = to_arc_space(zero_crossings, sigmas_list)
-    else:
-        debug = False
-    ###
-
     #Get arches from Zero Crossings
     arches = label_arches(zero_crossings, input_data, convolved_1)
    
@@ -620,29 +613,31 @@ def sum_gaussians_fit(input_data, output_data):
         i += 3
 
     ###Debugging purposes
-   
-    print "\n" 
-    print "Final number of gaussians are {}".format(num)
-    print "Amps are {}".format(amps)
-    print "Means are {}".format(means)
-    print "Sigmas are {}".format(sigmas)
-    plt.subplot(221)
-    plt.plot(input_data,output_data)
-    plt.title("original")
-    plt.subplot(222)
-    plt.plot(input_data,gauss_creator_simple(num)(input_data,*params))
-    plt.title("fitted")
-    plt.subplot(223)
-    plt.plot(arc_data[:,0],arc_data[:,1],"o")
-    plt.title("scale space zeros")
-    plt.subplot(224)
-    plt.plot(input_data,orig_output_data - gauss_creator_simple(num)(input_data,*params))
-    plt.title("residuals")
-    plt.show() 
+    if False: 
+        print "\n" 
+        print "Final number of gaussians are {}".format(num)
+        print "Amps are {}".format(amps)
+        print "Means are {}".format(means)
+        print "Sigmas are {}".format(sigmas)
+        plt.subplot(221)
+        plt.plot(input_data,output_data)
+        plt.title("original")
+        plt.subplot(222)
+        plt.plot(input_data,gauss_creator_simple(num)(input_data,*params))
+        plt.title("fitted")
+        plt.subplot(223)
+        plt.plot(arc_data[:,0],arc_data[:,1],"o")
+        plt.title("scale space zeros")
+        plt.subplot(224)
+        plt.plot(input_data,orig_output_data - gauss_creator_simple(num)(input_data,*params))
+        plt.title("residuals")
+        plt.show() 
     ###
  
     return num, np.array(amps), np.array(means), np.array(sigmas)
 
+
+####Everything Below is for Testing Purposes####
 if __name__ == "__main_":
     """Lev"""
     input_data = np.array([[], [], []])
