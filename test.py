@@ -12,7 +12,11 @@ if __name__ == "__main__":
     X3 = np.array([np.random.normal(loc=2, scale=.5, size=300)]).T
     data = np.vstack((np.hstack((X, X2, X3, 1.5*X)), np.hstack((X, X2, X3, 2.5*X)), np.hstack((X, X2, X3, 2*X)), np.hstack((X, X2, X3, 3*X))))
     inputData, peaks = splitPeakData(data)
-    cluster(inputData, peaks)
+    clusters = cluster(inputData, peaks)
+
+    for cluster in clusters:
+        print cluster
+        print linearity(cluster[0], cluster[1])
 
 if __name__ == "__main_":
     np.set_printoptions(threshold=np.nan)

@@ -9,9 +9,7 @@ from parse_intensities import parse_intensities
 from peak_shift_analysis import sum_gaussians_fit
 from peak_tracking import SA, linreg
 from scipy.stats import pearsonr
-from sklearn.mixture import DPGMM
-from sklearn.cluster import DBSCAN, KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
 # DATA PARSING, CALCULATION, PREPARATION
@@ -114,6 +112,11 @@ def extractData(coords, atomLabels, excited_atom, radius, periodic=False, *args)
     angleInputData = genAngleRelations(coords, dists, angles, atomLabels, atomSet, excited_atom, radius)
     return np.hstack((distInputData, angleInputData))
 
+def expand(inputData):
+    cos_OCO = np.array([np.cos(inputData[:, 3])]).T
+    print cos_OCO
+    return np.hstack((inputData[:, 0:3], cos_OCO))
+
 def splitPeakData(peakData):
     return peakData[:, :-1], np.array([peakData[:, -1]]).T
 
@@ -151,15 +154,11 @@ def find_elbow(inputData, peaks):
         y.append(baseline-kmeans.inertia_)
     plt.plot(x, y, 'go')
     plt.show()
-    y2 = diff(diff(y))
-    y3 = diff(y2)
-    print y2
-    print y3
+    y3 = diff(diff(diff(y)))
     max_index, max_val = 0, -np.inf
     for i in range(len(y3)):
         if y3[i] > max_val:
             max_index, max_val = i + 2, y3[i] #Plus 2 is because 3rd difference loses values along the way
-    print max_index
     return x[max_index]
 
 def separate_points(data, labels):
@@ -175,32 +174,37 @@ def separate_points(data, labels):
     return [splitPeakData(cluster) for cluster in clusters]
 
 def cluster(inputData, peaks):
-    """
-    min_cluster_size = 5
-    eps = find_elbow(inputData, peaks, min_cluster_size)
-    db = DBSCAN(eps=eps, min_samples=min_cluster_size)
-    db.fit(np.hstack((inputData, peaks)))
-    labels = db.labels_
-    print labels
-    """
     num_clusters = find_elbow(inputData, peaks)
     kmeans = KMeans(n_clusters=num_clusters)
     kmeans.fit(np.hstack((inputData, peaks)))
     labels = kmeans.labels_
-    print labels
-    return separate_points(np.hstack((inputData, peaks)), labels)
+    result = separate_points(np.hstack((inputData, peaks)), labels)
+    return result
 # CLUSTERING
 
 
 def linearity(inputData, peaks):
-    pearsonr(inputData, peaks)
+    c = []
+    R = []
+    for i in range(len(inputData[0])):
+        x_i = inputData[:, i]
+        c.append(pearsonr(x_i, peaks[:, 0]))
+        R_i = []
+        for j in range(len(inputData[0])):
+            x_j = inputData[:, j]
+            R_i.append(pearsonr(x_i, x_j))
+        R.append(R_i)
+    c = np.array(c)
+    R = np.array(R)
+    c_T = np.array([c]).T
+    return np.sqrt(np.dot(np.dot(c, R), c_T))
 
 if __name__ == "__main__":
     args = sys.argv
     excited_atom, snapshots_folder, xas_folder, radius, periodic = args[1:6]
     snapshots = os.listdir(snapshots_folder)
     if periodic == "true":
-        unit_cell, lattice_a, lattice_b, lattice_c, alpha, beta, gamma = [float(arg) for arg in args[6:]]
+        lattice_a, lattice_b, lattice_c, alpha, beta, gamma = [float(arg) for arg in args[6:]]
         periodic = True
     else:
         periodic = False
@@ -218,7 +222,6 @@ if __name__ == "__main__":
             currInputData = extractData(currCoords, currAtomLabels, excited_atom, radius, periodic, lattice_a, lattice_b, lattice_c, alpha, beta, gamma)
         inputData = np.vstack((inputData, currInputData))
         intens = np.vstack((intens, currIntens))
-    print inputData
 
     energies = []
     intensities = []
@@ -235,7 +238,7 @@ if __name__ == "__main__":
 
     inputData, peaks, avg_num_peaks = preparePeakData(inputData, intensities)
     clusters = cluster(inputData, peaks)
-    """
+
     for cluster in clusters:
         inputData = cluster[0]
         peaks = cluster[1]
@@ -243,15 +246,3 @@ if __name__ == "__main__":
             error, params = linreg(cluster)
         else:
             config, error, params = SA(inputData, peaks)
-    """
-##########
-
-def expand(matr):
-    matr = np.transpose(matr)
-    d1 = matr[0]
-    d2 = matr[1]
-    a = matr[2]
-    cosa = np.cos(a)
-    sina = np.sin(a)
-    matr = np.transpose(np.vstack((d1, d2, a)))
-    return matr
