@@ -1,5 +1,7 @@
+DISCLAIMER:  
 NOTE: THIS CODE BELONGS TO THE LAWRENCE BERKELEY NATIONAL LABORATORY. THIS CODE BEING ON MY GITHUB IS NOT TO BE INTERPRETED AS ME CLAIMING OWNERSHIP. I AM ONLY HOSTING THE CODE.  
-
+  
+General description:  
 A tool for correlating peaks in Xray Absorption Spectra to physical attributes in the molecule in order to express peak positions as functions of physical attributes like distances and angles between atoms within the molecule.  
   
 To run the code, clone the repository, and run:  
